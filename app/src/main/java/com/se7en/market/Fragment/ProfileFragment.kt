@@ -1,18 +1,15 @@
 package com.se7en.market.Fragment
 
-import android.annotation.SuppressLint
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import com.se7en.market.R
+import com.se7en.market.Activity.AddActivity
 import com.se7en.market.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment(), LifecycleObserver {
@@ -20,7 +17,6 @@ class ProfileFragment : Fragment(), LifecycleObserver {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
-    @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,10 +26,16 @@ class ProfileFragment : Fragment(), LifecycleObserver {
         val root: View = binding.root
 
         initShimmer()
+        binding.myAddressBtn.setOnClickListener {
+            startActivity(Intent(requireActivity(), AddActivity::class.java))
+        }
 
         return root
     }
 
+    private fun initViews() {
+
+    }
 
     private fun initShimmer() {
 

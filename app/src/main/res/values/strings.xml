@@ -14,8 +14,10 @@
     <string name="title_your_credit">اعتبار شما</string>
     <string name="title_zero">0</string>
     <string name="title_price_unit">ريال</string>
+    <string name="title_continue">ادامه</string>
 
     <string name="search_hint">دنبال چی میگردی ؟</string>
+
 
     <string name="sub_title_orders">لیست تمامی سفارش های شما</string>
 
