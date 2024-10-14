@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
-import com.se7en.market.Activity.AddActivity
+import com.se7en.market.Activity.AddressActivity
 import com.se7en.market.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment(), LifecycleObserver {
@@ -27,7 +27,7 @@ class ProfileFragment : Fragment(), LifecycleObserver {
 
         initShimmer()
         binding.myAddressBtn.setOnClickListener {
-            startActivity(Intent(requireActivity(), AddActivity::class.java))
+            startActivity(Intent(requireActivity(), AddressActivity::class.java))
         }
 
         return root
