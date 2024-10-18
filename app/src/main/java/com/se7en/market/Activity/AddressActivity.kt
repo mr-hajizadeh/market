@@ -2,8 +2,11 @@ package com.se7en.market.Activity
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,7 +34,12 @@ class AddressActivity : AppCompatActivity() {
         }
 
         binding.newAddressBtn.setOnClickListener {
-            if (!isPermissionGranted()) showDialog()
+            if (!isPermissionGranted()) requestPermission.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
             else showMap()
         }
     }
@@ -48,12 +56,10 @@ class AddressActivity : AppCompatActivity() {
             }
         builderBinding.apply {
             positiveBtn.setOnClickListener {
-                requestPermission.launch(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-                )
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", packageName, null)
+                }
+                startActivity(intent)
                 builder.dismiss()
             }
             closeBtn.setOnClickListener {
@@ -79,6 +85,8 @@ class AddressActivity : AppCompatActivity() {
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
             if (isFineLocationGranted || isCoarseLocationGranted)
                 showMap()
+            else
+                showDialog()
         }
 
 
