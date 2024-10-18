@@ -15,15 +15,15 @@
     </style>
 
     <style name="CustomBottomNavTextAppearance" parent="TextAppearance.AppCompat.Caption">
-        <item name="android:fontFamily">@font/</item>
+        <item name="android:fontFamily">@font/vazir</item>
     </style>
 
     <style name="CustomTextView" parent="Widget.AppCompat.TextView">
-        <item name="android:fontFamily">@font/iranian_sans</item>
+        <item name="android:fontFamily">@font/vazir</item>
     </style>
 
     <style name="CustomRadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/iranian_sans</item>
+        <item name="android:fontFamily">@font/vazir</item>
     </style>
 
     <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">

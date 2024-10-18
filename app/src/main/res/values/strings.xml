@@ -29,6 +29,14 @@
     <string name="title_receiver_name">نام تحویل گیرنده</string>
     <string name="title_phone_number">شماره موبایل</string>
     <string name="title_submit_address">تایید و قبت آدرس</string>
+    <string name="title_login_register">ورود و ثبت نام</string>
+    <string name="title_welcome">سلام!\nلطفا شماره موبایل خود را وارد کنید</string>
+    <string name="title_enter_phone_number">شماره موبایل خود را وارد کنید</string>
+    <string name="title_enter_confirm_code">کد تایید را وارد کنید</string>
+    <string name="title_submit">تایید</string>
+    <string name="title_login">ورود</string>
+    <string name="title_change_phone">تغییر شماره موبایل</string>
+    <string name="title_resend">ارسال مجدد</string>
 
     <string name="search_hint">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>
@@ -36,6 +44,7 @@
     <string name="hint_other_title">عنوان آدرس خود را وارد کنید</string>
     <string name="hint_receiver_name">نام گیرنده را وارد کنید</string>
     <string name="hint_phone_number">شماره گیرنده را وارد کنید</string>
+    <string name="hint_digit_phone_number">09123456789</string>
 
     <string name="input_error_message">این فیلد الزامی است</string>
 

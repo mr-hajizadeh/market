@@ -17,9 +17,6 @@ class OrdersFragment : Fragment() {
     ): View {
         binding = FragmentOrdersBinding.inflate(inflater, container, false)
 
-        binding.shimmer.shimmerLayout.startShimmer()
-
-
         return binding.root
     }
 }
