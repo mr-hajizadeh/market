@@ -1,17 +1,17 @@
 package com.se7en.market.Activity.Ui
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.content.IntentSender
-import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
-import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,8 +23,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.carto.styles.MarkerStyleBuilder
-import com.carto.utils.BitmapUtils
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -37,13 +35,13 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.se7en.market.Activity.DetailsAddressActivity
 import com.se7en.market.Model.ReverseGeocoding
 import com.se7en.market.R
 import com.se7en.market.ViewModel.MapViewModel
 import com.se7en.market.databinding.MapBottomSheetBinding
 import org.neshan.common.model.LatLng
 import org.neshan.mapsdk.MapView
-import org.neshan.mapsdk.model.Marker
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -74,8 +72,15 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
         binding.closeBtn.setOnClickListener { dialog?.dismiss() }
         binding.submitLocationBtn.setOnClickListener {
             val latLon: LatLng = map.cameraTargetPosition
-            reverseGeocoding(latLon)
+            Intent(context, DetailsAddressActivity::class.java).apply {
+                putExtra("lat", latLon.latitude)
+                putExtra("lon", latLon.longitude)
+                context.startActivity(this)
+                dismiss()
+            }
         }
+        if (locationStatus())
+            getLocation()
         return binding.root
     }
 
@@ -94,6 +99,7 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
             bottomSheet?.let {
                 val behavior = BottomSheetBehavior.from(it)
                 behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.isDraggable = false
             }
         }
 
@@ -105,7 +111,7 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
         this.context = context
     }
 
-    private fun checkLocationStatus(): Boolean {
+    private fun locationStatus(): Boolean {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
@@ -150,7 +156,7 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
     private fun findUserLocation() {
 
         fab?.setOnClickListener {
-            if (!checkLocationStatus())
+            if (!locationStatus())
                 displayLocationSettingsRequest()
             else
                 getLocation()
@@ -183,25 +189,6 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
             locationCallback,
             Looper.getMainLooper()
         )
-    }
-
-    private fun reverseGeocoding(latLon: LatLng) {
-
-        viewModel.reverseGeocoding(latLon.latitude, latLon.longitude)
-            .enqueue(object : Callback<ReverseGeocoding> {
-                override fun onResponse(
-                    call: Call<ReverseGeocoding>,
-                    response: Response<ReverseGeocoding>
-                ) {
-                    if (response.isSuccessful && response.body() != null)
-                        Log.i(TAG, "onResponse: $response")
-                }
-
-                override fun onFailure(call: Call<ReverseGeocoding>, t: Throwable) {
-                    Log.i(TAG, "onFailure: ${t.message}")
-                }
-            })
-
     }
 
     private val locationSettingsLauncher = registerForActivityResult(

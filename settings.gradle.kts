@@ -8,6 +8,7 @@ pluginManagement {
             }
         }
         mavenCentral()
+        jcenter()
         gradlePluginPortal()
         maven {
             url = uri("https://maven.neshan.org/artifactory/public-maven")

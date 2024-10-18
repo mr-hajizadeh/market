@@ -82,4 +82,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:3.6.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
+    //noinspection UseTomlInstead
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+
+    //noinspection UseTomlInstead
+    implementation("com.ericktijerou.koleton:koleton:1.0.0-beta01")
 }

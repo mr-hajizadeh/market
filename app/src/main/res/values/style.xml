@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Widget.App.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
@@ -15,11 +15,15 @@
     </style>
 
     <style name="CustomBottomNavTextAppearance" parent="TextAppearance.AppCompat.Caption">
-        <item name="android:fontFamily">@font/sandal</item>
+        <item name="android:fontFamily">@font/</item>
     </style>
 
     <style name="CustomTextView" parent="Widget.AppCompat.TextView">
-        <item name="android:fontFamily">@font/sandal</item>
+        <item name="android:fontFamily">@font/iranian_sans</item>
+    </style>
+
+    <style name="CustomRadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/iranian_sans</item>
     </style>
 
     <style name="ThemeOverlay.App.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
@@ -37,7 +41,7 @@
     </style>
 
     <style name="customNavigateButton">
-        <item name="android:background">@drawable/button_bg</item>
+        <item name="android:background">@drawable/outline_bg</item>
         <item name="android:padding">4dp</item>
     </style>
 
@@ -48,6 +52,11 @@
 
     <style name="customTextSubtitle">
         <item name="android:textSize">@dimen/sub_title_size</item>
+    </style>
+
+    <style name="roundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
     </style>
 
 </resources>

@@ -15,12 +15,29 @@
     <string name="title_zero">0</string>
     <string name="title_price_unit">ريال</string>
     <string name="title_continue">ادامه</string>
-    <string name="title_submit_location">ثبت موقعیت رو نقشه</string>
+    <string name="title_submit_location">ثبت موقعیت روی نقشه</string>
     <string name="title_add_address">افزودن آدرس جدید</string>
     <string name="title_permission_denied">عدم دسترسی به موقعیت مکانی</string>
     <string name="title_i_understand">متوجه شدم</string>
+    <string name="title_detail_address">جزئیات آدرس</string>
+    <string name="title_house_number">پلاک *</string>
+    <string name="title_unit">واحد *</string>
+    <string name="title_address">عنوان آدرس</string>
+    <string name="title_workplace">محل کار</string>
+    <string name="title_other">سایر…</string>
+    <string name="title_receiver_delivery">تحویل گیرنده شخص دیگری است</string>
+    <string name="title_receiver_name">نام تحویل گیرنده</string>
+    <string name="title_phone_number">شماره موبایل</string>
+    <string name="title_submit_address">تایید و قبت آدرس</string>
 
     <string name="search_hint">دنبال چی میگردی ؟</string>
+    <string name="hint_house_number">پلاک خود را وارد کنید</string>
+    <string name="hint_unit">واحد خود را وارد کنید</string>
+    <string name="hint_other_title">عنوان آدرس خود را وارد کنید</string>
+    <string name="hint_receiver_name">نام گیرنده را وارد کنید</string>
+    <string name="hint_phone_number">شماره گیرنده را وارد کنید</string>
+
+    <string name="input_error_message">این فیلد الزامی است</string>
 
     <string name="permission_denied_message">
         برای ادامه کار و استفاده از تمامی قابلیت‌های این برنامه، نیاز است که به دسترسی موقعیت مکانی اجازه دهید.\n

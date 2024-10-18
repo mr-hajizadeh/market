@@ -20,6 +20,7 @@
 
         <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
         <item name="android:textViewStyle">@style/CustomTextView</item>
+        <item name="radioButtonStyle">@style/CustomRadioButton</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheetDialog</item>
 
     </style>

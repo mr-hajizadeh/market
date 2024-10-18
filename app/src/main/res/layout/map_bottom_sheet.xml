@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
@@ -45,12 +46,12 @@
         <org.neshan.mapsdk.MapView
             android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="650dp">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/marker_size"
+                android:layout_height="@dimen/marker_size"
                 android:contentDescription="@string/title_submit_location"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
