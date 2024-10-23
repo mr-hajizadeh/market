@@ -11,13 +11,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.se7en.market.Activity.Ui.ModalBottomSheetMap
+import com.se7en.market.Adapter.AddressAdapter
+import com.se7en.market.Model.AddressModel
 import com.se7en.market.databinding.ActivityAddressBinding
 import com.se7en.market.databinding.DialogLayoutBinding
+import org.neshan.common.model.LatLng
 
 
 class AddressActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddressBinding
+    private lateinit var adapter: AddressAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +33,7 @@ class AddressActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+
         binding.backBtn.setOnClickListener {
             finish()
         }
@@ -42,6 +47,15 @@ class AddressActivity : AppCompatActivity() {
             )
             else showMap()
         }
+
+        setupAddressView()
+    }
+
+    private fun setupAddressView() {
+        val addressView = binding.addressView
+        adapter = AddressAdapter(listOf(AddressModel("خانه", "test")))
+        addressView.adapter = adapter
+        addressView.setHasFixedSize(true)
     }
 
     @SuppressLint("InflateParams")

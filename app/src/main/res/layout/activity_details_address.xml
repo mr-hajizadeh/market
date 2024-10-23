@@ -14,13 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="false"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/submitBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/test"
+            android:id="@+id/containerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -95,8 +95,8 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/title_detail_address"
-                android:textColor="@color/text_color"
-                android:textSize="11sp" />
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="@color/text_color" />
 
             <EditText
                 android:id="@+id/addressEdt"
@@ -106,12 +106,14 @@
                 android:layout_marginTop="4dp"
                 android:background="@drawable/input_stroke_bg"
                 android:ems="10"
+                android:fontFamily="@font/vazir"
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:lines="3"
                 android:maxLines="3"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@color/text_color"
                 android:textSize="11sp"
                 tools:ignore="Autofill,LabelFor" />
@@ -137,8 +139,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/title_unit"
-                        android:textColor="@color/text_color"
-                        android:textSize="11sp" />
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:textColor="@color/text_color" />
 
                     <EditText
                         android:id="@+id/unitEdt"
@@ -147,15 +149,17 @@
                         android:layout_marginTop="4dp"
                         android:background="@drawable/input_bg"
                         android:ems="10"
+                        android:fontFamily="@font/vazir"
                         android:hint="@string/hint_unit"
                         android:inputType="text"
                         android:lines="1"
+                        android:maxLength="30"
                         android:maxLines="1"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="10dp"
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/secondary_gray"
-                        android:textSize="13sp"
                         tools:ignore="Autofill" />
 
 
@@ -172,8 +176,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/title_house_number"
-                        android:textColor="@color/text_color"
-                        android:textSize="11sp" />
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:textColor="@color/text_color" />
 
                     <EditText
                         android:id="@+id/houseNumberEdt"
@@ -182,15 +186,17 @@
                         android:layout_marginTop="4dp"
                         android:background="@drawable/input_bg"
                         android:ems="10"
+                        android:fontFamily="@font/vazir"
                         android:hint="@string/hint_house_number"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:lines="1"
+                        android:maxLength="30"
                         android:maxLines="1"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="10dp"
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/secondary_gray"
-                        android:textSize="13sp"
                         tools:ignore="Autofill" />
 
 
@@ -229,6 +235,7 @@
                     android:layoutDirection="rtl"
                     android:paddingHorizontal="16dp"
                     android:text="@string/title_home"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     android:textColor="@drawable/selector_radio_text"
                     android:textSize="11sp" />
 
@@ -244,6 +251,7 @@
                     android:drawablePadding="6dp"
                     android:paddingHorizontal="8dp"
                     android:text="@string/title_workplace"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     android:textColor="@drawable/selector_radio_text"
                     android:textSize="11sp" />
 
@@ -258,6 +266,7 @@
                     android:drawablePadding="6dp"
                     android:paddingHorizontal="8dp"
                     android:text="@string/title_other"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     android:textColor="@drawable/selector_radio_text"
                     android:textSize="11sp" />
             </RadioGroup>
@@ -270,15 +279,17 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/input_bg"
                 android:ems="10"
+                android:fontFamily="@font/vazir"
                 android:hint="@string/hint_other_title"
                 android:inputType="text"
                 android:lines="1"
+                android:maxLength="50"
                 android:maxLines="1"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/secondary_gray"
-                android:textSize="13sp"
                 android:visibility="gone"
                 tools:ignore="Autofill"
                 tools:visibility="visible" />
@@ -321,8 +332,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/title_phone_number"
-                        android:textColor="@color/text_color"
-                        android:textSize="11sp" />
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:textColor="@color/text_color" />
 
                     <EditText
                         android:id="@+id/phoneEdt"
@@ -331,15 +342,17 @@
                         android:layout_marginTop="4dp"
                         android:background="@drawable/input_bg"
                         android:ems="10"
+                        android:fontFamily="@font/vazir"
                         android:hint="@string/hint_phone_number"
                         android:inputType="phone"
                         android:lines="1"
+                        android:maxLength="11"
                         android:maxLines="1"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="10dp"
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/secondary_gray"
-                        android:textSize="13sp"
                         tools:ignore="Autofill" />
 
 
@@ -356,8 +369,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/title_receiver_name"
-                        android:textColor="@color/text_color"
-                        android:textSize="11sp" />
+                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:textColor="@color/text_color" />
 
                     <EditText
                         android:id="@+id/deliveryNameEdt"
@@ -366,15 +379,16 @@
                         android:layout_marginTop="4dp"
                         android:background="@drawable/input_bg"
                         android:ems="10"
+                        android:fontFamily="@font/vazir"
                         android:hint="@string/hint_receiver_name"
                         android:inputType="text"
                         android:lines="1"
                         android:maxLines="1"
                         android:paddingHorizontal="10dp"
                         android:paddingVertical="10dp"
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                         android:textColor="@color/text_color"
                         android:textColorHint="@color/secondary_gray"
-                        android:textSize="13sp"
                         tools:ignore="Autofill" />
 
 
@@ -382,20 +396,20 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/submitBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="24dp"
-                android:text="@string/title_submit_address"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/submitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/vazir"
+        android:text="@string/title_submit_address"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

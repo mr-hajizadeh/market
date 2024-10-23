@@ -68,6 +68,7 @@
                 android:layout_gravity="right|end"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
+                android:fontFamily="@font/vazir"
                 android:layoutDirection="rtl"
                 android:text="@string/title_add_address"
                 android:textColor="@color/green"
@@ -81,7 +82,8 @@
                 android:layout_height="match_parent"
                 android:paddingHorizontal="16dp"
                 android:paddingBottom="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/address_view_holder" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,5 @@
 package com.se7en.market.Activity
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
@@ -8,15 +7,16 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.google.android.material.textfield.TextInputLayout
-import com.se7en.market.Activity.Ui.ModalBottomSheetMap
 import com.se7en.market.Activity.Ui.ModalBottomSheetMap.Companion.TAG
 import com.se7en.market.Model.ReverseGeocoding
 import com.se7en.market.R
@@ -24,15 +24,17 @@ import com.se7en.market.ViewModel.MapViewModel
 import com.se7en.market.databinding.ActivityDetailsAddressBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
-import org.neshan.common.model.LatLng
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailsAddressActivity : AppCompatActivity() {
+class DetailsAddressActivity : BaseActivity() {
 
     private lateinit var binding: ActivityDetailsAddressBinding
     private lateinit var viewModel: MapViewModel
+    private lateinit var editTexts: MutableList<EditText>
+    private var toolbar: ConstraintLayout? = null
+    private var containerLayout: LinearLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,25 +44,52 @@ class DetailsAddressActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MapViewModel::class.java]
         initViews()
 
+    }
+
+    private fun initViews() {
+
+        val lat = intent.getDoubleExtra("lat", 0.0)
+        val lon = intent.getDoubleExtra("lon", 0.0)
+        editTexts = mutableListOf(binding.addressEdt, binding.houseNumberEdt, binding.unitEdt)
+
+        toolbar = binding.toolbar
+        containerLayout = binding.containerLayout
+
+        binding.backBtn.setOnClickListener { finish() }
+        binding.addressEdt.keyListener = null
+
+        radiobuttons()
+        startSkeleton()
+        reverseGeocoding(lat, lon)
+        loadStaticMap(lat, lon)
+        setupOtherReceiverCheckBox()
+        convertToPersian()
+
         binding.submitBtn.setOnClickListener {
-            validation()
+            if (validateEditText(editTexts)) {
+                Toast.makeText(this@DetailsAddressActivity, "form submitted", Toast.LENGTH_SHORT)
+                    .show()
+            } else setErrorEditText()
         }
 
     }
 
-    private fun initViews() {
-        radiobuttons()
+    private fun setupOtherReceiverCheckBox() {
+        val deliveryDetailsLayout = binding.deliveryDetailsLayout
+        val otherReceiverCb = binding.otherReceiverCb
 
-        val lat = intent.getDoubleExtra("lat", 0.0)
-        val lon = intent.getDoubleExtra("lon", 0.0)
-        reverseGeocoding(lat, lon)
+        otherReceiverCb.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                deliveryDetailsLayout.visibility = View.VISIBLE
+                editTexts.addAll(listOf(binding.phoneEdt, binding.deliveryNameEdt))
+            } else {
+                deliveryDetailsLayout.visibility = View.GONE
+                editTexts.subList(editTexts.size - 2, editTexts.size).clear()
+            }
+        }
+    }
 
-        binding.backBtn.setOnClickListener { finish() }
-        binding.addressEdt.keyListener = null
-        val imageView = binding.staticImg
-
-        binding.test.loadSkeleton()
-        binding.toolbar.loadSkeleton()
+    private fun loadStaticMap(lat: Double, lon: Double) {
         Glide.with(this)
             .load("https://api.neshan.org/v4/static?key=service.b8ad9848b3614526bcd2dfb35fae9b14&type=standard-day&zoom=19&width=1024&height=512&center=$lat,$lon&markerToken=351047.QDbFpjwn")
             .listener(object : RequestListener<Drawable> {
@@ -70,8 +99,7 @@ class DetailsAddressActivity : AppCompatActivity() {
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    binding.test.hideSkeleton()
-                    binding.toolbar.hideSkeleton()
+                    hideSkeleton()
                     return false
                 }
 
@@ -82,22 +110,25 @@ class DetailsAddressActivity : AppCompatActivity() {
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    binding.test.hideSkeleton()
-                    binding.toolbar.hideSkeleton()
+                    hideSkeleton()
                     return false
                 }
 
             })
-            .into(imageView)
+            .into(binding.staticImg)
+    }
 
-        binding.otherReceiverCb.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) binding.deliveryDetailsLayout.visibility = View.VISIBLE
-            else binding.deliveryDetailsLayout.visibility = View.GONE
-        }
+    private fun startSkeleton() {
+        toolbar?.loadSkeleton()
+        containerLayout?.loadSkeleton()
+    }
+
+    private fun hideSkeleton() {
+        toolbar?.hideSkeleton()
+        containerLayout?.hideSkeleton()
     }
 
     private fun radiobuttons() {
-
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 binding.homeRd.id -> {
@@ -113,102 +144,23 @@ class DetailsAddressActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun convertToPersian() {
+
+        convertToPersianEditText(binding.addressEdt, isError = true)
+        convertToPersianEditText(binding.houseNumberEdt, isError = true)
+        convertToPersianEditText(binding.unitEdt, isError = true)
+        convertToPersianEditText(binding.phoneEdt, isError = true)
+        convertToPersianEditText(binding.deliveryNameEdt, isError = true)
 
     }
 
-    private fun validation() {
-
-        val addressEdt = binding.addressEdt
-        val houseNumberEdt = binding.houseNumberEdt
-        val unitEdt = binding.unitEdt
-        val phoneNumberEdt = binding.phoneEdt
-        val deliveryNameEdt = binding.deliveryNameEdt
-        val isOtherReceiver = binding.otherReceiverCb
-
-        val address = addressEdt.text
-        val houseNumber = houseNumberEdt.text
-        val unit = unitEdt.text
-        val phoneNumber = phoneNumberEdt.text
-        val deliveryName = deliveryNameEdt.text
-
-        val inputs = mutableListOf<Pair<CharSequence, EditText>>(
-            houseNumber to houseNumberEdt,
-            unit to unitEdt
-        )
-
-        if (isOtherReceiver.isChecked) inputs.addAll(
-            listOf(
-                phoneNumber to phoneNumberEdt,
-                deliveryName to deliveryNameEdt
-            )
-        )
-        else
-            if (inputs.size > 2)
-                inputs.subList(inputs.size - 2, inputs.size).clear()
-        Log.i(TAG, "validation: $inputs")
-
-        var isValidate = true
-        inputs.forEach {
-            if (it.first.isEmpty()) {
-                it.second.setBackgroundResource(R.drawable.error_input_bg)
-                isValidate = false
-            }
+    private fun setErrorEditText() {
+        editTexts.forEach {
+            if (it.text.isEmpty())
+                it.setBackgroundResource(R.drawable.error_input_bg)
         }
-
-        Log.i(TAG, "validation: $isValidate")
-
-        houseNumberEdt.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s?.length!! >= 1)
-                    houseNumberEdt.setBackgroundResource(R.drawable.input_bg)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
-        unitEdt.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s?.length!! >= 1)
-                    unitEdt.setBackgroundResource(R.drawable.input_bg)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
-        phoneNumberEdt.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s?.length!! >= 1)
-                    phoneNumberEdt.setBackgroundResource(R.drawable.input_bg)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
-        deliveryNameEdt.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s?.length!! >= 1)
-                    deliveryNameEdt.setBackgroundResource(R.drawable.input_bg)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
     }
 
     private fun reverseGeocoding(lat: Double, lon: Double) {

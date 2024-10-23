@@ -8,4 +8,8 @@
     <dimen name="navigate_button">25dp</dimen>
     <dimen name="marker_size">35dp</dimen>
     <dimen name="radio_button_size">40dp</dimen>
+    <dimen name="small_button">35dp</dimen>
+    <dimen name="small_image">16dp</dimen>
+    <dimen name="medium_image">30dp</dimen>
+
 </resources>

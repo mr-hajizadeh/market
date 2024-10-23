@@ -28,7 +28,7 @@
     <string name="title_receiver_delivery">تحویل گیرنده شخص دیگری است</string>
     <string name="title_receiver_name">نام تحویل گیرنده</string>
     <string name="title_phone_number">شماره موبایل</string>
-    <string name="title_submit_address">تایید و قبت آدرس</string>
+    <string name="title_submit_address">تایید و ثبت آدرس</string>
     <string name="title_login_register">ورود و ثبت نام</string>
     <string name="title_welcome">سلام!\nلطفا شماره موبایل خود را وارد کنید</string>
     <string name="title_enter_phone_number">شماره موبایل خود را وارد کنید</string>
@@ -37,6 +37,8 @@
     <string name="title_login">ورود</string>
     <string name="title_change_phone">تغییر شماره موبایل</string>
     <string name="title_resend">ارسال مجدد</string>
+    <string name="title_edit">ویرایش</string>
+    <string name="title_delete_address">حذف آدرس</string>
 
     <string name="search_hint">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>
@@ -44,13 +46,17 @@
     <string name="hint_other_title">عنوان آدرس خود را وارد کنید</string>
     <string name="hint_receiver_name">نام گیرنده را وارد کنید</string>
     <string name="hint_phone_number">شماره گیرنده را وارد کنید</string>
-    <string name="hint_digit_phone_number">09123456789</string>
+    <string name="hint_digit_phone_number">۰۹۱۲۳۴۵۶۷۸۹</string>
 
-    <string name="input_error_message">این فیلد الزامی است</string>
 
     <string name="permission_denied_message">
        برای ادامه کار و استفاده از تمامی قابلیت‌های این برنامه، نیاز است که به دسترسی موقعیت مکانی اجازه دهید.\nلطفاً از تنظیمات دستگاه خود، دسترسی به موقعیت مکانی را فعال کنید.
     </string>
+
+    <string name="input_error_message">این فیلد الزامی است</string>
+    <string name="error_message_empty_phone">این فیلد الزامی است</string>
+    <string name="error_message_pattern_phone">شماره همراه باید 11 رقم باشد</string>
+    <string name="permission_denied">برای موقعیت یابی باید موقعیت مکانی را روشن کنید.</string>
 
     <string name="sub_title_orders">لیست تمامی سفارش های شما</string>
     <string name="sub_title_address">جزئیات آدرس خود را وارد کنید</string>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="rtl"
+    android:layout_marginTop="16dp"
+    android:paddingHorizontal="8dp"
+    android:paddingTop="8dp">
+
+    <ImageView
+        android:id="@+id/statusImg"
+        android:layout_width="@dimen/small_image"
+        android:layout_height="@dimen/small_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_location" />
+
+    <ImageView
+        android:id="@+id/moreBtn"
+        android:layout_width="@dimen/medium_image"
+        android:layout_height="@dimen/medium_image"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_more" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/moreBtn"
+        app:layout_constraintStart_toEndOf="@+id/statusImg"
+        app:layout_constraintTop_toTopOf="@+id/statusImg">
+
+        <TextView
+            android:id="@+id/titleTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:textStyle="bold"
+            tools:text="title" />
+
+        <TextView
+            android:id="@+id/addressTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+            android:textColor="@color/text_color"
+            tools:text="address" />
+
+        <LinearLayout
+            android:id="@+id/settingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editBtn"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/small_button"
+                android:layoutDirection="rtl"
+                android:text="@string/title_edit"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                app:backgroundTint="@color/colorTransparent"
+                app:icon="@drawable/ic_pencil"
+                app:iconSize="@dimen/small_image" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteBtn"
+                style="@style/Widget.Material3.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/small_button"
+                android:layout_marginStart="8dp"
+                android:layoutDirection="rtl"
+                android:text="@string/title_delete_address"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                android:textColor="@color/red"
+                app:backgroundTint="@color/colorTransparent"
+                app:icon="@drawable/ic_trash"
+                app:iconSize="@dimen/small_image"
+                app:iconTint="@color/red" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dividerVIew"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/line2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,10 +5,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.content.IntentSender
 import android.location.LocationManager
 import android.os.Bundle
@@ -22,7 +18,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -36,51 +32,55 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.se7en.market.Activity.DetailsAddressActivity
-import com.se7en.market.Model.ReverseGeocoding
 import com.se7en.market.R
-import com.se7en.market.ViewModel.MapViewModel
 import com.se7en.market.databinding.MapBottomSheetBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.neshan.common.model.LatLng
 import org.neshan.mapsdk.MapView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class ModalBottomSheetMap : BottomSheetDialogFragment() {
+class ModalBottomSheetMap(private val latLon: LatLng? = null) : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "ModalBottomSheet"
     }
 
-    private lateinit var binding: MapBottomSheetBinding
-    private lateinit var context: Context
-    private lateinit var map: MapView
-    private lateinit var mFusedLocationClient: FusedLocationProviderClient
-    private lateinit var viewModel: MapViewModel
+    private var _binding: MapBottomSheetBinding? = null
+    private val binding get() = _binding!!
+
+    private var _map: MapView? = null
+    private val map get() = _map!!
+
+    private var _context: Context? = null
+    private val nonNullContext get() = _context!!
+
+    private var _mFusedLocationClient: FusedLocationProviderClient? = null
+    private val mFusedLocationClient get() = _mFusedLocationClient!!
+
     private var fab: FloatingActionButton? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        _context = context
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MapBottomSheetBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[MapViewModel::class.java]
+        _binding = MapBottomSheetBinding.inflate(inflater, container, false)
+        _mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         initViews()
-        findUserLocation()
-        binding.closeBtn.setOnClickListener { dialog?.dismiss() }
-        binding.submitLocationBtn.setOnClickListener {
-            val latLon: LatLng = map.cameraTargetPosition
-            Intent(context, DetailsAddressActivity::class.java).apply {
-                putExtra("lat", latLon.latitude)
-                putExtra("lon", latLon.longitude)
-                context.startActivity(this)
-                dismiss()
-            }
-        }
-        if (locationStatus())
-            getLocation()
+        closeSheet()
+        submitLocationOnMap()
+        findMyLocation()
+        if (latLon == null)
+            findUserLocation()
+        lifecycleScope.launch { createMap((latLon ?: LatLng(36.2972, 59.6067))) }
+
         return binding.root
     }
 
@@ -91,34 +91,46 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
             setCancelable(false)
             setCanceledOnTouchOutside(false)
             isCancelable = false
-        }
-        dialog.setOnShowListener { it ->
-            val sheet = it as BottomSheetDialog
-            val bottomSheet =
-                sheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet?.let {
-                val behavior = BottomSheetBehavior.from(it)
-                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                behavior.isDraggable = false
+
+            setOnShowListener { it ->
+                val sheet = it as BottomSheetDialog
+                val bottomSheet =
+                    sheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+                bottomSheet?.let {
+                    val behavior = BottomSheetBehavior.from(it)
+                    behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    behavior.isDraggable = false
+                }
             }
         }
 
         return dialog
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        this.context = context
+    private fun initViews() {
+        fab = binding.floatingActionButton
+    }
+
+    private fun closeSheet() {
+        binding.closeBtn.setOnClickListener { dialog?.dismiss() }
+    }
+
+    private fun submitLocationOnMap() {
+        binding.submitLocationBtn.setOnClickListener {
+            val latLon: LatLng = map.cameraTargetPosition
+            Intent(context, DetailsAddressActivity::class.java).apply {
+                putExtra("lat", latLon.latitude)
+                putExtra("lon", latLon.longitude)
+                nonNullContext.startActivity(this)
+                dismiss()
+            }
+        }
     }
 
     private fun locationStatus(): Boolean {
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager =
+            nonNullContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-    }
-
-    private fun initViews() {
-        map = binding.map
-        fab = binding.floatingActionButton
     }
 
     private fun displayLocationSettingsRequest() {
@@ -131,7 +143,7 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
             .addLocationRequest(locationRequest)
             .setAlwaysShow(true)
 
-        val settingsClient = LocationServices.getSettingsClient(context)
+        val settingsClient = LocationServices.getSettingsClient(nonNullContext)
         val task = settingsClient.checkLocationSettings(builder.build())
 
         task.addOnSuccessListener {
@@ -154,20 +166,22 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
     }
 
     private fun findUserLocation() {
+        if (locationStatus())
+            getLocation()
+    }
 
+    private fun findMyLocation() {
         fab?.setOnClickListener {
             if (!locationStatus())
                 displayLocationSettingsRequest()
             else
                 getLocation()
         }
-
     }
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
         findLocationStatus(true)
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         val locationRequest =
             LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 1000)
                 .setMaxUpdates(1)
@@ -177,9 +191,14 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
                 for (location in locationRes.locations) {
                     if (location != null) {
                         findLocationStatus()
-                        val latLon = LatLng(location.latitude, location.longitude)
-                        map.moveCamera(latLon, 0f)
-                        map.setZoom(18f, 0f)
+                        lifecycleScope.launch {
+                            createMap(
+                                LatLng(
+                                    location.latitude,
+                                    location.longitude
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -203,7 +222,7 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
             Activity.RESULT_CANCELED -> {
                 Toast.makeText(
                     context,
-                    "برای موقعیت یابی باید موقعیت مکانی را روشن کنید.",
+                    getString(R.string.permission_denied),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -211,15 +230,36 @@ class ModalBottomSheetMap : BottomSheetDialogFragment() {
     }
 
     private fun findLocationStatus(isSearching: Boolean = false) {
+        Log.i(TAG, "findLocationStatus: $isSearching")
         if (isSearching) {
             binding.loading.visibility = View.VISIBLE
+            binding.submitLocationBtn.isEnabled = false
             fab?.setImageIcon(null)
             fab?.isClickable = false
         } else {
             binding.loading.visibility = View.INVISIBLE
-            fab?.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_locate_fixed))
+            binding.submitLocationBtn.isEnabled = true
+            fab?.setImageDrawable(
+                ContextCompat.getDrawable(
+                    nonNullContext,
+                    R.drawable.ic_locate_fixed
+                )
+            )
             fab?.isClickable = true
         }
+    }
+
+    private suspend fun createMap(latLon: LatLng) {
+        withContext(Dispatchers.Main) {
+            _map = binding.map
+            map.moveCamera(latLon, 0f)
+            map.setZoom(18f, 0f)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

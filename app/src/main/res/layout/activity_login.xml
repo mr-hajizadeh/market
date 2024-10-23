@@ -8,7 +8,10 @@
     android:animateLayoutChanges="true"
     android:background="@color/green"
     android:clipToPadding="false"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
+    android:textDirection="rtl"
     tools:context=".Activity.LoginActivity">
 
     <ImageView
@@ -28,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/white_bg"
         android:orientation="vertical"
         android:padding="16dp"
@@ -55,31 +58,30 @@
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textColor="@color/text_color" />
 
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
             android:id="@+id/phoneEdt"
+            style="@style/outlineEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@drawable/outline_bg"
             android:ems="10"
             android:hint="@string/hint_digit_phone_number"
+            android:imeOptions="actionDone"
             android:inputType="phone"
             android:lines="1"
             android:maxLength="11"
             android:maxLines="1"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="10dp"
-            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
             android:textColor="@color/text_color"
             android:textColorHint="@color/secondary_gray"
-            android:textSize="13sp"
             tools:ignore="Autofill" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/submitBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:enabled="false"
+            android:fontFamily="@font/vazir"
             android:text="@string/title_submit" />
 
     </LinearLayout>
@@ -90,14 +92,15 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/white_bg"
         android:orientation="vertical"
         android:padding="16dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView131"
@@ -116,70 +119,154 @@
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textColor="@color/text_color" />
 
-        <com.google.android.material.textfield.TextInputEditText
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="16dp"
-            android:background="@drawable/outline_bg"
-            android:ems="10"
-            android:hint="@string/hint_digit_phone_number"
-            android:inputType="phone"
-            android:lines="1"
-            android:maxLines="1"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="10dp"
-            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-            android:textColor="@color/text_color"
-            android:textColorHint="@color/secondary_gray"
-            android:textSize="13sp"
-            tools:ignore="Autofill" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/firstEdt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/input_stroke_bg"
+                android:ems="10"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+
+            <EditText
+                android:id="@+id/secondEdt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/input_stroke_bg"
+                android:ems="10"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+
+            <EditText
+                android:id="@+id/thirdEdt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/input_stroke_bg"
+                android:ems="10"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+
+            <EditText
+                android:id="@+id/fourthEdt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="0.2"
+                android:background="@drawable/input_stroke_bg"
+                android:ems="10"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:imeOptions="actionNext"
+                android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+
+            <EditText
+                android:id="@+id/fifthEdt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:background="@drawable/input_stroke_bg"
+                android:ems="10"
+                android:fontFamily="@font/vazir"
+                android:gravity="center"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:lines="1"
+                android:maxLength="1"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
+
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="4dp">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/changePhoneBtn"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/vazir"
                 android:text="@string/title_change_phone"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@color/link"
+                app:backgroundTint="@color/colorTransparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/timerTxt"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:gravity="center|end"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@color/text_color"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/changePhoneBtn"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="02:00" />
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/resendBtn"
+                style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/vazir"
                 android:text="@string/title_resend"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="@color/red"
                 android:visibility="gone"
+                app:backgroundTint="@color/colorTransparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/loginBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:enabled="true"
+            android:fontFamily="@font/vazir"
             android:text="@string/title_login" />
 
     </LinearLayout>
