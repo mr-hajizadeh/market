@@ -2,7 +2,6 @@ package com.se7en.market.Activity.Ui
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import zabih.lib.zipersiancalendar.ZiPersianCalendar
-import kotlin.math.max
 
 class ModalBottomSheetCalendar(
     private val birthdayChangeListener: BirthdayChangeListener,
@@ -94,7 +92,7 @@ class ModalBottomSheetCalendar(
 
     private fun setupNumberPickers(pickers: List<NumberPicker>) {
         val currentYear = persianCalendar.year
-        var currentMonth = persianCalendar.month + 1
+        val currentMonth = persianCalendar.month + 1
         var currentDay = persianCalendar.dayOfMonth
         var dayPicker: NumberPicker? = null
 
