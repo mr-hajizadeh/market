@@ -69,6 +69,7 @@
     <string name="error_message_empty_phone">این فیلد الزامی است</string>
     <string name="error_message_pattern_phone">شماره همراه باید 11 رقم باشد</string>
     <string name="permission_denied">برای موقعیت یابی باید موقعیت مکانی را روشن کنید.</string>
+    <string name="error_connection">اتصال اینترنت خود را بررسی کنید!</string>
 
     <string name="sub_title_orders">لیست تمامی سفارش های شما</string>
     <string name="sub_title_address">جزئیات آدرس خود را وارد کنید</string>
