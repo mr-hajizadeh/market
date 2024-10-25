@@ -88,4 +88,8 @@ dependencies {
 
     //noinspection UseTomlInstead
     implementation("com.ericktijerou.koleton:koleton:1.0.0-beta01")
+
+    //noinspection UseTomlInstead
+    implementation("com.github.zabih-dev:ZiPersianCalendar:1.0.0")
+
 }

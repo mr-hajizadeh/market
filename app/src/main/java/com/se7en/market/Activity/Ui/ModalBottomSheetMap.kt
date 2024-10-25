@@ -79,27 +79,30 @@ class ModalBottomSheetMap(private val latLon: LatLng? = null) : BottomSheetDialo
         findMyLocation()
         if (latLon == null)
             findUserLocation()
-        lifecycleScope.launch { createMap((latLon ?: LatLng(36.2972, 59.6067))) }
+        createMap(latLon ?: LatLng(36.2972, 59.6067))
 
         return binding.root
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main){
+                dialog.apply {
+                    setCancelable(false)
+                    setCanceledOnTouchOutside(false)
+                    isCancelable = false
 
-        dialog.apply {
-            setCancelable(false)
-            setCanceledOnTouchOutside(false)
-            isCancelable = false
-
-            setOnShowListener { it ->
-                val sheet = it as BottomSheetDialog
-                val bottomSheet =
-                    sheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-                bottomSheet?.let {
-                    val behavior = BottomSheetBehavior.from(it)
-                    behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    behavior.isDraggable = false
+                    setOnShowListener { it ->
+                        val sheet = it as BottomSheetDialog
+                        val bottomSheet =
+                            sheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+                        bottomSheet?.let {
+                            val behavior = BottomSheetBehavior.from(it)
+                            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                            behavior.isDraggable = false
+                        }
+                    }
                 }
             }
         }
@@ -249,12 +252,10 @@ class ModalBottomSheetMap(private val latLon: LatLng? = null) : BottomSheetDialo
         }
     }
 
-    private suspend fun createMap(latLon: LatLng) {
-        withContext(Dispatchers.Main) {
-            _map = binding.map
-            map.moveCamera(latLon, 0f)
-            map.setZoom(18f, 0f)
-        }
+    private fun createMap(latLon: LatLng) {
+        _map = binding.map
+        map.moveCamera(latLon, 0f)
+        map.setZoom(18f, 0f)
     }
 
     override fun onDestroy() {

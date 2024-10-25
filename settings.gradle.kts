@@ -8,10 +8,12 @@ pluginManagement {
             }
         }
         mavenCentral()
-        jcenter()
         gradlePluginPortal()
         maven {
             url = uri("https://maven.neshan.org/artifactory/public-maven")
+        }
+        maven {
+            url = uri("https://jitpack.io")
         }
     }
 }
@@ -23,9 +25,11 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.neshan.org/artifactory/public-maven")
         }
+        maven {
+            url = uri("https://jitpack.io")
+        }
     }
 }
 
 rootProject.name = "Market"
 include(":app")
- 

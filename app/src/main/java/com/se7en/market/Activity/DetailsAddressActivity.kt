@@ -2,15 +2,12 @@ package com.se7en.market.Activity
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -19,7 +16,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.se7en.market.Activity.Ui.ModalBottomSheetMap.Companion.TAG
 import com.se7en.market.Model.ReverseGeocoding
-import com.se7en.market.R
 import com.se7en.market.ViewModel.MapViewModel
 import com.se7en.market.databinding.ActivityDetailsAddressBinding
 import koleton.api.hideSkeleton
@@ -69,7 +65,7 @@ class DetailsAddressActivity : BaseActivity() {
             if (validateEditText(editTexts)) {
                 Toast.makeText(this@DetailsAddressActivity, "form submitted", Toast.LENGTH_SHORT)
                     .show()
-            } else setErrorEditText()
+            } else setErrorEditText(editTexts)
         }
 
     }
@@ -154,13 +150,6 @@ class DetailsAddressActivity : BaseActivity() {
         convertToPersianEditText(binding.phoneEdt, isError = true)
         convertToPersianEditText(binding.deliveryNameEdt, isError = true)
 
-    }
-
-    private fun setErrorEditText() {
-        editTexts.forEach {
-            if (it.text.isEmpty())
-                it.setBackgroundResource(R.drawable.error_input_bg)
-        }
     }
 
     private fun reverseGeocoding(lat: Double, lon: Double) {

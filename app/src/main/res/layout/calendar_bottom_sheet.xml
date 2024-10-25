@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        tools:ignore="UseCompoundDrawables,UselessParent">
+
+        <ImageView
+            android:id="@+id/closeBtn"
+            style="@style/customNavigateButton"
+            android:layout_width="@dimen/navigate_button"
+            android:layout_height="@dimen/navigate_button"
+            android:contentDescription="@string/title_submit_location"
+            android:padding="6dp"
+            app:srcCompat="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="@string/title_select_birthday"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="16dp">
+
+        <NumberPicker
+            android:id="@+id/year"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fadingEdge="vertical"
+            android:selectionDividerHeight="0.5dp"
+            tools:ignore="UnusedAttribute" />
+
+        <NumberPicker
+            android:id="@+id/month"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:selectionDividerHeight="0.5dp"
+            tools:ignore="UnusedAttribute" />
+
+        <NumberPicker
+            android:id="@+id/day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:selectionDividerHeight="0.5dp"
+            tools:ignore="UnusedAttribute" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submitBtn"
+        style="@style/Widget.Material3.Button.UnelevatedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/vazir"
+        android:text="@string/title_submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</LinearLayout>

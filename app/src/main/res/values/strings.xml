@@ -39,6 +39,15 @@
     <string name="title_resend">ارسال مجدد</string>
     <string name="title_edit">ویرایش</string>
     <string name="title_delete_address">حذف آدرس</string>
+    <string name="title_first_name">نام</string>
+    <string name="title_last_name">نام خانوادگی</string>
+    <string name="title_birthday_date">تاریخ تولد</string>
+    <string name="title_select_birthday">انتخاب تاریخ تولد</string>
+    <string name="title_email">ایمیل</string>
+    <string name="title_gender">جنسیت</string>
+    <string name="title_male">مرد</string>
+    <string name="title_female">زن</string>
+    <string name="title_submit_changes">ذخیره تغییرات</string>
 
     <string name="search_hint">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>
@@ -47,6 +56,9 @@
     <string name="hint_receiver_name">نام گیرنده را وارد کنید</string>
     <string name="hint_phone_number">شماره گیرنده را وارد کنید</string>
     <string name="hint_digit_phone_number">۰۹۱۲۳۴۵۶۷۸۹</string>
+    <string name="hint_first_name">نام خود را وارد کنید</string>
+    <string name="hint_last_name">نام خانوادگی خود را وارد کنید</string>
+    <string name="hint_email">ایمیل خود را وارد کنید</string>
 
 
     <string name="permission_denied_message">

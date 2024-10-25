@@ -112,7 +112,7 @@ class LoginActivity : BaseActivity() {
         }
 
         editTexts[0].requestFocus()
-        handelCodeEditText(editTexts)
+        handleCodeEditText(editTexts)
 
         binding.loginBtn.setOnClickListener {
             if (!validateEditText(editTexts)) Toast.makeText(
@@ -125,17 +125,17 @@ class LoginActivity : BaseActivity() {
 
     }
 
-    private fun handelCodeEditText(editTexts: List<EditText>) {
+    private fun handleCodeEditText(editTexts: List<EditText>) {
         editTexts.forEach {
             it.addTextChangedListener(object : TextWatcher {
                 var isChange = false
+
                 override fun beforeTextChanged(
                     s: CharSequence?,
                     start: Int,
                     count: Int,
                     after: Int
                 ) {
-
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -146,8 +146,12 @@ class LoginActivity : BaseActivity() {
                         if (validateEditText(editTexts)) loginIntent()
                         if (!isChange) {
                             isChange = true
-                            it.setText(convertToPersianNumbers(s.toString()))
-                            isChange = true
+                            val convertedText = convertToPersianNumbers(s.toString())
+                            if (convertedText != it.text.toString()) {
+                                it.setText(convertedText)
+                                it.setSelection(convertedText.length)
+                            }
+                            isChange = false
                         }
                     }
                 }
@@ -157,7 +161,6 @@ class LoginActivity : BaseActivity() {
             })
         }
     }
-
 
     private fun loginIntent() {
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))

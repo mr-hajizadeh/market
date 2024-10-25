@@ -1,16 +1,13 @@
 package com.se7en.market.Activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.se7en.market.R
+import zabih.lib.zipersiancalendar.ZiPersianCalendar
 
 open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,8 +62,12 @@ open class BaseActivity : AppCompatActivity() {
                         view.setSelection(formated.length)
                         isChange = false
                     }
+
                     isError && s?.length!! >= 1 ->
                         view.setBackgroundResource(R.drawable.input_bg)
+
+                    isError && s?.isEmpty() == true ->
+                        view.setBackgroundResource(R.drawable.error_input_bg)
 
                     submitBtn != null -> submitBtn.isEnabled = s?.length!! >= 11
                 }
@@ -78,5 +79,17 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun validateEditText(editTexts: List<EditText>) = editTexts.all { it.text.isNotEmpty() }
+
+    fun setErrorEditText(editTexts: List<EditText>) {
+        editTexts.forEach {
+            if (it.text.isEmpty())
+                it.setBackgroundResource(R.drawable.error_input_bg)
+        }
+    }
+
+    fun dateFormater(year: Int, month: Int, day: Int): String {
+        val cal = ZiPersianCalendar(year, month, day)
+        return cal.dayOfMonth.toString() + " " + cal.monthName + " " + cal.year
+    }
 
 }

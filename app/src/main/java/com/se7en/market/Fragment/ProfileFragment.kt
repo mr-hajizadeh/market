@@ -1,5 +1,6 @@
 package com.se7en.market.Fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -10,12 +11,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import com.se7en.market.Activity.AddressActivity
+import com.se7en.market.Activity.ProfileActivity
 import com.se7en.market.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment(), LifecycleObserver {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+
+    private var _context: Context? = null
+    private val noneNullContext get() = _context!!
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        _context = context
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,14 +36,34 @@ class ProfileFragment : Fragment(), LifecycleObserver {
         val root: View = binding.root
 
         initShimmer()
-        binding.myAddressBtn.setOnClickListener {
-            startActivity(Intent(requireActivity(), AddressActivity::class.java))
-        }
+        menuButtons()
 
         return root
     }
 
     private fun initViews() {
+
+    }
+
+    private fun menuButtons() {
+
+        binding.myAddressBtn.setOnClickListener {
+            startActivity(
+                Intent(
+                    noneNullContext,
+                    AddressActivity::class.java
+                )
+            )
+        }
+
+        binding.profileBtn.setOnClickListener {
+            startActivity(
+                Intent(
+                    noneNullContext,
+                    ProfileActivity::class.java
+                )
+            )
+        }
 
     }
 

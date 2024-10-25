@@ -235,9 +235,8 @@
                     android:layoutDirection="rtl"
                     android:paddingHorizontal="16dp"
                     android:text="@string/title_home"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="@drawable/selector_radio_text"
-                    android:textSize="11sp" />
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    android:textColor="@drawable/selector_radio_text" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/workplaceRd"
@@ -251,9 +250,8 @@
                     android:drawablePadding="6dp"
                     android:paddingHorizontal="8dp"
                     android:text="@string/title_workplace"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="@drawable/selector_radio_text"
-                    android:textSize="11sp" />
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    android:textColor="@drawable/selector_radio_text" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/otherRd"
@@ -266,9 +264,8 @@
                     android:drawablePadding="6dp"
                     android:paddingHorizontal="8dp"
                     android:text="@string/title_other"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="@drawable/selector_radio_text"
-                    android:textSize="11sp" />
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    android:textColor="@drawable/selector_radio_text" />
             </RadioGroup>
 
             <EditText
