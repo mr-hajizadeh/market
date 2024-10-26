@@ -12,7 +12,7 @@
         android:title="@string/title_cart" />
 
     <item
-        android:id="@+id/navigation_search"
+        android:id="@+id/navigation_orders"
         android:icon="@drawable/selector_orders"
         android:title="@string/title_orders" />
 
