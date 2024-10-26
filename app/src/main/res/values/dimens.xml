@@ -11,5 +11,7 @@
     <dimen name="small_button">35dp</dimen>
     <dimen name="small_image">16dp</dimen>
     <dimen name="medium_image">30dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
 
 </resources>

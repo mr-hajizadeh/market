@@ -48,6 +48,7 @@
     <string name="title_male">مرد</string>
     <string name="title_female">زن</string>
     <string name="title_submit_changes">ذخیره تغییرات</string>
+    <string name="title_select_address">انتخاب آدرس</string>
 
     <string name="search_hint">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>

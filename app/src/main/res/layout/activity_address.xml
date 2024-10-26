@@ -60,30 +60,13 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/newAddressBtn"
-                style="@style/Widget.Material3.Button.TonalButton.Icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|end"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/vazir"
-                android:layoutDirection="rtl"
-                android:text="@string/title_add_address"
-                android:textColor="@color/green"
-                app:icon="@drawable/ic_square_plus"
-                app:iconTint="@color/green"
-                tools:ignore="RtlHardcoded" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/addressView"
+            <FrameLayout
+                android:id="@+id/fragmentContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingHorizontal="16dp"
-                android:paddingBottom="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/address_view_holder" />
+                android:layout_height="match_parent">
+
+            </FrameLayout>
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
