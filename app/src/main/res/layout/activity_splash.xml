@@ -40,6 +40,16 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/tryBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            app:icon="@drawable/ic_try_again"
+            android:backgroundTint="@color/secondary_green"
+            android:fontFamily="@font/vazir"
+            android:text="@string/title_try_again" />
+
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loading"
             android:layout_width="wrap_content"
