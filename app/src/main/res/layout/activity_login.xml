@@ -17,10 +17,11 @@
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
         android:padding="32dp"
-        android:src="@drawable/mail"
+        android:src="@drawable/login_img"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
