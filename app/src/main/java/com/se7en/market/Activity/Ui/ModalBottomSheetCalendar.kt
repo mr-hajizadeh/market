@@ -38,39 +38,41 @@ class ModalBottomSheetCalendar(
         savedInstanceState: Bundle?
     ): View {
         _binding = CalendarBottomSheetBinding.inflate(inflater, container, false)
-
-        initViews()
-        closeBtn()
-
         return binding.root
     }
 
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-
-        lifecycleScope.launch {
-            withContext(Dispatchers.Main) {
-                dialog.apply {
-                    setCancelable(false)
-                    setCanceledOnTouchOutside(false)
-
-                    setOnShowListener { it ->
-                        val sheet = it as BottomSheetDialog
-                        val bottomSheetDialog =
-                            sheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-                        bottomSheetDialog?.let {
-                            val behavior = BottomSheetBehavior.from(it)
-                            behavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                            behavior.isDraggable = false
-                        }
-                    }
-                }
-            }
-        }
-
-        return dialog
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+        closeBtn()
     }
+
+
+//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+//        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+//
+//        lifecycleScope.launch {
+//            withContext(Dispatchers.Main) {
+//                dialog.apply {
+//                    setCancelable(false)
+//                    setCanceledOnTouchOutside(false)
+//
+//                    setOnShowListener { it ->
+//                        val sheet = it as BottomSheetDialog
+//                        val bottomSheetDialog =
+//                            sheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+//                        bottomSheetDialog?.let {
+//                            val behavior = BottomSheetBehavior.from(it)
+//                            behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+//                            behavior.isDraggable = false
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        return dialog
+//    }
 
     private fun initViews() {
 

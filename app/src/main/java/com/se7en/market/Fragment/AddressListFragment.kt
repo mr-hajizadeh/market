@@ -130,5 +130,4 @@ class AddressListFragment : Fragment() {
                 showDialog()
         }
 
-
 }

@@ -65,7 +65,11 @@ class AddressAdapter(private val items: List<AddressModel>) :
             }
             editBtn.setOnClickListener {
                 val modal = ModalBottomSheetMap(LatLng(item.lat, item.lon))
-                modal.show((context as AppCompatActivity).supportFragmentManager, modal.tag)
+                modal.show(
+                    (context as AppCompatActivity).supportFragmentManager,
+                    ModalBottomSheetMap.TAG
+                )
+
             }
             deleteBtn.setOnClickListener { }
 
