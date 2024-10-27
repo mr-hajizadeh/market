@@ -94,4 +94,7 @@ dependencies {
     //noinspection UseTomlInstead
     implementation("com.github.zabih-dev:ZiPersianCalendar:1.0.0")
 
+    //noinspection UseTomlInstead
+    implementation("com.tbuonomo:dotsindicator:5.0")
+
 }

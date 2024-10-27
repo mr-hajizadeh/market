@@ -66,7 +66,21 @@ class AddressListFragment : Fragment() {
 
     private fun setupAddressView() {
         val addressView = binding.addressView
-        adapter = AddressAdapter(listOf(AddressModel("خانه", "test")))
+        adapter = AddressAdapter(
+            listOf(
+                AddressModel(
+                    "خانه",
+                    "استان خراسان رضوی، مشهد، رسالت، بلوار مقداد، مقداد 28",
+                    true,
+                    36.30895763524162,
+                    59.64298011641936
+                ),
+                AddressModel(
+                    "دانشگاه", "مشهد،بهارستان،بلوار نماز،بلوار کاوه",
+                    false, 36.2826897, 59.5483996
+                ),
+            )
+        )
         addressView.adapter = adapter
         addressView.setHasFixedSize(true)
     }
