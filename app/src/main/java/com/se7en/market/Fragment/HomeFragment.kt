@@ -7,7 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.se7en.market.Activity.Ui.AddressListBottomSheet
 import com.se7en.market.Adapter.CategoryAdapter
 import com.se7en.market.Adapter.SliderAdapter
@@ -23,6 +24,19 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+    private var _viewPager: ViewPager2? = null
+    private val viewPager get() = _viewPager!!
+
+    private var _sliderAdapter: SliderAdapter? = null
+    private val sliderAdapter get() = _sliderAdapter!!
+
+    private val sliderHandler = Handler(Looper.getMainLooper())
+    private val sliderRunnable = Runnable {
+        val nextItem =
+            if (viewPager.currentItem == sliderAdapter.itemCount - 1) 0 else viewPager.currentItem + 1
+        viewPager.currentItem = nextItem
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +48,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initViews()
         binding.collapsingToolbar.loadSkeleton()
         binding.homeContainer.loadSkeleton()
         binding.categoryView.loadSkeleton(R.layout.category_view_holder) {
@@ -48,6 +63,10 @@ class HomeFragment : Fragment() {
             initSlider()
             buttonsOnCLick()
         }, 3000)
+    }
+
+    private fun initViews() {
+        _viewPager = binding.sliderView
     }
 
     private fun initCategory() {
@@ -78,16 +97,24 @@ class HomeFragment : Fragment() {
     }
 
     private fun initSlider() {
-        val viewPager = binding.sliderView
-        val sliderAdapter = SliderAdapter(
-            listOf(
+        val dotsIndicator = binding.dotsIndicator
+        _sliderAdapter = SliderAdapter(
+            mutableListOf(
                 SliderModel(R.drawable.t1),
                 SliderModel(R.drawable.t2),
                 SliderModel(R.drawable.t3)
             )
         )
         viewPager.adapter = sliderAdapter
-        binding.dotsIndicator.attachTo(viewPager)
+        dotsIndicator.attachTo(viewPager)
+
+        viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                sliderHandler.removeCallbacks(sliderRunnable)
+                sliderHandler.postDelayed(sliderRunnable, 5000)
+            }
+        })
     }
 
     private fun buttonsOnCLick() {
@@ -99,6 +126,16 @@ class HomeFragment : Fragment() {
     private fun showAddressListBottomSheet(closeable: Boolean = true) {
         AddressListBottomSheet.newInstance(closeable)
             .show(requireActivity().supportFragmentManager, AddressListBottomSheet.TAG)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sliderHandler.removeCallbacks(sliderRunnable)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sliderHandler.postDelayed(sliderRunnable, 5000)
     }
 
 }

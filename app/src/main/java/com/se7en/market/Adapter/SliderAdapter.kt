@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.se7en.market.Model.SliderModel
 import com.se7en.market.databinding.SliderViewHolderBinding
 
@@ -26,13 +27,13 @@ class SliderAdapter(private val items: List<SliderModel>) :
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
-        holder.setData(items[position], context)
+        holder.setData(items[position])
     }
 
     class SliderViewHolder(private val binding: SliderViewHolderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun setData(item: SliderModel, context: Context) {
-            binding.sliderImg.setImageDrawable(context.getDrawable(item.image))
+        fun setData(item: SliderModel) {
+            binding.sliderImg.setImageResource(item.image)
         }
     }
 
