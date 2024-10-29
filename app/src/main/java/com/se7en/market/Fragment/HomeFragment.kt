@@ -56,11 +56,14 @@ class HomeFragment : Fragment() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
+            initSlider()
+        }, 1000)
+
+        Handler(Looper.getMainLooper()).postDelayed({
             binding.collapsingToolbar.hideSkeleton()
             binding.homeContainer.hideSkeleton()
             binding.categoryView.hideSkeleton()
             initCategory()
-            initSlider()
             buttonsOnCLick()
         }, 3000)
     }

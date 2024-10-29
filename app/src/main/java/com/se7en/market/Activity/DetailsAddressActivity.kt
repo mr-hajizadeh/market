@@ -115,12 +115,10 @@ class DetailsAddressActivity : BaseActivity() {
     }
 
     private fun startSkeleton() {
-        toolbar?.loadSkeleton()
         containerLayout?.loadSkeleton()
     }
 
     private fun hideSkeleton() {
-        toolbar?.hideSkeleton()
         containerLayout?.hideSkeleton()
     }
 

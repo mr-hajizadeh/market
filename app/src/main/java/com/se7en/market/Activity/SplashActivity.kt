@@ -18,7 +18,6 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.se7en.market.ViewModel.SplashViewModel
 import com.se7en.market.databinding.ActivitySplashBinding
 
-
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
 
