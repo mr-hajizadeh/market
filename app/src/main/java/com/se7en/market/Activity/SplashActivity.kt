@@ -72,8 +72,8 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkPhone() {
 
-        viewmodel.getPhoneNumber().observe(this) { phone ->
-            if (phone.isNullOrEmpty())
+        viewmodel.getPhoneNumber().observe(this) { loginInfo ->
+            if (loginInfo.phone.isEmpty())
                 Handler(Looper.getMainLooper()).postDelayed({
                     showLoginActivity()
                 }, 3000)

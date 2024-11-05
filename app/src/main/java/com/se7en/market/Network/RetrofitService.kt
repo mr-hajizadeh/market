@@ -1,34 +1,38 @@
 package com.se7en.market.Network
 
+import com.se7en.market.Utils.Constance.Companion.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitService {
+class RetrofitService {
 
-    private fun getInstance(baseUrl: String = "https://api.neshan.org"): Retrofit {
+    companion object {
 
-        val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        private fun getInstance(baseUrl: String): Retrofit {
 
-        val client =
-            OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
+            val loggingInterceptor = HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+
+            val client =
+                OkHttpClient.Builder()
+                    .addInterceptor(loggingInterceptor)
+                    .build()
+
+            return Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build()
 
-        return Retrofit.Builder()
-            .baseUrl("https://api.neshan.org")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
+        }
 
+        fun apiService(baseUrl: String = BASE_URL): ApiService {
+            return getInstance(baseUrl).create(ApiService::class.java)
+        }
     }
 
-
-    fun apiService(baseUrl: String = ""): ApiService {
-        return getInstance(baseUrl).create(ApiService::class.java)
-    }
 
 }

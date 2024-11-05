@@ -7,7 +7,7 @@ import retrofit2.Call
 class MapRepository() {
 
     fun reverseGeocoding(lat: Double, lon: Double): Call<ReverseGeocoding> {
-        return RetrofitService.apiService().reverseGeocoding(lat, lon)
+        return RetrofitService.apiService("https://api.neshan.org").reverseGeocoding(lat, lon)
     }
 
 }

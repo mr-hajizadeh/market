@@ -39,7 +39,8 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView13"
@@ -76,14 +77,31 @@
             android:textColorHint="@color/secondary_gray"
             tools:ignore="Autofill" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/submitBtn"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:enabled="false"
-            android:fontFamily="@font/vazir"
-            android:text="@string/title_submit" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="32dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:fontFamily="@font/vazir"
+                android:text="@string/title_submit" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/authProgressLoading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_margin="8dp"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:indicatorSize="20dp" />
+
+
+        </FrameLayout>
 
     </LinearLayout>
 
@@ -101,7 +119,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView131"
@@ -261,14 +279,29 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/loginBtn"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:enabled="true"
-            android:fontFamily="@font/vazir"
-            android:text="@string/title_login" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="32dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="true"
+                android:fontFamily="@font/vazir"
+                android:text="@string/title_login" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/loginProgressLoading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_margin="8dp"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:indicatorSize="20dp" />
+        </FrameLayout>
 
     </LinearLayout>
 

@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.play.services.auth.api.phone)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.security.crypto)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -96,5 +97,8 @@ dependencies {
 
     //noinspection UseTomlInstead
     implementation("com.tbuonomo:dotsindicator:5.0")
+
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.android.gms:play-services-auth-api-phone:11.6.0")
 
 }

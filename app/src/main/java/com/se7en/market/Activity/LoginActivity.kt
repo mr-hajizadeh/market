@@ -6,71 +6,94 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.auth.api.phone.SmsRetriever
-import com.se7en.market.Utils.Helper
+import com.se7en.market.Model.LoginInfo
+import com.se7en.market.Network.NetworkResult
 import com.se7en.market.Utils.SmsBroadcastReceiver
+import com.se7en.market.ViewModel.LoginViewModel
 import com.se7en.market.databinding.ActivityLoginBinding
 import java.util.Locale
 
-class LoginActivity : BaseActivity() {
+class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
 
     private lateinit var binding: ActivityLoginBinding
-    private val smsBroadcastReceiver = SmsBroadcastReceiver()
-
+    private lateinit var viewModel: LoginViewModel
+    private var smsReceiver: SmsBroadcastReceiver? = null
     private var authenticationLayout: LinearLayout? = null
     private var receiveCodeLayout: LinearLayout? = null
     private var phoneEdt: EditText? = null
+    private var submitBtn: Button? = null
+    private var loginBtn: Button? = null
+    private var editTexts: List<EditText>? = null
+
+    private var _phone: String? = null
+    private val phone get() = _phone!!
+    private var _token: String? = null
+    private val token get() = _token!!
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onResume() {
         super.onResume()
         val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
-        registerReceiver(smsBroadcastReceiver, intentFilter, RECEIVER_EXPORTED)
+        registerReceiver(smsReceiver, intentFilter, RECEIVER_EXPORTED)
     }
 
     override fun onPause() {
         super.onPause()
-        unregisterReceiver(smsBroadcastReceiver)
+        unregisterReceiver(smsReceiver)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         initViews()
-        setupAuthenticationViews()
-        startSmsRetriever()
         setContentView(binding.root)
+        startSMSListener()
+        sendPhone()
+        otpListener()
+        otpCodeListener()
+        confirmCodeListener()
     }
 
     private fun initViews() {
         authenticationLayout = binding.AuthenticationLayout
         receiveCodeLayout = binding.receiverCodeLayout
         phoneEdt = binding.phoneEdt
+        submitBtn = binding.submitBtn
+        loginBtn = binding.loginBtn
+        editTexts = listOf(
+            binding.firstEdt,
+            binding.secondEdt,
+            binding.thirdEdt,
+            binding.fourthEdt,
+            binding.fifthEdt
+        )
+        convertToPersianEditText(phoneEdt!!, submitBtn = submitBtn)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
     @SuppressLint("SetTextI18n")
-    private fun setupAuthenticationViews() {
-        val submitBtn = binding.submitBtn
-        submitBtn.setOnClickListener {
-            val phone = phoneEdt?.text.toString()
-            showAuthenticationLayout(false)
-            showReceiveCodeLayout()
-            binding.messageTxt.text = "کد 5 رقمی به شماره موبایل $phone ارسال گردید."
-            initReceiverCodeView()
-            Log.i("TAG", "onFinish: ${Helper.getAppHash(this)}")
-        }
-        convertToPersianEditText(phoneEdt!!, submitBtn = submitBtn)
+    private fun setupAuthenticationViews(phone: String) {
+        showAuthenticationLayout(false)
+        showReceiveCodeLayout()
+        binding.messageTxt.text = "کد 5 رقمی به شماره موبایل $phone ارسال گردید."
+        initReceiverCodeView()
     }
 
     private fun initReceiverCodeView() {
@@ -78,13 +101,6 @@ class LoginActivity : BaseActivity() {
         val resendBtn = binding.resendBtn
         val changePhoneNumberBtn = binding.changePhoneBtn
         val timerTxt = binding.timerTxt
-        val editTexts = listOf(
-            binding.firstEdt,
-            binding.secondEdt,
-            binding.thirdEdt,
-            binding.fourthEdt,
-            binding.fifthEdt
-        )
 
         val timer = object : CountDownTimer(120000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -111,11 +127,11 @@ class LoginActivity : BaseActivity() {
             timer.cancel()
         }
 
-        editTexts[0].requestFocus()
-        handleCodeEditText(editTexts)
+        editTexts?.get(0)?.requestFocus()
+        editTextsChangeText(editTexts!!)
 
-        binding.loginBtn.setOnClickListener {
-            if (!validateEditText(editTexts)) Toast.makeText(
+        loginBtn?.setOnClickListener {
+            if (!validateEditText(editTexts!!)) Toast.makeText(
                 this,
                 "Incorrect code!",
                 Toast.LENGTH_SHORT
@@ -125,7 +141,7 @@ class LoginActivity : BaseActivity() {
 
     }
 
-    private fun handleCodeEditText(editTexts: List<EditText>) {
+    private fun editTextsChangeText(editTexts: List<EditText>) {
         editTexts.forEach {
             it.addTextChangedListener(object : TextWatcher {
                 var isChange = false
@@ -143,7 +159,7 @@ class LoginActivity : BaseActivity() {
                         if (editTexts.lastIndex != editTexts.indexOf(it)) editTexts[editTexts.indexOf(
                             it
                         ) + 1].requestFocus()
-                        if (validateEditText(editTexts)) loginIntent()
+//                        if (validateEditText(editTexts)) loginIntent()
                         if (!isChange) {
                             isChange = true
                             val convertedText = convertToPersianNumbers(s.toString())
@@ -163,28 +179,49 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun loginIntent() {
-        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-        finish()
+        loginLoading()
+        Handler(Looper.getMainLooper()).postDelayed({
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            finish()
+        }, 500)
     }
 
-    private fun startSmsRetriever() {
-        val client = SmsRetriever.getClient(this /* context */)
-        val task = client.startSmsRetriever()
-        task.addOnSuccessListener {
-            Log.i("TAG", "startSmsRetriever: $it")
-        }
-        task.addOnFailureListener {
-            Log.i("TAG", "startSmsRetriever: ")
-        }
-        smsBroadcastReceiver.setListener(object : SmsBroadcastReceiver.SmsListener {
-            override fun onSmsReceived(message: String) {
-                Log.i("TAG", "onSmsReceived: $message")
+    private fun startSMSListener() {
+        try {
+            smsReceiver = SmsBroadcastReceiver()
+            smsReceiver!!.initOTPListener(this)
+
+//            val intentFilter = IntentFilter()
+//            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
+//            this.registerReceiver(smsReceiver, intentFilter)
+
+            val client = SmsRetriever.getClient(this)
+
+            val task = client.startSmsRetriever()
+            task.addOnSuccessListener {
+                // API successfully started
             }
 
-            override fun onSmsTimeOut() {
-                Log.i("TAG", "onSmsTimeOut: ")
+            task.addOnFailureListener {
+                // Fail to start API
             }
-        })
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun extractVerificationCode(message: String): String? {
+        val regex = Regex("\\d{6}")
+        val matchResult = regex.find(message)
+        return matchResult?.value
+    }
+
+    private fun populateVerificationCode(code: String) {
+        for (i in code.indices) {
+            if (i < editTexts?.size!!) {
+                editTexts?.get(i)?.setText(code[i].toString())
+            }
+        }
     }
 
     private fun showAuthenticationLayout(isVisibility: Boolean = true) {
@@ -195,6 +232,112 @@ class LoginActivity : BaseActivity() {
     private fun showReceiveCodeLayout(isVisibility: Boolean = true) {
         if (isVisibility) receiveCodeLayout?.visibility = View.VISIBLE
         else receiveCodeLayout?.visibility = View.GONE
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun otpListener() {
+        viewModel.tokenStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> {
+                    authLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    authLoading()
+                    setupAuthenticationViews(phone)
+                    _token = result.data.data.token
+                    viewModel.otpCode(token)
+                    Log.i("TAG", "otpListener: ${result.data}")
+                }
+
+                is NetworkResult.Error -> {
+                    authLoading()
+                    Log.i("TAG", "otpErrorListener: ${result.message}")
+                }
+            }
+        }
+    }
+
+    private fun sendPhone() {
+        submitBtn?.setOnClickListener {
+            _phone = phoneEdt?.text.toString()
+            viewModel.sendPhone(phoneWithoutZero(phone))
+        }
+    }
+
+    private fun phoneWithoutZero(phone: String) = convertToEnglishNumbers(phone).removePrefix("0")
+
+    private fun authLoading(isLoading: Boolean = false) {
+        val progressLoading = binding.authProgressLoading
+        if (isLoading) {
+            submitBtn?.isEnabled = false
+            progressLoading.visibility = View.VISIBLE
+        } else {
+            submitBtn?.isEnabled = true
+            progressLoading.visibility = View.GONE
+        }
+    }
+
+    private fun loginLoading(isLoading: Boolean = false) {
+        val progressLoading = binding.loginProgressLoading
+        if (isLoading) {
+            loginBtn?.isEnabled = false
+            progressLoading.visibility = View.VISIBLE
+        } else {
+            loginBtn?.isEnabled = true
+            progressLoading.visibility = View.GONE
+        }
+    }
+
+    private fun otpCodeListener() {
+        viewModel.codeStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> {}
+                is NetworkResult.Success -> {
+                    populateVerificationCode(result.data.data.code)
+                    Log.i("TAG", "otpCodeListener token: $token")
+                    viewModel.confirmCode(token, result.data.data.code)
+                }
+
+                is NetworkResult.Error -> {
+                    Log.i("TAG", "otpCodeListener: ${result.message}")
+                }
+            }
+        }
+    }
+
+    private fun confirmCodeListener() {
+        viewModel.confirmStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> {
+                    loginLoading(true)
+                }
+
+                is NetworkResult.Success -> {
+                    loginIntent()
+                    viewModel.saveLoginInfo(LoginInfo(phoneWithoutZero(phone), token))
+                    Log.i("TAG", "confirmCodeListener: ${result.data.data}")
+                }
+
+                is NetworkResult.Error -> {
+                    loginLoading()
+                    Log.i("TAG", "confirmCodeListener: ${result.message}")
+                }
+            }
+        }
+    }
+
+    override fun onOTPReceived(otp: String) {
+        val code = extractVerificationCode(otp)
+        Log.i("TAG", "onOTPReceived: $code")
+        populateVerificationCode(code.toString())
+        if (smsReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(smsReceiver!!)
+        }
+    }
+
+    override fun onOTPTimeOut() {
+        Log.i("TAG", "onOTPTimeOut: timeOut")
     }
 
 }

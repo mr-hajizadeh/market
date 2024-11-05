@@ -9,20 +9,21 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.se7en.market.Activity.Ui.ModalBottomSheetMap.Companion.TAG
-import com.se7en.market.Model.ReverseGeocoding
+import com.se7en.market.Network.NetworkResult
 import com.se7en.market.ViewModel.MapViewModel
 import com.se7en.market.databinding.ActivityDetailsAddressBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DetailsAddressActivity : BaseActivity() {
 
@@ -38,11 +39,11 @@ class DetailsAddressActivity : BaseActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this)[MapViewModel::class.java]
-        initViews()
+        lifecycleScope.launch { initViews() }
 
     }
 
-    private fun initViews() {
+    private suspend fun initViews() {
 
         val lat = intent.getDoubleExtra("lat", 0.0)
         val lon = intent.getDoubleExtra("lon", 0.0)
@@ -92,23 +93,22 @@ class DetailsAddressActivity : BaseActivity() {
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
-                    target: Target<Drawable>?,
+                    target: Target<Drawable>,
                     isFirstResource: Boolean
                 ): Boolean {
                     hideSkeleton()
-                    return false
+                    return true
                 }
 
                 override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
+                    resource: Drawable,
+                    model: Any,
                     target: Target<Drawable>?,
-                    dataSource: DataSource?,
+                    dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
                     hideSkeleton()
-                    return false
-                }
+                    return true                }
 
             })
             .into(binding.staticImg)
@@ -150,23 +150,23 @@ class DetailsAddressActivity : BaseActivity() {
 
     }
 
-    private fun reverseGeocoding(lat: Double, lon: Double) {
+    private suspend fun reverseGeocoding(lat: Double, lon: Double) {
 
-        viewModel.reverseGeocoding(lat, lon)
-            .enqueue(object : Callback<ReverseGeocoding> {
-                override fun onResponse(
-                    call: Call<ReverseGeocoding>,
-                    response: Response<ReverseGeocoding>
-                ) {
-                    if (response.isSuccessful && response.body() != null)
-                        binding.addressEdt.setText(response.body()?.formatted_address)
-                }
+        viewModel.geocodingStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading ->
+                    Log.i(TAG, "reverseGeocoding: Loading")
 
-                override fun onFailure(call: Call<ReverseGeocoding>, t: Throwable) {
-                    Log.i(TAG, "onFailure: ${t.message}")
-                }
-            })
+                is NetworkResult.Success ->
+                    binding.addressEdt.setText(result.data.formatted_address)
 
+                is NetworkResult.Error ->
+                    Log.i(TAG, "reverseGeocoding: Error")
+
+            }
+        }
+
+        withContext(Dispatchers.IO) { viewModel.reverseGeocoding(lat, lon) }
     }
 
 }
