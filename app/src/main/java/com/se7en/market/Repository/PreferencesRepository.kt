@@ -22,6 +22,11 @@ class PreferencesRepository(context: Context) {
 
     fun saveLoginInfo(loginInfo: LoginInfo) {
         preferencesManager.saveString(KEY_PHONE, loginInfo.phone)
-        preferencesManager.saveString(KEY_TOKEN, loginInfo.toke)
+        preferencesManager.saveString(KEY_TOKEN, loginInfo.token)
     }
+
+    fun logout() {
+        preferencesManager.clear()
+    }
+
 }

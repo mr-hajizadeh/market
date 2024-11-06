@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleObserver
 import com.se7en.market.Activity.AddressActivity
 import com.se7en.market.Activity.ProfileActivity
+import com.se7en.market.Activity.Ui.LogoutBottomSheet
 import com.se7en.market.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment(), LifecycleObserver {
@@ -37,6 +38,7 @@ class ProfileFragment : Fragment(), LifecycleObserver {
 
         initShimmer()
         menuButtons()
+        logout()
 
         return root
     }
@@ -77,6 +79,15 @@ class ProfileFragment : Fragment(), LifecycleObserver {
             creditView.visibility = View.VISIBLE
 
         }, 3000)
+
+    }
+
+    private fun logout() {
+
+        binding.logoutBtn.setOnClickListener {
+            val modal = LogoutBottomSheet()
+            modal.show(childFragmentManager,"LogoutBottomSheet")
+        }
 
     }
 

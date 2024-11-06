@@ -1,6 +1,7 @@
 package com.se7en.market.Activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -73,18 +74,18 @@ class SplashActivity : AppCompatActivity() {
     private fun checkPhone() {
 
         viewmodel.getPhoneNumber().observe(this) { loginInfo ->
-            if (loginInfo.phone.isEmpty())
-                Handler(Looper.getMainLooper()).postDelayed({
-                    showLoginActivity()
-                }, 3000)
+            if (loginInfo.phone.isEmpty() && loginInfo.token.isEmpty())
+                Handler(Looper.getMainLooper()).postDelayed(
+                    { customIntent(LoginActivity::class.java) }, 3000
+                )
             else
-                Toast.makeText(this@SplashActivity, "login", Toast.LENGTH_LONG).show()
+                customIntent(MainActivity::class.java)
         }
 
     }
 
-    private fun showLoginActivity() {
-        startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+    private fun customIntent(activityClass: Class<out Activity>) {
+        startActivity(Intent(this@SplashActivity, activityClass))
         finish()
     }
 

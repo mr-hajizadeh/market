@@ -315,8 +315,9 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
 
                 is NetworkResult.Success -> {
                     loginIntent()
+                    val token = result.data.data.token.substringAfterLast("|")
                     viewModel.saveLoginInfo(LoginInfo(phoneWithoutZero(phone), token))
-                    Log.i("TAG", "confirmCodeListener: ${result.data.data}")
+                    Log.i("TAG", "confirmCodeListener:TOKEN $token")
                 }
 
                 is NetworkResult.Error -> {

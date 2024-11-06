@@ -64,6 +64,7 @@
     <string name="hint_email">ایمیل خود را وارد کنید</string>
     <string name="title_cart_empty">سبد خرید شما خالیست!</string>
     <string name="title_orders_empty">هیج سفارشی وجود ندارد!</string>
+    <string name="title_return">بازگشت</string>
 
     <string name="permission_denied_message">
        برای ادامه کار و استفاده از تمامی قابلیت‌های این برنامه، نیاز است که به دسترسی موقعیت مکانی اجازه دهید.\nلطفاً از تنظیمات دستگاه خود، دسترسی به موقعیت مکانی را فعال کنید.
@@ -81,5 +82,6 @@
     <string name="sub_cart_empty">هیچ موردی یافت نشد!</string>
 
     <string name="message_cart">می توانید از صفحه خانه از فروشگاه های اطراف خود خرید کنید.</string>
+    <string name="message_logout">کاربر عزیز مطمئنید میخواهید خارج شوید؟</string>
 
 </resources>
