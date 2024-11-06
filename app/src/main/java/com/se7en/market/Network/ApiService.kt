@@ -4,6 +4,7 @@ import com.se7en.market.Model.ReverseGeocoding
 import com.se7en.market.Response.OTP.Code
 import com.se7en.market.Response.OTP.Confirm
 import com.se7en.market.Response.OTP.Token
+import com.se7en.market.Response.User.Profile
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -32,4 +33,6 @@ interface ApiService {
     fun confirmCode(@Header("token") token: String,
                     @Body codeMap: Map<String, String>): Call<Confirm>
 
+    @GET("/api/v1/customer/profile")
+    fun getProfile(@Header("Authorization") token: String): Call<Profile>
 }

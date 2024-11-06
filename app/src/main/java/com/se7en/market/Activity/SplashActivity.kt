@@ -9,15 +9,17 @@ import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.se7en.market.Network.NetworkResult
 import com.se7en.market.ViewModel.SplashViewModel
 import com.se7en.market.databinding.ActivitySplashBinding
+import kotlin.math.log
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -42,6 +44,7 @@ class SplashActivity : AppCompatActivity() {
         initViews()
         tryToConnect()
         checkInternetConnection()
+        responseListener()
     }
 
     private fun tryToConnect() {
@@ -73,15 +76,38 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkPhone() {
 
-        viewmodel.getPhoneNumber().observe(this) { loginInfo ->
+        viewmodel.getLoginInfo().observe(this) { loginInfo ->
             if (loginInfo.phone.isEmpty() && loginInfo.token.isEmpty())
                 Handler(Looper.getMainLooper()).postDelayed(
                     { customIntent(LoginActivity::class.java) }, 3000
                 )
             else
-                customIntent(MainActivity::class.java)
+                viewmodel.getProfile(loginInfo.token)
         }
 
+    }
+
+    private fun responseListener() {
+        viewmodel.profileStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> loadingProgress()
+
+                is NetworkResult.Success -> {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        if (result.data.data.has_address)
+                            customIntent(MainActivity::class.java)
+                        else
+                            customIntent(MapActivity::class.java)
+                    }, 1000)
+
+                }
+
+                is NetworkResult.Error -> {
+                    loadingProgress(false)
+                    Log.i("TAG", "responseListener: ${result.message}")
+                }
+            }
+        }
     }
 
     private fun customIntent(activityClass: Class<out Activity>) {
