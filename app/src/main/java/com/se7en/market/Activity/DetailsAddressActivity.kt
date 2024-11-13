@@ -1,12 +1,16 @@
 package com.se7en.market.Activity
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -15,39 +19,47 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.snackbar.Snackbar
 import com.se7en.market.Activity.Ui.ModalBottomSheetMap.Companion.TAG
+import com.se7en.market.Model.AddressModel
 import com.se7en.market.Network.NetworkResult
+import com.se7en.market.R
+import com.se7en.market.Utils.Constance.Companion.KEY_ADDRESS
+import com.se7en.market.ViewModel.AddressViewModel
 import com.se7en.market.ViewModel.MapViewModel
 import com.se7en.market.databinding.ActivityDetailsAddressBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
+@Suppress("DEPRECATION")
 class DetailsAddressActivity : BaseActivity() {
 
     private lateinit var binding: ActivityDetailsAddressBinding
-    private lateinit var viewModel: MapViewModel
+    private lateinit var mapViewModel: MapViewModel
+    private lateinit var addressViewModel: AddressViewModel
     private lateinit var editTexts: MutableList<EditText>
+    private var userAddress = AddressModel()
     private var toolbar: ConstraintLayout? = null
     private var containerLayout: LinearLayout? = null
+    private var snackbar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailsAddressBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this)[MapViewModel::class.java]
+        mapViewModel = ViewModelProvider(this)[MapViewModel::class.java]
+        addressViewModel = ViewModelProvider(this)[AddressViewModel::class.java]
+
         lifecycleScope.launch { initViews() }
 
     }
 
-    private suspend fun initViews() {
+    private fun initViews() {
 
-        val lat = intent.getDoubleExtra("lat", 0.0)
-        val lon = intent.getDoubleExtra("lon", 0.0)
-        editTexts = mutableListOf(binding.addressEdt, binding.houseNumberEdt, binding.unitEdt)
+        userAddress = intent.extras?.getParcelable(KEY_ADDRESS)!!
+        editTexts = mutableListOf(binding.addressEdt, binding.apartmentEdt, binding.unitEdt)
 
         toolbar = binding.toolbar
         containerLayout = binding.containerLayout
@@ -55,17 +67,24 @@ class DetailsAddressActivity : BaseActivity() {
         binding.backBtn.setOnClickListener { finish() }
         binding.addressEdt.keyListener = null
 
-        radiobuttons()
+        setTitleAddress()
         startSkeleton()
-        reverseGeocoding(lat, lon)
-        loadStaticMap(lat, lon)
+        reverseGeocoding(userAddress.latitude, userAddress.longitude)
+        loadStaticMap(userAddress.latitude, userAddress.longitude)
+        recipientChangeText()
         setupOtherReceiverCheckBox()
         convertToPersian()
+        storeAddressListener()
+        editAddressListener()
 
         binding.submitBtn.setOnClickListener {
             if (validateEditText(editTexts)) {
-                Toast.makeText(this@DetailsAddressActivity, "form submitted", Toast.LENGTH_SHORT)
-                    .show()
+                userAddress.unit =
+                    convertToEnglishNumbers(binding.unitEdt.text.toString()).toInt()
+                userAddress.apartment =
+                    convertToEnglishNumbers(binding.apartmentEdt.text.toString()).toInt()
+                if (userAddress.id == 0) addressViewModel.storeAddress(userAddress)
+                else addressViewModel.editAddress(userAddress)
             } else setErrorEditText(editTexts)
         }
 
@@ -78,7 +97,7 @@ class DetailsAddressActivity : BaseActivity() {
         otherReceiverCb.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 deliveryDetailsLayout.visibility = View.VISIBLE
-                editTexts.addAll(listOf(binding.phoneEdt, binding.deliveryNameEdt))
+                editTexts.addAll(listOf(binding.recipientPhoneEdt, binding.recipientNameEdt))
             } else {
                 deliveryDetailsLayout.visibility = View.GONE
                 editTexts.subList(editTexts.size - 2, editTexts.size).clear()
@@ -88,7 +107,8 @@ class DetailsAddressActivity : BaseActivity() {
 
     private fun loadStaticMap(lat: Double, lon: Double) {
         Glide.with(this)
-            .load("https://api.neshan.org/v4/static?key=service.b8ad9848b3614526bcd2dfb35fae9b14&type=standard-day&zoom=19&width=1024&height=512&center=$lat,$lon&markerToken=351047.QDbFpjwn")
+            .load("https://api.neshan.org/v4/static?key=service.b8ad9848b3614526bcd2dfb35fae9b14&type=dreamy&zoom=19&width=512&height=256&center=$lat,$lon&markerToken=351047.QDbFpjwn")
+            .error(R.mipmap.ic_launcher)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
@@ -108,7 +128,8 @@ class DetailsAddressActivity : BaseActivity() {
                     isFirstResource: Boolean
                 ): Boolean {
                     hideSkeleton()
-                    return true                }
+                    return true
+                }
 
             })
             .into(binding.staticImg)
@@ -119,46 +140,67 @@ class DetailsAddressActivity : BaseActivity() {
     }
 
     private fun hideSkeleton() {
-        containerLayout?.hideSkeleton()
+        Handler(Looper.getMainLooper()).postDelayed({ containerLayout?.hideSkeleton() }, 1000)
     }
 
-    private fun radiobuttons() {
+    private fun setTitleAddress() {
+
+        val addressTitleEdt = binding.addressTitleEdt
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 binding.homeRd.id -> {
-                    binding.addressTitleEdt.visibility = View.GONE
+                    addressTitleEdt.visibility = View.GONE
+                    userAddress.title = getString(R.string.title_home)
                 }
 
                 binding.workplaceRd.id -> {
-                    binding.addressTitleEdt.visibility = View.GONE
+                    addressTitleEdt.visibility = View.GONE
+                    userAddress.title = getString(R.string.title_workplace)
                 }
 
                 binding.otherRd.id -> {
-                    binding.addressTitleEdt.visibility = View.VISIBLE
+                    addressTitleEdt.visibility = View.VISIBLE
                 }
             }
         }
+
+        addressTitleEdt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                userAddress.title = convertToEnglishNumbers(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
     }
 
     private fun convertToPersian() {
 
         convertToPersianEditText(binding.addressEdt, isError = true)
-        convertToPersianEditText(binding.houseNumberEdt, isError = true)
+        convertToPersianEditText(binding.apartmentEdt, isError = true)
         convertToPersianEditText(binding.unitEdt, isError = true)
-        convertToPersianEditText(binding.phoneEdt, isError = true)
-        convertToPersianEditText(binding.deliveryNameEdt, isError = true)
+        convertToPersianEditText(binding.recipientPhoneEdt, isError = true)
+        convertToPersianEditText(binding.recipientNameEdt, isError = true)
+        convertToPersianEditText(binding.addressTitleEdt, isError = false)
 
     }
 
-    private suspend fun reverseGeocoding(lat: Double, lon: Double) {
+    private fun reverseGeocoding(lat: Double, lon: Double) {
 
-        viewModel.geocodingStatus.observe(this) { result ->
+        mapViewModel.geocodingStatus.observe(this) { result ->
             when (result) {
                 is NetworkResult.Loading ->
                     Log.i(TAG, "reverseGeocoding: Loading")
 
-                is NetworkResult.Success ->
-                    binding.addressEdt.setText(result.data.formatted_address)
+                is NetworkResult.Success -> {
+                    userAddress.address = result.response.formatted_address
+                    binding.addressEdt.setText(userAddress.address)
+                }
 
                 is NetworkResult.Error ->
                     Log.i(TAG, "reverseGeocoding: Error")
@@ -166,7 +208,126 @@ class DetailsAddressActivity : BaseActivity() {
             }
         }
 
-        withContext(Dispatchers.IO) { viewModel.reverseGeocoding(lat, lon) }
+        mapViewModel.reverseGeocoding(lat, lon)
     }
 
+    private fun storeAddressListener() {
+
+        addressViewModel.storeStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> progressLoading(true)
+
+                is NetworkResult.Success -> {
+                    progressLoading()
+                    val address = result.response.data.apply { active = true }
+                    addressViewModel.saveActiveAddress(address)
+                    showMessage(result.response.messages[0])
+                    snackbar?.addCallback(object : Snackbar.Callback() {
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            super.onDismissed(transientBottomBar, event)
+                            if (event == DISMISS_EVENT_TIMEOUT) {
+                                val intent =
+                                    Intent(this@DetailsAddressActivity, MainActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+                            }
+                        }
+
+                        override fun onShown(sb: Snackbar?) {
+                            super.onShown(sb)
+                        }
+                    })
+                }
+
+                is NetworkResult.Error -> {
+                    progressLoading()
+                    showMessage(result.message)
+                }
+            }
+        }
+
+    }
+
+    private fun editAddressListener() {
+
+        addressViewModel.editStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> progressLoading(true)
+
+                is NetworkResult.Success -> {
+                    progressLoading()
+                    val address = result.response.data.apply { active = true }
+                    addressViewModel.saveActiveAddress(address)
+                    showMessage(result.response.messages[0])
+                    snackbar?.addCallback(object : Snackbar.Callback() {
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            super.onDismissed(transientBottomBar, event)
+                            if (event == DISMISS_EVENT_TIMEOUT) {
+                                val intent =
+                                    Intent(this@DetailsAddressActivity, MainActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+                            }
+                        }
+
+                        override fun onShown(sb: Snackbar?) {
+                            super.onShown(sb)
+                        }
+                    })
+                }
+
+                is NetworkResult.Error -> {
+                    progressLoading()
+                    showMessage(result.message)
+                }
+            }
+        }
+
+    }
+
+    private fun recipientChangeText() {
+
+        binding.recipientPhoneEdt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                userAddress.recipient_phone = convertToEnglishNumbers(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
+        binding.recipientNameEdt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                userAddress.recipient_name = s.toString()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
+    }
+
+    private fun showMessage(message: String) {
+        snackbar = Snackbar.make(binding.main, message, Snackbar.LENGTH_SHORT)
+        snackbar?.show()
+    }
+
+    private fun progressLoading(isLoading: Boolean = false) {
+        val progressLoading = binding.progressLoading
+        val submitBtn = binding.submitBtn
+        if (isLoading) {
+            submitBtn.isEnabled = false
+            progressLoading.visibility = View.VISIBLE
+        } else {
+            submitBtn.isEnabled = true
+            progressLoading.visibility = View.GONE
+        }
+    }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragment.AddressListFragment" >
+    tools:context=".Fragment.AddressListFragment">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/newAddressBtn"
@@ -27,7 +27,8 @@
         android:id="@+id/addressView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:paddingBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/address_view_holder" />
+        tools:listitem="@layout/view_holder_address" />
 </LinearLayout>

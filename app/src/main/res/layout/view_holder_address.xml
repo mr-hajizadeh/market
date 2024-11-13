@@ -6,16 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
-    android:layout_marginTop="16dp"
     android:elevation="1dp"
     android:layoutDirection="rtl"
-    android:paddingHorizontal="8dp"
-    android:paddingTop="8dp">
+    android:paddingHorizontal="8dp">
 
     <ImageView
         android:id="@+id/statusImg"
         android:layout_width="@dimen/small_image"
         android:layout_height="@dimen/small_image"
+        android:layout_marginTop="16dp"
         android:rotationY="180"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +26,7 @@
         android:layout_height="@dimen/medium_image"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/statusImg"
         app:srcCompat="@drawable/ic_more" />
 
     <LinearLayout
@@ -45,17 +44,18 @@
             android:id="@+id/titleTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/title_hint"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-            android:textStyle="bold"
-            tools:text="title" />
+            android:textDirection="rtl"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/addressTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/hint_address"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-            android:textColor="@color/text_color"
-            tools:text="address" />
+            android:textColor="@color/text_color" />
 
         <LinearLayout
             android:id="@+id/settingLayout"
@@ -99,8 +99,8 @@
         android:id="@+id/dividerVIew"
         android:layout_width="wrap_content"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/line2"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/line"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

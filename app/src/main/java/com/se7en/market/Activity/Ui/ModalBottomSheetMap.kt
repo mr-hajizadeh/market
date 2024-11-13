@@ -9,11 +9,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.se7en.market.Fragment.MapFragment
+import com.se7en.market.Model.AddressModel
 import com.se7en.market.R
 import com.se7en.market.databinding.MapBottomSheetBinding
 import org.neshan.common.model.LatLng
 
-class ModalBottomSheetMap(private val latLng: LatLng? = null) : BottomSheetDialogFragment() {
+class ModalBottomSheetMap(private val address: AddressModel? = null) : BottomSheetDialogFragment() {
 
     private var _binding: MapBottomSheetBinding? = null
     private val binding get() = _binding!!
@@ -58,7 +59,7 @@ class ModalBottomSheetMap(private val latLng: LatLng? = null) : BottomSheetDialo
     }
 
     private fun loadMapFragment() {
-        val fragment = MapFragment(latLng)
+        val fragment = MapFragment(address)
         childFragmentManager.beginTransaction()
             .replace(R.id.containerFragmentMap, fragment)
             .commit()

@@ -1,13 +1,17 @@
 package com.se7en.market.Fragment
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
+import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -27,16 +31,20 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.Priority
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.se7en.market.Activity.DetailsAddressActivity
 import com.se7en.market.Activity.Ui.ModalBottomSheetMap.Companion.TAG
+import com.se7en.market.Model.AddressModel
 import com.se7en.market.R
+import com.se7en.market.Utils.Constance.Companion.KEY_ADDRESS
+import com.se7en.market.databinding.DialogLayoutBinding
 import com.se7en.market.databinding.FragmentMapBinding
 import kotlinx.coroutines.launch
 import org.neshan.common.model.LatLng
 import org.neshan.mapsdk.MapView
 
-class MapFragment(private val latLon: LatLng? = null) : Fragment() {
+class MapFragment(private val address: AddressModel? = null) : Fragment() {
 
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
@@ -51,6 +59,7 @@ class MapFragment(private val latLon: LatLng? = null) : Fragment() {
     private val mFusedLocationClient get() = _mFusedLocationClient!!
 
     private var fab: FloatingActionButton? = null
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -73,10 +82,10 @@ class MapFragment(private val latLon: LatLng? = null) : Fragment() {
         initViews()
         submitLocationOnMap()
         findMyLocation()
-        if (latLon == null)
+        if (address == null)
             findUserLocation()
-        createMap(latLon ?: LatLng(36.2972, 59.6067))
-
+        address?.let { createMap(LatLng(it.latitude, it.longitude)) }
+        checkPermission()
     }
 
     private fun initViews() {
@@ -85,12 +94,13 @@ class MapFragment(private val latLon: LatLng? = null) : Fragment() {
 
     private fun submitLocationOnMap() {
         binding.submitLocationBtn.setOnClickListener {
-            val latLon: LatLng = map.cameraTargetPosition
             Intent(context, DetailsAddressActivity::class.java).apply {
-                putExtra("lat", latLon.latitude)
-                putExtra("lon", latLon.longitude)
+                address?.let {
+                    it.latitude = map.cameraTargetPosition.latitude
+                    it.longitude = map.cameraTargetPosition.longitude
+                }
+                putExtra(KEY_ADDRESS, address)
                 nonNullContext.startActivity(this)
-                requireActivity().finish()
             }
         }
     }
@@ -221,6 +231,55 @@ class MapFragment(private val latLon: LatLng? = null) : Fragment() {
         _map = binding.map
         map.moveCamera(latLon, 0f)
         map.setZoom(18f, 0f)
+    }
+
+
+    private fun isPermissionGranted(): Boolean =
+        nonNullContext.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+    private fun checkPermission() {
+        if (!isPermissionGranted()) requestPermission.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        )
+    }
+
+    private val requestPermission =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val isFineLocationGranted =
+                permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false
+            val isCoarseLocationGranted =
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false
+            if (isFineLocationGranted || isCoarseLocationGranted)
+                findUserLocation()
+            else
+                showDialog()
+        }
+
+    @SuppressLint("InflateParams")
+    private fun showDialog() {
+
+        val builderBinding = DialogLayoutBinding.inflate(layoutInflater)
+        val builder = MaterialAlertDialogBuilder(nonNullContext)
+            .create().apply {
+                setView(builderBinding.root)
+                setCancelable(false)
+                show()
+            }
+        builderBinding.apply {
+            positiveBtn.setOnClickListener {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", nonNullContext.packageName, null)
+                }
+                startActivity(intent)
+                builder.dismiss()
+            }
+            closeBtn.setOnClickListener {
+                builder.dismiss()
+            }
+        }
     }
 
     override fun onDestroy() {

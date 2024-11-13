@@ -7,6 +7,8 @@ class Constance {
         const val KEY_PHONE = "phone"
         const val KEY_TOKEN = "token"
         const val KEY_CODE = "code"
+        const val KEY_ACTIVE_ADDRESS = "active_id"
+        const val KEY_ADDRESS = "address"
     }
 
 }
