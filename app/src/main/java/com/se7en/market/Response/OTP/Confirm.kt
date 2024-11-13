@@ -1,6 +1,6 @@
 package com.se7en.market.Response.OTP
 
-import com.se7en.market.Model.User
+import com.se7en.market.Model.UserModel
 
 data class Confirm(
     val status: String,
@@ -11,6 +11,6 @@ data class Confirm(
 ) {
     data class Data(
         val token: String,
-        val user: User
+        val userModel: UserModel
     )
 }

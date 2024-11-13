@@ -1,20 +1,29 @@
 package com.se7en.market.Fragment
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.se7en.market.Activity.MapActivity
 import com.se7en.market.Activity.Ui.AddressListBottomSheet
 import com.se7en.market.Adapter.CategoryAdapter
 import com.se7en.market.Adapter.SliderAdapter
+import com.se7en.market.Model.AddressModel
 import com.se7en.market.Model.CategoryModel
 import com.se7en.market.Model.SliderModel
 import com.se7en.market.R
+import com.se7en.market.ViewModel.HomeViewModel
 import com.se7en.market.databinding.FragmentHomeBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
@@ -24,11 +33,14 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+    val viewModel by viewModels<HomeViewModel>()
+
     private var _viewPager: ViewPager2? = null
     private val viewPager get() = _viewPager!!
 
     private var _sliderAdapter: SliderAdapter? = null
     private val sliderAdapter get() = _sliderAdapter!!
+    private var activeAddressTxt: TextView? = null
 
     private val sliderHandler = Handler(Looper.getMainLooper())
     private val sliderRunnable = Runnable {
@@ -49,6 +61,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViews()
+        activeAddress()
         binding.collapsingToolbar.loadSkeleton()
         binding.homeContainer.loadSkeleton()
         binding.categoryView.loadSkeleton(R.layout.category_view_holder) {
@@ -70,6 +83,7 @@ class HomeFragment : Fragment() {
 
     private fun initViews() {
         _viewPager = binding.sliderView
+        activeAddressTxt = binding.activeAddressTxt
     }
 
     private fun initCategory() {
@@ -121,7 +135,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun buttonsOnCLick() {
-        binding.addressBtn.setOnClickListener {
+        activeAddressTxt?.setOnClickListener {
             showAddressListBottomSheet()
         }
     }
@@ -129,6 +143,25 @@ class HomeFragment : Fragment() {
     private fun showAddressListBottomSheet(closeable: Boolean = true) {
         AddressListBottomSheet.newInstance(closeable)
             .show(requireActivity().supportFragmentManager, AddressListBottomSheet.TAG)
+    }
+
+    private fun activeAddress() {
+        viewModel.loadActiveAddress().observe(viewLifecycleOwner) { address ->
+            Log.i("TAG", "activeAddress: ${address?.address}")
+            if (address != null)
+                setActiveAddress(address)
+            else {
+                requireActivity().startActivity(Intent(requireActivity(), MapActivity::class.java))
+                requireActivity().finish()
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setActiveAddress(address: AddressModel) {
+        val title = if (address.title.isNullOrEmpty()) "آدرس"
+        else "${address.title}"
+        activeAddressTxt?.text = "$title: \n ${address.address}"
     }
 
     override fun onPause() {

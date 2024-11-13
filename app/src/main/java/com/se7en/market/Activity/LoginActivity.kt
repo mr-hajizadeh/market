@@ -20,7 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.auth.api.phone.SmsRetriever
-import com.se7en.market.Model.LoginInfo
+import com.se7en.market.Model.LoginInfoModel
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.Utils.SmsBroadcastReceiver
 import com.se7en.market.ViewModel.LoginViewModel
@@ -245,9 +245,9 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                 is NetworkResult.Success -> {
                     authLoading()
                     setupAuthenticationViews(phone)
-                    _token = result.data.data.token
+                    _token = result.response.data.token
                     viewModel.otpCode(token)
-                    Log.i("TAG", "otpListener: ${result.data}")
+                    Log.i("TAG", "otpListener: ${result.response}")
                 }
 
                 is NetworkResult.Error -> {
@@ -294,9 +294,9 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
             when (result) {
                 is NetworkResult.Loading -> {}
                 is NetworkResult.Success -> {
-                    populateVerificationCode(result.data.data.code)
+                    populateVerificationCode(result.response.data.code)
                     Log.i("TAG", "otpCodeListener token: $token")
-                    viewModel.confirmCode(token, result.data.data.code)
+                    viewModel.confirmCode(token, result.response.data.code)
                 }
 
                 is NetworkResult.Error -> {
@@ -315,8 +315,8 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
 
                 is NetworkResult.Success -> {
                     loginIntent()
-                    val token = result.data.data.token.substringAfterLast("|")
-                    viewModel.saveLoginInfo(LoginInfo(phoneWithoutZero(phone), token))
+                    val token = result.response.data.token.substringAfterLast("|")
+                    viewModel.saveLoginInfo(LoginInfoModel(phoneWithoutZero(phone), token))
                     Log.i("TAG", "confirmCodeListener:TOKEN $token")
                 }
 

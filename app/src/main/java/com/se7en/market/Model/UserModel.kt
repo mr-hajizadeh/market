@@ -1,6 +1,6 @@
 package com.se7en.market.Model
 
-data class User(
+data class UserModel(
     val id: Int,
     val first_name: Any,
     val last_name: Any,

@@ -19,7 +19,6 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.ViewModel.SplashViewModel
 import com.se7en.market.databinding.ActivitySplashBinding
-import kotlin.math.log
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -94,7 +93,7 @@ class SplashActivity : AppCompatActivity() {
 
                 is NetworkResult.Success -> {
                     Handler(Looper.getMainLooper()).postDelayed({
-                        if (result.data.data.has_address)
+                        if (result.response.data.has_address)
                             customIntent(MainActivity::class.java)
                         else
                             customIntent(MapActivity::class.java)

@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.se7en.market.Model.LoginInfo
+import com.se7en.market.Model.LoginInfoModel
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.Repository.PreferencesRepository
 import com.se7en.market.Repository.ProfileRepository
@@ -17,13 +17,13 @@ import retrofit2.Response
 
 class SplashViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val preferencesRepository = PreferencesRepository(application)
+    private val preferencesRepository = PreferencesRepository.getInstance(application)
     private val profileRepository = ProfileRepository()
 
     private var _profileStatus = MutableLiveData<NetworkResult<Profile>>()
     val profileStatus get() = _profileStatus
 
-    fun getLoginInfo(): LiveData<LoginInfo> {
+    fun getLoginInfo(): LiveData<LoginInfoModel> {
         return preferencesRepository.getLoginInfo()
     }
 

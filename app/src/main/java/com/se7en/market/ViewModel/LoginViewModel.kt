@@ -5,14 +5,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.se7en.market.Model.LoginInfo
+import com.se7en.market.Model.LoginInfoModel
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.Repository.LoginRepository
 import com.se7en.market.Repository.PreferencesRepository
 import com.se7en.market.Response.OTP.Code
 import com.se7en.market.Response.OTP.Confirm
 import com.se7en.market.Response.OTP.Token
-import com.se7en.market.Utils.Constance
 import com.se7en.market.Utils.Constance.Companion.KEY_CODE
 import com.se7en.market.Utils.Constance.Companion.KEY_PHONE
 import kotlinx.coroutines.launch
@@ -29,8 +28,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val _confirmStatus = MutableLiveData<NetworkResult<Confirm>>()
     val confirmStatus get() = _confirmStatus
 
-    private val preferencesRepository = PreferencesRepository(application)
-
+    private val preferencesRepository = PreferencesRepository.getInstance(application)
     private var repository = LoginRepository()
 
     fun sendPhone(phone: String) {
@@ -94,8 +92,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun saveLoginInfo(loginInfo: LoginInfo) = preferencesRepository.saveLoginInfo(loginInfo)
+    fun saveLoginInfo(loginInfoModel: LoginInfoModel) =
+        preferencesRepository.saveLoginInfo(loginInfoModel)
 
-    fun getLoginInfo(): LiveData<LoginInfo> = preferencesRepository.getLoginInfo()
+    fun getLoginInfo(): LiveData<LoginInfoModel> = preferencesRepository.getLoginInfo()
 
 }
