@@ -81,7 +81,7 @@ class SplashActivity : AppCompatActivity() {
                     { customIntent(LoginActivity::class.java) }, 3000
                 )
             else
-                viewmodel.getProfile(loginInfo.token)
+                viewmodel.getProfile()
         }
 
     }

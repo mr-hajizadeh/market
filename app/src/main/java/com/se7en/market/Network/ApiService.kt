@@ -2,12 +2,14 @@ package com.se7en.market.Network
 
 import com.se7en.market.Model.AddressModel
 import com.se7en.market.Model.ReverseGeocoding
+import com.se7en.market.Model.UserModel
 import com.se7en.market.Response.Address.AddressList
 import com.se7en.market.Response.Address.DeleteAddress
 import com.se7en.market.Response.Address.StoreAddress
 import com.se7en.market.Response.OTP.Code
 import com.se7en.market.Response.OTP.Confirm
 import com.se7en.market.Response.OTP.Token
+import com.se7en.market.Response.User.UpdateProfile
 import com.se7en.market.Response.User.Profile
 import retrofit2.Call
 import retrofit2.http.Body
@@ -32,7 +34,6 @@ interface ApiService {
     @POST("/api/v1/customer/auth/otp")
     fun sendPhone(@Body phoneMap: Map<String, String>): Call<Token>
 
-
     @GET("/api/v1/customer/auth/otp/return")
     fun otpCode(@Header("token") token: String): Call<Code>
 
@@ -44,6 +45,12 @@ interface ApiService {
 
     @GET("/api/v1/customer/profile")
     fun getProfile(@Header("Authorization") token: String): Call<Profile>
+
+    @POST("/api/v1/customer/profile")
+    fun updateProfile(
+        @Header("Authorization") token: String,
+        @Body user: UserModel
+    ): Call<UpdateProfile>
 
     @POST("/api/v1/customer/address")
     fun storeAddress(
