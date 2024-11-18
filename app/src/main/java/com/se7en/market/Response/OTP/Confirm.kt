@@ -6,11 +6,11 @@ data class Confirm(
     val status: String,
     val system_message: String,
     val `data`: Data,
-    val messages: List<Any>,
-    val errors: List<Any>
+    val messages: List<String>,
+    val errors: List<String>
 ) {
     data class Data(
         val token: String,
-        val userModel: UserModel
+        val user: UserModel
     )
 }

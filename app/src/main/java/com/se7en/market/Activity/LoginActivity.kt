@@ -1,6 +1,7 @@
 package com.se7en.market.Activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
@@ -16,8 +17,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.se7en.market.Model.LoginInfoModel
@@ -30,7 +31,7 @@ import java.util.Locale
 class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by viewModels<LoginViewModel>()
     private var smsReceiver: SmsBroadcastReceiver? = null
     private var authenticationLayout: LinearLayout? = null
     private var receiveCodeLayout: LinearLayout? = null
@@ -60,7 +61,6 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         initViews()
         setContentView(binding.root)
@@ -118,7 +118,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
         timer.start()
 
         resendBtn.setOnClickListener {
-
+            viewModel.sendPhone(phone)
         }
 
         changePhoneNumberBtn.setOnClickListener {
@@ -136,7 +136,12 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                 "Incorrect code!",
                 Toast.LENGTH_SHORT
             ).show()
-            else loginIntent()
+            else {
+                loginLoading(true)
+                val code: String =
+                    editTexts!!.joinToString("") { convertToEnglishNumbers(it.text.toString()) }
+                viewModel.confirmCode(token, code)
+            }
         }
 
     }
@@ -156,9 +161,10 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s?.length!! > 0) {
-                        if (editTexts.lastIndex != editTexts.indexOf(it)) editTexts[editTexts.indexOf(
-                            it
-                        ) + 1].requestFocus()
+                        if (editTexts.lastIndex != editTexts.indexOf(it))
+                            editTexts[editTexts.indexOf(
+                                it
+                            ) + 1].requestFocus()
 //                        if (validateEditText(editTexts)) loginIntent()
                         if (!isChange) {
                             isChange = true
@@ -178,10 +184,10 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
         }
     }
 
-    private fun loginIntent() {
+    private fun customIntent(activity: Class<out Activity> = MainActivity::class.java) {
         loginLoading()
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            startActivity(Intent(this@LoginActivity, activity))
             finish()
         }, 500)
     }
@@ -246,7 +252,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                     authLoading()
                     setupAuthenticationViews(phone)
                     _token = result.response.data.token
-                    viewModel.otpCode(token)
+//                    viewModel.otpCode(token)
                     Log.i("TAG", "otpListener: ${result.response}")
                 }
 
@@ -294,7 +300,8 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
             when (result) {
                 is NetworkResult.Loading -> {}
                 is NetworkResult.Success -> {
-                    populateVerificationCode(result.response.data.code)
+                    Log.i("TAG", "otpCodeListener: ${result.response}")
+//                    populateVerificationCode(result.response.data.code)
                     Log.i("TAG", "otpCodeListener token: $token")
                     viewModel.confirmCode(token, result.response.data.code)
                 }
@@ -314,10 +321,16 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                 }
 
                 is NetworkResult.Success -> {
-                    loginIntent()
+                    loginLoading()
                     val token = result.response.data.token.substringAfterLast("|")
                     viewModel.saveLoginInfo(LoginInfoModel(phoneWithoutZero(phone), token))
+                    Log.i("TAG", "getLoginInfo: ${viewModel.getLoginInfo().value}")
+                    val user = result.response.data.user
+                    if (user.has_address) customIntent(SplashActivity::class.java)
+                    else customIntent(MapActivity::class.java)
+
                     Log.i("TAG", "confirmCodeListener:TOKEN $token")
+                    Log.i("TAG", "confirmCodeListener: ${result.response.data}")
                 }
 
                 is NetworkResult.Error -> {
@@ -329,9 +342,10 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
     }
 
     override fun onOTPReceived(otp: String) {
-        val code = extractVerificationCode(otp)
+        val code = extractVerificationCode(otp).toString()
         Log.i("TAG", "onOTPReceived: $code")
-        populateVerificationCode(code.toString())
+        populateVerificationCode(code)
+        viewModel.confirmCode(token, code)
         if (smsReceiver != null) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(smsReceiver!!)
         }

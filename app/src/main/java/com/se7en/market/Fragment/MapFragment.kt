@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import org.neshan.common.model.LatLng
 import org.neshan.mapsdk.MapView
 
-class MapFragment(private val address: AddressModel? = null) : Fragment() {
+class MapFragment(private var address: AddressModel? = null) : Fragment() {
 
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
@@ -82,8 +82,10 @@ class MapFragment(private val address: AddressModel? = null) : Fragment() {
         initViews()
         submitLocationOnMap()
         findMyLocation()
-        if (address == null)
+        if (address == null) {
             findUserLocation()
+            address = AddressModel()
+        }
         address?.let { createMap(LatLng(it.latitude, it.longitude)) }
         checkPermission()
     }

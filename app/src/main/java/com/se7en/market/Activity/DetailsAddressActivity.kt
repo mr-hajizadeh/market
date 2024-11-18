@@ -205,6 +205,7 @@ class DetailsAddressActivity : BaseActivity() {
                 is NetworkResult.Error ->
                     Log.i(TAG, "reverseGeocoding: Error")
 
+                else -> {}
             }
         }
 
@@ -243,6 +244,8 @@ class DetailsAddressActivity : BaseActivity() {
                     progressLoading()
                     showMessage(result.message)
                 }
+
+                else -> {}
             }
         }
 
@@ -280,6 +283,8 @@ class DetailsAddressActivity : BaseActivity() {
                     progressLoading()
                     showMessage(result.message)
                 }
+
+                else -> {}
             }
         }
 

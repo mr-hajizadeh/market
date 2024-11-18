@@ -12,11 +12,12 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.se7en.market.Network.NetworkResult
+import com.se7en.market.ViewModel.AddressViewModel
 import com.se7en.market.ViewModel.SplashViewModel
 import com.se7en.market.databinding.ActivitySplashBinding
 
@@ -24,8 +25,10 @@ import com.se7en.market.databinding.ActivitySplashBinding
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
-    private lateinit var viewmodel: SplashViewModel
     private lateinit var connectivityManager: ConnectivityManager
+
+    private val viewmodel: SplashViewModel by viewModels<SplashViewModel>()
+    private val addressViewModel: AddressViewModel by viewModels<AddressViewModel>()
 
     private var progress: CircularProgressIndicator? = null
     private var errorMessage: TextView? = null
@@ -37,11 +40,11 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewmodel = ViewModelProvider(this)[SplashViewModel::class.java]
         connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         initViews()
         tryToConnect()
+        addressListListener()
         checkInternetConnection()
         responseListener()
     }
@@ -60,7 +63,7 @@ class SplashActivity : AppCompatActivity() {
 
         if (isConnected) {
             loadingProgress()
-            checkPhone()
+            checkValues()
         } else
             loadingProgress(false)
     }
@@ -73,7 +76,7 @@ class SplashActivity : AppCompatActivity() {
 
     }
 
-    private fun checkPhone() {
+    private fun checkValues() {
 
         viewmodel.getLoginInfo().observe(this) { loginInfo ->
             if (loginInfo.phone.isEmpty() && loginInfo.token.isEmpty())
@@ -93,12 +96,35 @@ class SplashActivity : AppCompatActivity() {
 
                 is NetworkResult.Success -> {
                     Handler(Looper.getMainLooper()).postDelayed({
-                        if (result.response.data.has_address)
+                        if (result.response.data.has_address && viewmodel.loadActiveAddress().value != null)
                             customIntent(MainActivity::class.java)
                         else
-                            customIntent(MapActivity::class.java)
+                            addressViewModel.getAddressList()
                     }, 1000)
 
+                }
+
+                is NetworkResult.Error -> {
+                    loadingProgress(false)
+                    Log.i("TAG", "responseListener: ${result.message}")
+                }
+            }
+        }
+    }
+
+    private fun addressListListener() {
+        addressViewModel.listStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> loadingProgress()
+
+                is NetworkResult.Success -> {
+                    val addressList = result.response.data
+                    if (addressList.isEmpty())
+                        customIntent(MapActivity::class.java)
+                    else {
+                        viewmodel.saveActiveAddress(addressList.first())
+                        customIntent(MainActivity::class.java)
+                    }
                 }
 
                 is NetworkResult.Error -> {

@@ -52,6 +52,10 @@
     <string name="title_select_address">انتخاب آدرس</string>
     <string name="title_category">عنوان دسته بندی</string>
     <string name="title_try_again">تلاش مجدد</string>
+    <string name="title_see_all">مشاهده همه</string>
+    <string name="title_recommended">پیشنهادی برای شما</string>
+    <string name="title_many_discount">تخفیف‌های شگفت‌انگیز</string>
+    <string name="title_near_shop">فروشگاه های اظراف شما</string>
 
     <string name="search_hint">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>
