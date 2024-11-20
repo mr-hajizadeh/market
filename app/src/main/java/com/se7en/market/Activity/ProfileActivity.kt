@@ -1,10 +1,6 @@
 package com.se7en.market.Activity
 
 import android.os.Bundle
-import android.os.Message
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -14,7 +10,6 @@ import com.se7en.market.Activity.Ui.BirthdayChangeListener
 import com.se7en.market.Activity.Ui.ModalBottomSheetCalendar
 import com.se7en.market.Model.UserModel
 import com.se7en.market.Network.NetworkResult
-import com.se7en.market.R
 import com.se7en.market.ViewModel.ProfileViewModel
 import com.se7en.market.databinding.ActivityProfileBinding
 import zabih.lib.zipersiancalendar.ZiPersianCalendar
@@ -124,6 +119,8 @@ class ProfileActivity : BaseActivity(), BirthdayChangeListener {
                     emailEdt?.setText(user.email)
                     firstnameEdt?.setText(user.first_name)
                     lastnameEdt?.setText(user.last_name)
+                    persianCalendar.timeInMillis = user.date_of_birth?.let { convertDateToMillis(it) }!!
+                    birthdayEdt?.text = convertToPersianNumbers(persianCalendar.longDate)
                     if (user.gender == "male")
                         binding.maleRd.isChecked = true
                     else
@@ -173,6 +170,17 @@ class ProfileActivity : BaseActivity(), BirthdayChangeListener {
         } else {
             submitBtn.isEnabled = true
             progressLoading.visibility = View.GONE
+        }
+    }
+
+    private fun convertDateToMillis(dateString: String): Long? {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return try {
+            val date = dateFormat.parse(dateString)
+            date?.time
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 
