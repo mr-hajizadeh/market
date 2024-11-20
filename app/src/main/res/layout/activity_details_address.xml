@@ -81,14 +81,14 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/staticImg"
+                    android:id="@+id/staticMapImg"
                     android:layout_width="match_parent"
                     android:layout_height="170dp"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="24dp"
                     android:elevation="1dp"
                     android:scaleType="centerCrop"
-                    app:shapeAppearance="@style/roundedImageView" />
+                    app:shapeAppearance="@style/roundedImageView"/>
 
                 <TextView
                     android:id="@+id/textView6"

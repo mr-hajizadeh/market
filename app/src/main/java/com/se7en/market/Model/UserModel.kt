@@ -1,7 +1,5 @@
 package com.se7en.market.Model
 
-import java.util.Date
-
 data class UserModel(
     val id: Int = 0,
     var first_name: String? = null,
@@ -22,5 +20,20 @@ data class UserModel(
     val sort_order: Int = 0,
     val role: String = "",
     val has_address: Boolean = false,
-    val roles: List<String>? = null
+    val roles: List<Role>? = null
+)
+
+data class Role(
+    val id: Int,
+    val name: String,
+    val guard_name: String,
+    val created_at: String,
+    val updated_at: String,
+    val pivot: Pivot
+)
+
+data class Pivot(
+    val model_type: String,
+    val model_id: Int,
+    val role_id: Int
 )

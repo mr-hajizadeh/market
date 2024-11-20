@@ -4,9 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.se7en.market.Model.SliderModel
-import com.se7en.market.databinding.SliderViewHolderBinding
+import com.se7en.market.databinding.ViewHolderBannerBinding
 
 class SliderAdapter(private val items: List<SliderModel>) :
     RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
@@ -16,7 +16,7 @@ class SliderAdapter(private val items: List<SliderModel>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
         context = parent.context
         return SliderViewHolder(
-            SliderViewHolderBinding.inflate(
+            ViewHolderBannerBinding.inflate(
                 LayoutInflater.from(context),
                 parent,
                 false
@@ -30,10 +30,10 @@ class SliderAdapter(private val items: List<SliderModel>) :
         holder.setData(items[position])
     }
 
-    class SliderViewHolder(private val binding: SliderViewHolderBinding) :
+    class SliderViewHolder(private val binding: ViewHolderBannerBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setData(item: SliderModel) {
-            binding.sliderImg.setImageResource(item.image)
+            Glide.with(binding.root.context).load(item.banner).into(binding.sliderImg)
         }
     }
 

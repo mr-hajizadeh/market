@@ -80,7 +80,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
@@ -100,8 +100,10 @@
                     android:paddingVertical="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
                     android:id="@+id/dotsIndicator"
@@ -123,17 +125,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/categoryView"
+                android:id="@+id/containerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginVertical="8dp"
-                android:layoutDirection="rtl"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp"
-                android:paddingStart="16dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:ignore="RtlSymmetry"
-                tools:listitem="@layout/category_view_holder" />
+                tools:listitem="@layout/view_holder_product_list" />
 
         </LinearLayout>
 

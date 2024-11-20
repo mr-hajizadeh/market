@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.imageview.ShapeableImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/brandImg"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    android:adjustViewBounds="true"
+    android:scaleType="fitXY"
+    android:src="@drawable/t1"
+    app:shapeAppearance="@style/roundedImageView">
+
+</com.google.android.material.imageview.ShapeableImageView>

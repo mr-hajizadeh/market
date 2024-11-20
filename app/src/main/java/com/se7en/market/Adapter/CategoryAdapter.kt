@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.se7en.market.Model.CategoryModel
+import com.se7en.market.Model.ListItemModel
 import com.se7en.market.databinding.CategoryViewHolderBinding
 
-class CategoryAdapter(private val items: List<CategoryModel>) :
+class CategoryAdapter(private val items: MutableList<ListItemModel>) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     private lateinit var context: Context
@@ -25,7 +26,8 @@ class CategoryAdapter(private val items: List<CategoryModel>) :
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        holder.setData(items[position], context)
+        val item = items[position] as CategoryModel
+        holder.setData(item, context)
     }
 
     class CategoryViewHolder(val binding: CategoryViewHolderBinding) :

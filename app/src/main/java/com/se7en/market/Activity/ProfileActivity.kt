@@ -43,7 +43,6 @@ class ProfileActivity : BaseActivity(), BirthdayChangeListener {
         initViews()
         setGender()
         getProfile()
-        updateProfileListener()
         onClickButtons()
         showCalendarModal()
         setDefaultBirthday()
@@ -84,6 +83,7 @@ class ProfileActivity : BaseActivity(), BirthdayChangeListener {
                 user.last_name = lastnameEdt?.text.toString()
                 user.email = emailEdt?.text.toString()
                 viewModel.updateProfile(user)
+                updateProfileListener()
             } else
                 setErrorEditText(editTexts)
         }
@@ -133,6 +133,8 @@ class ProfileActivity : BaseActivity(), BirthdayChangeListener {
                 is NetworkResult.Error -> {
                     viewModel.getProfile()
                 }
+
+                else -> {}
             }
         }
 
@@ -142,6 +144,7 @@ class ProfileActivity : BaseActivity(), BirthdayChangeListener {
         viewModel.updateStatus.observe(this) { result ->
             when (result) {
                 is NetworkResult.Loading -> progressLoading(true)
+
                 is NetworkResult.Success -> {
                     progressLoading(false)
                     showMessage(result.response.messages[0])
@@ -151,6 +154,8 @@ class ProfileActivity : BaseActivity(), BirthdayChangeListener {
                 is NetworkResult.Error -> {
                     showMessage(result.message)
                 }
+
+                else -> {}
             }
         }
     }

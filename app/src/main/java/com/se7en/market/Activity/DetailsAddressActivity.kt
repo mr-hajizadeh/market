@@ -11,8 +11,8 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -36,8 +36,8 @@ import kotlinx.coroutines.launch
 class DetailsAddressActivity : BaseActivity() {
 
     private lateinit var binding: ActivityDetailsAddressBinding
-    private lateinit var mapViewModel: MapViewModel
-    private lateinit var addressViewModel: AddressViewModel
+    private val mapViewModel: MapViewModel by viewModels<MapViewModel>()
+    private val addressViewModel: AddressViewModel by viewModels<AddressViewModel>()
     private lateinit var editTexts: MutableList<EditText>
     private var userAddress = AddressModel()
     private var toolbar: ConstraintLayout? = null
@@ -48,9 +48,6 @@ class DetailsAddressActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailsAddressBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        mapViewModel = ViewModelProvider(this)[MapViewModel::class.java]
-        addressViewModel = ViewModelProvider(this)[AddressViewModel::class.java]
 
         lifecycleScope.launch { initViews() }
 
@@ -108,31 +105,7 @@ class DetailsAddressActivity : BaseActivity() {
     private fun loadStaticMap(lat: Double, lon: Double) {
         Glide.with(this)
             .load("https://api.neshan.org/v4/static?key=service.b8ad9848b3614526bcd2dfb35fae9b14&type=dreamy&zoom=19&width=512&height=256&center=$lat,$lon&markerToken=351047.QDbFpjwn")
-            .error(R.mipmap.ic_launcher)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    hideSkeleton()
-                    return true
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    hideSkeleton()
-                    return true
-                }
-
-            })
-            .into(binding.staticImg)
+            .into(binding.staticMapImg)
     }
 
     private fun startSkeleton() {
@@ -198,14 +171,15 @@ class DetailsAddressActivity : BaseActivity() {
                     Log.i(TAG, "reverseGeocoding: Loading")
 
                 is NetworkResult.Success -> {
+                    hideSkeleton()
                     userAddress.address = result.response.formatted_address
                     binding.addressEdt.setText(userAddress.address)
                 }
 
-                is NetworkResult.Error ->
+                is NetworkResult.Error -> {
+                    hideSkeleton()
                     Log.i(TAG, "reverseGeocoding: Error")
-
-                else -> {}
+                }
             }
         }
 
@@ -244,8 +218,6 @@ class DetailsAddressActivity : BaseActivity() {
                     progressLoading()
                     showMessage(result.message)
                 }
-
-                else -> {}
             }
         }
 

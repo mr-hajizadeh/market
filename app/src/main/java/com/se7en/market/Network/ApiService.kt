@@ -2,6 +2,7 @@ package com.se7en.market.Network
 
 import com.se7en.market.Model.AddressModel
 import com.se7en.market.Model.ReverseGeocoding
+import com.se7en.market.Model.SliderModel
 import com.se7en.market.Model.UserModel
 import com.se7en.market.Response.Address.AddressList
 import com.se7en.market.Response.Address.DeleteAddress
@@ -73,5 +74,8 @@ interface ApiService {
         @Path("id") id: Int,
         @Body address: AddressModel
     ): Call<StoreAddress>
+
+    @GET("/api/v1/admin/slider")
+    fun getSliderList(): Call<List<SliderModel>>
 
 }

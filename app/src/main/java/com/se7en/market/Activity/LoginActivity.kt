@@ -252,7 +252,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                     authLoading()
                     setupAuthenticationViews(phone)
                     _token = result.response.data.token
-//                    viewModel.otpCode(token)
+                    viewModel.otpCode(token)
                     Log.i("TAG", "otpListener: ${result.response}")
                 }
 
@@ -301,7 +301,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                 is NetworkResult.Loading -> {}
                 is NetworkResult.Success -> {
                     Log.i("TAG", "otpCodeListener: ${result.response}")
-//                    populateVerificationCode(result.response.data.code)
+                    populateVerificationCode(result.response.data.code)
                     Log.i("TAG", "otpCodeListener token: $token")
                     viewModel.confirmCode(token, result.response.data.code)
                 }
