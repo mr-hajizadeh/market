@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:background="@drawable/white_bg">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/shopImg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/orange"
+        app:contentPadding="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/roundedImageView"
+        app:srcCompat="@drawable/ic_shop"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/shopNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="@color/text_color"
+        app:layout_constraintStart_toEndOf="@+id/shopImg"
+        app:layout_constraintTop_toTopOf="@+id/shopImg" />
+
+    <View
+        android:id="@+id/dividerVIew"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shopImg"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/productCountTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="20 محصول"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        app:layout_constraintEnd_toStartOf="@+id/seeAllBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dividerVIew" />
+
+    <TextView
+        android:id="@+id/seeAllBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/title_see_all"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        app:drawableLeftCompat="@drawable/ic_arrow_left"
+        app:layout_constraintBottom_toBottomOf="@+id/productCountTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/productCountTxt" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productCountTxt"
+        tools:listitem="@layout/view_holder_product" />
+
+    <TextView
+        android:id="@+id/scoreTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:drawablePadding="1dp"
+        android:text="4.4"
+        android:paddingEnd="4dp"
+        android:paddingStart="3dp"
+        android:background="@drawable/light_green_bg"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="@color/green"
+        app:drawableStartCompat="@drawable/ic_star"
+        app:drawableTint="@color/green"
+        app:layout_constraintStart_toStartOf="@+id/shopNameTxt"
+        app:layout_constraintTop_toBottomOf="@+id/shopNameTxt" />
+</androidx.constraintlayout.widget.ConstraintLayout>

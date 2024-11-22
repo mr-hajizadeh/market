@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.se7en.market.Activity.MapActivity
+import com.se7en.market.Activity.SearchActivity
 import com.se7en.market.Activity.Ui.AddressListBottomSheet
 import com.se7en.market.Adapter.CategoryAdapter
 import com.se7en.market.Adapter.ContainerAdapter
@@ -155,6 +156,9 @@ class HomeFragment : Fragment() {
     private fun buttonsOnCLick() {
         activeAddressTxt?.setOnClickListener {
             showAddressListBottomSheet()
+        }
+        binding.searchViewBtn.setOnClickListener {
+            nonNullContext.startActivity(Intent(nonNullContext, SearchActivity::class.java))
         }
     }
 
