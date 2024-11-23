@@ -9,33 +9,6 @@
     android:layoutDirection="rtl"
     tools:context=".Activity.SearchActivity">
 
-    <EditText
-        android:id="@+id/searchBarEdt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/search_bg"
-        android:drawableStart="@drawable/ic_search"
-        android:ems="10"
-        android:drawablePadding="8dp"
-        android:fontFamily="@font/vazir"
-        android:hint="@string/search_hint"
-        android:inputType="text"
-        android:lines="1"
-        android:maxLength="30"
-        android:maxLines="1"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="10dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        android:textColor="@color/text_color"
-        android:textColorHint="@color/secondary_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchTitleTxt"
-        tools:ignore="Autofill" />
-
     <ImageView
         android:id="@+id/backBtn"
         style="@style/customNavigateButton"
@@ -60,6 +33,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/backBtn"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/searchBarEdt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/search_bg"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:fontFamily="@font/vazir"
+        android:hint="@string/search_hint"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLength="30"
+        android:maxLines="1"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="@color/text_color"
+        android:textColorHint="@color/secondary_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchTitleTxt"
+        tools:ignore="Autofill" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchView"

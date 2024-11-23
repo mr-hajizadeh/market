@@ -1,9 +1,11 @@
 package com.se7en.market.Adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.se7en.market.Activity.ShopActivity
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.ShopModel
 import com.se7en.market.R
@@ -34,6 +36,11 @@ class ShopAdapter(private val shopList: MutableList<ListItemModel>) :
             holder.shopName.setTextColor(context.getColor(R.color.blue))
         else
             holder.shopName.setTextColor(context.getColor(R.color.green))
+
+        holder.itemView.setOnClickListener {
+            context.startActivity(Intent(context, ShopActivity::class.java))
+        }
+
     }
 
     class ViewHolder(shopBinding: ViewHolderShopBinding) :
