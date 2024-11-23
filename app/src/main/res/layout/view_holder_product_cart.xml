@@ -23,14 +23,13 @@
         android:id="@+id/productCountTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/cart_count_bg"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:text="22"
         android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/productImg"
-        app:layout_constraintTop_toTopOf="@+id/productImg" />
+        android:textColor="@color/green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/productImg" />
 
     <TextView
         android:id="@+id/percentTxt"
@@ -42,6 +41,6 @@
         android:text="41%"
         android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/productImg"
-        app:layout_constraintStart_toStartOf="@+id/productImg" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
