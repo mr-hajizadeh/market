@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/productImg"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/roundedImageView"
+        app:srcCompat="@drawable/t3" />
+
+    <TextView
+        android:id="@+id/productNameTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/productImg"
+        app:layout_constraintTop_toTopOf="@+id/productImg" />
+
+    <TextView
+        android:id="@+id/percentTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cart_percent_bg"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:text="41%"
+        android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/productImg"
+        app:layout_constraintTop_toTopOf="@+id/productImg" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/minusBtn"
+        android:layout_width="@dimen/navigate_button"
+        android:layout_height="@dimen/navigate_button"
+        android:layout_marginStart="8dp"
+        android:background="@color/light_red"
+        app:contentPaddingEnd="6dp"
+        app:contentPaddingStart="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/productImg"
+        app:layout_constraintStart_toEndOf="@+id/productImg"
+        app:shapeAppearance="@style/roundedImageView2"
+        app:srcCompat="@drawable/ic_minus"
+        app:tint="@color/red" />
+
+    <TextView
+        android:id="@+id/countTxt"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:maxLength="3"
+        android:paddingHorizontal="8dp"
+        android:text="111"
+        app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
+        app:layout_constraintEnd_toStartOf="@+id/plusBtn"
+        app:layout_constraintStart_toEndOf="@+id/minusBtn"
+        app:layout_constraintTop_toTopOf="@+id/minusBtn" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/plusBtn"
+        android:layout_width="@dimen/navigate_button"
+        android:layout_height="@dimen/navigate_button"
+        android:background="@color/light_green"
+        app:contentPaddingEnd="6dp"
+        app:contentPaddingStart="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
+        app:layout_constraintStart_toEndOf="@+id/countTxt"
+        app:layout_constraintTop_toTopOf="@+id/minusBtn"
+        app:shapeAppearance="@style/roundedImageView2"
+        app:srcCompat="@drawable/ic_plus"
+        app:tint="@color/green" />
+
+    <TextView
+        android:id="@+id/finalPriceTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="3,500 تومان"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/productImg"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="7,000 تومان"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintBottom_toTopOf="@+id/finalPriceTxt"
+        app:layout_constraintEnd_toEndOf="@+id/finalPriceTxt" />
+
+    <View
+        android:id="@+id/dividerVIew"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/line"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productImg"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
