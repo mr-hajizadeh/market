@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Activity.Ui.ModalBottomSheetMap
 import com.se7en.market.Model.AddressModel
 import com.se7en.market.R
@@ -60,7 +61,7 @@ class AddressAdapter(
 
             titleTxt.visibility = if (item.title == null) View.GONE else View.VISIBLE
             titleTxt.text = item.title
-            addressTxt.text = item.address
+            addressTxt.text = MainActivity().convertToPersianNumbers(item.address)
             moreBtn.setOnClickListener {
                 if (settingLayout.isVisible) {
                     settingLayout.visibility = View.GONE

@@ -10,7 +10,7 @@ data class UserModel(
     val email_verified_at: String = "",
     var gender: String = "",
     var date_of_birth: String? = null,
-    val wallet_balance: String = "",
+    val wallet_balance: Int = 0,
     val otp_request_count: Int = 0,
     val otp_ban_until: String = "",
     val created_at: String = "",

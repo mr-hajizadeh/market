@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Activity.MapActivity
 import com.se7en.market.Activity.SearchActivity
 import com.se7en.market.Activity.Ui.AddressListBottomSheet
@@ -188,7 +189,8 @@ class HomeFragment : Fragment() {
     private fun setActiveAddress(address: AddressModel) {
         val title = if (address.title.isNullOrEmpty()) "آدرس"
         else "${address.title}"
-        activeAddressTxt?.text = "$title: \n ${address.address}"
+        activeAddressTxt?.text =
+            MainActivity().convertToPersianNumbers("$title: \n ${address.address}")
     }
 
     private fun setupContainerView() {

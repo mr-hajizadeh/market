@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +14,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleObserver
 import com.se7en.market.Activity.AddressActivity
+import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Activity.ProfileActivity
 import com.se7en.market.Activity.Ui.LogoutBottomSheet
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.R
+import com.se7en.market.Utils.Helper
 import com.se7en.market.ViewModel.ProfileViewModel
 import com.se7en.market.databinding.FragmentProfileBinding
+import koleton.api.hideSkeleton
+import koleton.api.loadSkeleton
 
 class ProfileFragment : Fragment(), LifecycleObserver {
 
@@ -79,14 +84,11 @@ class ProfileFragment : Fragment(), LifecycleObserver {
 
     private fun initShimmer() {
 
-        val shimmer = binding.creditShimmer
         val creditView = binding.creditView
+        creditView.loadSkeleton()
         Handler(Looper.getMainLooper()).postDelayed({
-            shimmer.stopShimmer()
-            shimmer.visibility = View.GONE
-            creditView.visibility = View.VISIBLE
-
-        }, 3000)
+            creditView.hideSkeleton()
+        }, 1000)
 
     }
 
@@ -112,6 +114,9 @@ class ProfileFragment : Fragment(), LifecycleObserver {
                         else
                             "${user.first_name} ${user.last_name}"
                     binding.usernameTxt.text = username
+                    binding.phoneTxt.text = MainActivity().convertToPersianNumbers(user.phone)
+                    binding.creditAmountTxt.text =
+                        Helper.formatPriceToPersian(user.wallet_balance.toLong())
                 }
 
                 is NetworkResult.Error -> {
