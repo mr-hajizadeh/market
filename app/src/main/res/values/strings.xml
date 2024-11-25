@@ -59,9 +59,29 @@
     <string name="title_continue_order">ادامه خرید</string>
     <string name="title_send_cost">هزینه ارسال</string>
     <string name="title_first_send_time">اولین زمان ارسال</string>
-    <string name="min_buy">حداقل خرید</string>
+    <string name="title_min_buy">حداقل خرید</string>
+    <string name="title_completion_order">تکمیل سفارش</string>
+    <string name="title_total_buy">مجموع خرید</string>
+    <string name="title_currency">تومان</string>
+    <string name="title_cart_empty">سبد خرید شما خالیست!</string>
+    <string name="title_orders_empty">هیج سفارشی وجود ندارد!</string>
+    <string name="title_return">بازگشت</string>
+    <string name="title_detail_order">جزئیات سفارش</string>
+    <string name="title_receive_place">محل تحویل</string>
+    <string name="title_receive_time">زمان تحویل</string>
+    <string name="title_discount_code">کد تخفیف</string>
+    <string name="title_pay_type">نوع پرداخت</string>
+    <string name="title_online_payment">پرداخت آنلاین</string>
+    <string name="title_wallet_payment">پرداخت با کیف پول</string>
+    <string name="title_on_site_payment">پرداخت در محل</string>
+    <string name="title_submit_discount_code">اعمال کد</string>
+    <string name="title_service_cost">هزینه خدمات</string>
+    <string name="title_total_items">مجموع خرید شما</string>
+    <string name="title_profit">سود شما از این خرید</string>
+    <string name="title_payment">پرداخت</string>
+    <string name="title_total_price">جمع کل</string>
 
-    <string name="search_hint">دنبال چی میگردی ؟</string>
+    <string name="hint_search">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>
     <string name="hint_unit">واحد خود را وارد کنید</string>
     <string name="hint_other_title">عنوان آدرس خود را وارد کنید</string>
@@ -71,9 +91,8 @@
     <string name="hint_first_name">نام خود را وارد کنید</string>
     <string name="hint_last_name">نام خانوادگی خود را وارد کنید</string>
     <string name="hint_email">ایمیل خود را وارد کنید</string>
-    <string name="title_cart_empty">سبد خرید شما خالیست!</string>
-    <string name="title_orders_empty">هیج سفارشی وجود ندارد!</string>
-    <string name="title_return">بازگشت</string>
+    <string name="hint_discount_code">لطفا کد تخفیف خود را وارد کنید</string>
+
 
     <string name="permission_denied_message">
        برای ادامه کار و استفاده از تمامی قابلیت‌های این برنامه، نیاز است که به دسترسی موقعیت مکانی اجازه دهید.\nلطفاً از تنظیمات دستگاه خود، دسترسی به موقعیت مکانی را فعال کنید.
@@ -95,5 +114,7 @@
 
     <string name="title_hint">عنوان</string>
     <string name="hint_address">استان خراسان رضوی، شهر مشهد، مقداد 28، پلاک 32</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

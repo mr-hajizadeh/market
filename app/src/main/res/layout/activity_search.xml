@@ -46,7 +46,7 @@
         android:drawablePadding="8dp"
         android:ems="10"
         android:fontFamily="@font/vazir"
-        android:hint="@string/search_hint"
+        android:hint="@string/hint_search"
         android:inputType="text"
         android:lines="1"
         android:maxLength="30"

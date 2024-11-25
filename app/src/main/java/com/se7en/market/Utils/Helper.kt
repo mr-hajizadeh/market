@@ -9,7 +9,10 @@ import android.util.Log
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.Arrays
+import java.util.Locale
 
 @Suppress("DEPRECATION")
 class Helper(val context: Context) {
@@ -75,20 +78,21 @@ class Helper(val context: Context) {
 
             return null
         }
-    }
 
-    fun convertToEnglishNumbers(input: String): String {
-        return input
-            .replace("۰", "0")
-            .replace("۱", "1")
-            .replace("۲", "2")
-            .replace("۳", "3")
-            .replace("۴", "4")
-            .replace("۵", "5")
-            .replace("۶", "6")
-            .replace("۷", "7")
-            .replace("۸", "8")
-            .replace("۹", "9")
+        fun formatPriceToPersian(price: Long): String {
+            val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
+            val decimalFormat = DecimalFormat("#,###", decimalFormatSymbols)
+            val formattedPrice = decimalFormat.format(price)
+
+            val persianDigits = arrayOf("۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹")
+            var persianPrice = formattedPrice
+            for (i in 0..9) {
+                persianPrice = persianPrice.replace(i.toString(), persianDigits[i])
+            }
+
+            return persianPrice
+        }
+
     }
 
 }

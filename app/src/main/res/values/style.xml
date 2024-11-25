@@ -65,6 +65,11 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+    <style name="radioButtonImageRounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
     <style name="productImageStyle">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">16dp</item>
@@ -90,5 +95,14 @@
     <style name="labelTextView">
         <item name="android:textAppearance">@style/TextAppearance.Material3.BodySmall</item>
     </style>
+
+    <style name="SmallMaterialButton" parent="Widget.Material3.Button">
+        <item name="android:minHeight">32dp</item>
+        <item name="android:minWidth">80dp</item>
+        <item name="android:paddingVertical" tools:ignore="NewApi">4dp</item>
+        <item name="android:paddingHorizontal" tools:ignore="NewApi">8dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Material3.BodySmall</item>
+    </style>
+
 
 </resources>

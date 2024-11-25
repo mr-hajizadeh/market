@@ -98,7 +98,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/min_buy"
+                            android:text="@string/title_min_buy"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
                         <TextView
@@ -193,7 +193,7 @@
                     android:layout_marginBottom="24dp"
                     android:background="@drawable/input_bg"
                     android:drawablePadding="8dp"
-                    android:hint="@string/search_hint"
+                    android:hint="@string/hint_search"
                     android:padding="10dp"
                     app:drawableStartCompat="@drawable/ic_search"
                     app:layout_constraintBottom_toBottomOf="parent"

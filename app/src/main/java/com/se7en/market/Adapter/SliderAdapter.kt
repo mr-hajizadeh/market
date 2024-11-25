@@ -1,10 +1,14 @@
 package com.se7en.market.Adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.se7en.market.Activity.CartActivity
 import com.se7en.market.Model.SliderModel
 import com.se7en.market.databinding.ViewHolderBannerBinding
 
@@ -31,9 +35,17 @@ class SliderAdapter(private val items: List<SliderModel>) :
     }
 
     class SliderViewHolder(private val binding: ViewHolderBannerBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root), OnClickListener {
+
+        val context: Context = binding.root.context
+        init { binding.root.setOnClickListener(this) }
+
         fun setData(item: SliderModel) {
             Glide.with(binding.root.context).load(item.banner).into(binding.sliderImg)
+        }
+
+        override fun onClick(v: View?) {
+            context.startActivity(Intent(context, CartActivity::class.java))
         }
     }
 
