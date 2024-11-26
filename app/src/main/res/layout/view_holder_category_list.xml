@@ -13,4 +13,4 @@
     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     tools:ignore="RtlSymmetry"
     tools:layout_editor_absoluteY="8dp"
-    tools:listitem="@layout/category_view_holder" />
+    tools:listitem="@layout/view_holder_category" />

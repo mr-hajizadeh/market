@@ -13,13 +13,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Activity.MapActivity
 import com.se7en.market.Activity.SearchActivity
 import com.se7en.market.Activity.Ui.AddressListBottomSheet
-import com.se7en.market.Adapter.CategoryAdapter
 import com.se7en.market.Adapter.ContainerAdapter
 import com.se7en.market.Adapter.SliderAdapter
 import com.se7en.market.Model.AddressModel
@@ -294,11 +294,14 @@ class HomeFragment : Fragment() {
             ),
             MainListModel(getString(R.string.title_recommended), 5, ViewTypeModel.BRAND_TYPE, list)
         ).apply { sortBy { it.position } }
-        containerAdapter = ContainerAdapter(lists) { product, position, adapter ->
-            Handler(Looper.getMainLooper()).postDelayed({
-                adapter.updateItem(position, product)
-            }, 3000)
-        }
+        val categoryLayoutManager =
+            GridLayoutManager(nonNullContext, 1, GridLayoutManager.HORIZONTAL, false)
+        containerAdapter =
+            ContainerAdapter(lists, categoryLayoutManager) { product, position, adapter ->
+                Handler(Looper.getMainLooper()).postDelayed({
+                    adapter.updateItem(position, product)
+                }, 3000)
+            }
         containerView.adapter = containerAdapter
 
 

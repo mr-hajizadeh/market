@@ -2,11 +2,11 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/primary_gray"
+    android:clipToPadding="true"
     android:layoutDirection="rtl">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -18,12 +18,11 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary_gray"
-            app:contentScrim="@color/primary_gray"
-
+            android:background="@color/white"
+            app:contentScrim="@color/white"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             app:toolbarId="@+id/toolbar"
-            tools:contentScrim="@color/primary_gray">
+            tools:contentScrim="@color/white">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +47,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="TextView"
+                    android:text="سوپر مارکت"
+                    android:textColor="@color/green"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/backBtn"
                     app:layout_constraintTop_toTopOf="@+id/backBtn" />
@@ -57,8 +57,7 @@
                     android:id="@+id/shopNameTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="TextView"
+                    android:text="سوپر مارکت قائم"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                     app:layout_constraintStart_toStartOf="@+id/shopTypeTxt"
                     app:layout_constraintTop_toBottomOf="@+id/shopTypeTxt" />
@@ -97,6 +96,7 @@
                             android:id="@+id/textView128"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:gravity="center"
                             android:text="@string/title_min_buy"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
@@ -132,6 +132,7 @@
                             android:id="@+id/textView228"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:gravity="center"
                             android:text="@string/title_first_send_time"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
@@ -167,6 +168,7 @@
                             android:id="@+id/textView28"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:gravity="center"
                             android:text="@string/title_send_cost"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
@@ -190,9 +192,10 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="16dp"
                     android:background="@drawable/input_bg"
                     android:drawablePadding="8dp"
+                    android:elevation="1dp"
                     android:hint="@string/hint_search"
                     android:padding="10dp"
                     app:drawableStartCompat="@drawable/ic_search"
@@ -205,18 +208,86 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="true"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/shopMainView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:padding="16dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/view_holder_product_list" />
     </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/gradient_white_bg">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="32dp"
+            android:background="@drawable/black_bg"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/cartImg"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:backgroundTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_outline_cart"
+                app:tint="@color/white" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="0.5dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@color/primary_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/cartImg"
+                app:layout_constraintStart_toEndOf="@+id/cartImg"
+                app:layout_constraintTop_toTopOf="@+id/cartImg" />
+
+            <TextView
+                android:id="@+id/totalBuyItemTxt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/title_total_items"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/totalPriceTxt"
+                app:layout_constraintStart_toEndOf="@+id/view4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/totalPriceTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9,000 تومان"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

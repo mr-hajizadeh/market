@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.se7en.market.Model.CategoryModel
 import com.se7en.market.Model.ListItemModel
-import com.se7en.market.databinding.CategoryViewHolderBinding
+import com.se7en.market.databinding.ViewHolderCategoryBinding
 
 class CategoryAdapter(private val items: MutableList<ListItemModel>) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
@@ -16,7 +16,7 @@ class CategoryAdapter(private val items: MutableList<ListItemModel>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         context = parent.context
         return CategoryViewHolder(
-            CategoryViewHolderBinding.inflate(
+            ViewHolderCategoryBinding.inflate(
                 LayoutInflater.from(context),
                 parent, false
             )
@@ -30,7 +30,7 @@ class CategoryAdapter(private val items: MutableList<ListItemModel>) :
         holder.setData(item, context)
     }
 
-    class CategoryViewHolder(val binding: CategoryViewHolderBinding) :
+    class CategoryViewHolder(val binding: ViewHolderCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setData(item: CategoryModel, context: Context) {
             binding.categoryImg.setImageDrawable(context.getDrawable(item.image))

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +20,7 @@ import com.se7en.market.databinding.ViewHolderShopListBinding
 
 class ContainerAdapter(
     private val items: MutableList<MainListModel>,
+    private val categoryLayout: GridLayoutManager,
     private val addToCartItem: (product: ProductModel, position: Int, adapter: ProductWithHeaderAdapter) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -54,10 +54,14 @@ class ContainerAdapter(
         return items[position].position
     }
 
-    class CategoryViewHolder(categoryBinding: ViewHolderCategoryListBinding) :
+    class CategoryViewHolder(
+        categoryBinding: ViewHolderCategoryListBinding,
+        private val categoryLayout: GridLayoutManager,
+    ) :
         RecyclerView.ViewHolder(categoryBinding.root) {
         private val categoryView = categoryBinding.categoryView
         fun bind(items: MutableList<ListItemModel>) {
+            categoryView.layoutManager = categoryLayout
             categoryView.adapter = CategoryAdapter(items)
         }
     }
@@ -183,7 +187,7 @@ class ContainerAdapter(
                         LayoutInflater.from(context),
                         parent,
                         false
-                    )
+                    ), categoryLayout
                 )
             }
 

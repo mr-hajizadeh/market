@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
     android:layout_marginEnd="16dp"
     android:orientation="vertical">
 
@@ -26,11 +27,11 @@
         android:gravity="center"
         android:maxLines="2"
         android:singleLine="false"
+        android:text="@string/title_category"
         android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
         android:textColor="@color/text_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/categoryImg"
         app:layout_constraintStart_toStartOf="@+id/categoryImg"
-        app:layout_constraintTop_toBottomOf="@+id/categoryImg"
-        android:text="@string/title_category"/>
+        app:layout_constraintTop_toBottomOf="@+id/categoryImg" />
 </androidx.constraintlayout.widget.ConstraintLayout>
