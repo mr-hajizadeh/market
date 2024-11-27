@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextWatcher
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.util.Log
@@ -18,6 +20,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.card.MaterialCardView
+import com.se7en.market.Activity.CartActivity
 import com.se7en.market.R
 import com.se7en.market.Utils.Helper
 import com.se7en.market.databinding.FragmentPayBinding
@@ -51,10 +54,11 @@ class PayFragment : Fragment() {
 
 
         binding.totalProductPriceTxt.text = Helper.formatPriceToPersian(170000)
-        binding.totalProfitTxt.text = Helper.formatPriceToPersian(5000)
+        binding.profitTxt.text = Helper.formatPriceToPersian(5000)
         binding.discountPriceTxt.text = Helper.formatPriceToPersian(0)
         binding.serviceCostPriceTxt.text = Helper.formatPriceToPersian(3000)
         binding.totalPriceTxt.text = Helper.formatPriceToPersian(165000)
+
     }
 
     private fun initViews() {
@@ -63,6 +67,24 @@ class PayFragment : Fragment() {
         walletPay = binding.walletPaymentCard
         sitePay = binding.sitePaymentCard
         cards = listOf(onlinePay, walletPay, sitePay)
+
+        val placeAddress = binding.placeAddressTxt
+        val receiveTime = binding.receiveTimeTxt
+        placeAddress.text = convertToPersianNumbers(placeAddress.text.toString())
+        receiveTime.text = convertToPersianNumbers(receiveTime.text.toString())
+
+        binding.discountCodeEdt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                convertToPersianNumbers(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
 
     }
 
@@ -78,6 +100,8 @@ class PayFragment : Fragment() {
         }
     }
 
+    private fun convertToPersianNumbers(input: String) =
+        CartActivity().convertToPersianNumbers(input)
 
     private fun managementPayButtons(
         cards: List<MaterialCardView>,

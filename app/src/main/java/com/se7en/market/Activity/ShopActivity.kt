@@ -4,11 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.se7en.market.Adapter.ContainerAdapter
 import com.se7en.market.Model.CategoryModel
 import com.se7en.market.Model.ListItemModel
@@ -18,7 +14,7 @@ import com.se7en.market.Model.ViewTypeModel
 import com.se7en.market.R
 import com.se7en.market.databinding.ActivityShopBinding
 
-class ShopActivity : AppCompatActivity() {
+class ShopActivity : BaseActivity() {
 
     private lateinit var binding: ActivityShopBinding
     private lateinit var containerAdapter: ContainerAdapter
@@ -29,9 +25,22 @@ class ShopActivity : AppCompatActivity() {
         binding = ActivityShopBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initViews()
         onclickButtons()
         setupShopView()
         manageBottomBar()
+
+    }
+
+    private fun initViews() {
+
+        val minPriceTxt = binding.minPriceTxt
+        val firstTimeSendTxt = binding.firstTimeSendTxt
+        val totalPriceTxt = binding.totalPriceTxt
+
+        minPriceTxt.text = convertToPersianNumbers(minPriceTxt.text.toString())
+        firstTimeSendTxt.text = convertToPersianNumbers(firstTimeSendTxt.text.toString())
+        totalPriceTxt.text = convertToPersianNumbers(totalPriceTxt.text.toString())
 
     }
 

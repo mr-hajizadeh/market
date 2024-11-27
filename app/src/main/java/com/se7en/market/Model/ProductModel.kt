@@ -5,7 +5,8 @@ interface ListItemModel
 data class ProductModel(
     var id: Int = 0,
     var percent: String,
-    var loading: Boolean = false
+    var count: Int = 0,
+    var loading: Boolean = false,
 ) : ListItemModel
 
 data class CategoryModel(

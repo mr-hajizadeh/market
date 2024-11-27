@@ -308,10 +308,12 @@
                     android:id="@+id/linearLayout3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/textView215"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView215">
 
                     <com.google.android.material.card.MaterialCardView
@@ -552,9 +554,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/title_currency"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-                    app:layout_constraintBottom_toBottomOf="@+id/totalProfitTxt"
+                    app:layout_constraintBottom_toBottomOf="@+id/profitTxt"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/totalProfitTxt" />
+                    app:layout_constraintTop_toTopOf="@+id/profitTxt" />
 
                 <TextView
                     android:id="@+id/textView41"
@@ -583,12 +585,12 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:text="@string/title_profit"
-                    app:layout_constraintEnd_toStartOf="@+id/totalProfitTxt"
+                    app:layout_constraintEnd_toStartOf="@+id/profitTxt"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView31" />
 
                 <TextView
-                    android:id="@+id/totalProfitTxt"
+                    android:id="@+id/profitTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"

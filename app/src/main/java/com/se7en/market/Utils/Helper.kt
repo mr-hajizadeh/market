@@ -4,6 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextUtils
+import android.text.style.StrikethroughSpan
 import android.util.Base64
 import android.util.Log
 import java.nio.charset.StandardCharsets
@@ -92,6 +96,15 @@ class Helper(val context: Context) {
 
             return persianPrice
         }
+
+        fun getStrikethroughPriceWithCurrency(price: Long, currency: String): CharSequence {
+            val formattedPrice = formatPriceToPersian(price)
+            val spannablePrice = SpannableString(formattedPrice).apply {
+                setSpan(StrikethroughSpan(), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            return TextUtils.concat(spannablePrice, " ", currency)
+        }
+
 
     }
 

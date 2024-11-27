@@ -12,7 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.se7en.market.R
 import com.se7en.market.databinding.ActivityCartBinding
 
-class CartActivity : AppCompatActivity() {
+class CartActivity : BaseActivity() {
 
     private lateinit var binding: ActivityCartBinding
 

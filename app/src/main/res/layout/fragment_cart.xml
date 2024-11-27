@@ -78,8 +78,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:padding="16dp"
+                android:orientation="vertical"
                 android:visibility="visible"
+                android:paddingBottom="16dp"
+                android:paddingHorizontal="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/view_holder_cart_list" />
 
             <LinearLayout
