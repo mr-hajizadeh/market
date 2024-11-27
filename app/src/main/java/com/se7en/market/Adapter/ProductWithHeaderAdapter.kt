@@ -4,17 +4,16 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RoundRectShape
-import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.se7en.market.Activity.MainActivity
+import com.se7en.market.Activity.Ui.ModalProductDetail
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.ProductModel
+import com.se7en.market.Utils.Helper
 import com.se7en.market.databinding.ViewHolderHeaderBinding
 import com.se7en.market.databinding.ViewHolderProductBinding
 
@@ -35,21 +34,23 @@ class ProductWithHeaderAdapter(
     }
 
     private val customHeaderShape: Drawable by lazy {
-        createCustomShape(context, itemColor)
+        helper.createCustomShape(itemColor)
     }
 
     private val customPercentageShape: Drawable by lazy {
-        createCustomShape(context, itemColor, 4f)
+        helper.createCustomShape(itemColor, 4f)
     }
 
     private val customAddButtonShape: Drawable by lazy {
-        createCustomShape(context, itemColor, 50f, Paint.Style.STROKE)
+        helper.createCustomShape(itemColor, 50f, Paint.Style.STROKE)
     }
 
     private lateinit var context: Context
+    private lateinit var helper: Helper
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         context = parent.context
+        helper = Helper(context)
         return when (viewType) {
             TYPE_HEADER -> HeaderViewHolder(
                 ViewHolderHeaderBinding.inflate(
@@ -70,7 +71,7 @@ class ProductWithHeaderAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (isHeaderEnable) 11 else 10/*productList.size + 1 else productList.size*/
+        return if (isHeaderEnable) 11 else 10
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -94,10 +95,16 @@ class ProductWithHeaderAdapter(
                 holder.addBtn.visibility = View.VISIBLE
             }
 
-            holder.itemView.setOnClickListener {
-                Log.i("TAG", "onBindViewHolder: item $item")
+            holder.addBtn.setOnClickListener {
                 updateItem(position, item)
                 onItemUpdate(position, item)
+            }
+            holder.itemView.setOnClickListener {
+                val modal = ModalProductDetail(itemColor)
+                modal.show(
+                    (context as AppCompatActivity).supportFragmentManager,
+                    "ModalProductDetail"
+                )
             }
         }
     }
@@ -133,34 +140,4 @@ class ProductWithHeaderAdapter(
         notifyItemChanged(position)
     }
 
-    private fun dpToPx(context: Context, dp: Float) = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        dp,
-        context.resources.displayMetrics
-    )
-
-    private fun createCustomShape(
-        context: Context,
-        color: Int,
-        cornerRadius: Float = 16f,
-        style: Paint.Style = Paint.Style.FILL
-    ): Drawable {
-        val radius = dpToPx(context, cornerRadius)
-
-        val rectShape = RoundRectShape(
-            floatArrayOf(
-                radius, radius, radius, radius,
-                radius, radius, radius, radius
-            ), null, null
-        )
-
-        val shapeDrawable = ShapeDrawable(rectShape)
-        shapeDrawable.paint.color = color
-        shapeDrawable.paint.style = style
-        shapeDrawable.paint.strokeWidth = dpToPx(context, 0.8f)
-        shapeDrawable.paint.isAntiAlias = true
-        shapeDrawable.paint.flags = Paint.ANTI_ALIAS_FLAG
-
-        return shapeDrawable
-    }
 }

@@ -3,6 +3,10 @@ package com.se7en.market.Utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Paint
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Build
 import android.text.SpannableString
 import android.text.Spanned
@@ -10,6 +14,7 @@ import android.text.TextUtils
 import android.text.style.StrikethroughSpan
 import android.util.Base64
 import android.util.Log
+import android.util.TypedValue
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -106,6 +111,37 @@ class Helper(val context: Context) {
         }
 
 
+    }
+
+
+    private fun dpToPx(context: Context, dp: Float) = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        dp,
+        context.resources.displayMetrics
+    )
+
+    fun createCustomShape(
+        color: Int,
+        cornerRadius: Float = 16f,
+        style: Paint.Style = Paint.Style.FILL
+    ): Drawable {
+        val radius = dpToPx(context, cornerRadius)
+
+        val rectShape = RoundRectShape(
+            floatArrayOf(
+                radius, radius, radius, radius,
+                radius, radius, radius, radius
+            ), null, null
+        )
+
+        val shapeDrawable = ShapeDrawable(rectShape)
+        shapeDrawable.paint.color = color
+        shapeDrawable.paint.style = style
+        shapeDrawable.paint.strokeWidth = dpToPx(context, 0.8f)
+        shapeDrawable.paint.isAntiAlias = true
+        shapeDrawable.paint.flags = Paint.ANTI_ALIAS_FLAG
+
+        return shapeDrawable
     }
 
 }
