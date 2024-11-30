@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.se7en.market.Activity.MainActivity
@@ -34,6 +35,8 @@ import com.se7en.market.R
 import com.se7en.market.Response.Home.HomeResponse
 import com.se7en.market.ViewModel.HomeViewModel
 import com.se7en.market.databinding.FragmentHomeBinding
+import koleton.api.hideSkeleton
+import koleton.api.loadSkeleton
 
 @Suppress("UNCHECKED_CAST")
 class HomeFragment : Fragment() {
@@ -42,6 +45,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var containerAdapter: ContainerAdapter
+    private lateinit var containerView: RecyclerView
 
     private val viewModel by viewModels<HomeViewModel>()
 
@@ -88,6 +92,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun dataListener() {
+//        containerView.loadSkeleton()
         viewModel.homeStatus.observe(requireActivity()) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
@@ -96,6 +101,10 @@ class HomeFragment : Fragment() {
 
                 is NetworkResult.Success -> {
                     setupContainerView(result.response)
+//                    Handler(Looper.getMainLooper()).postDelayed(
+//                        { containerView.hideSkeleton() },
+//                        1000
+//                    )
                 }
 
                 is NetworkResult.Error -> {
@@ -109,11 +118,16 @@ class HomeFragment : Fragment() {
         viewModel.sliderStatus.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
-
+                    binding.homeContainer.loadSkeleton()
+                    binding.appBarLayout.loadSkeleton()
                 }
 
                 is NetworkResult.Success -> {
                     initSlider(result.response)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        binding.homeContainer.hideSkeleton()
+                        binding.appBarLayout.hideSkeleton()
+                    }, 1000)
                 }
 
                 is NetworkResult.Error -> {
@@ -126,6 +140,7 @@ class HomeFragment : Fragment() {
     private fun initViews() {
         _viewPager = binding.sliderView
         activeAddressTxt = binding.activeAddressTxt
+        containerView = binding.containerView
     }
 
     private fun initSlider(sliderList: List<SliderModel>) {
@@ -247,21 +262,21 @@ class HomeFragment : Fragment() {
             ProductModel(110, "95"),
             ProductModel(111, "70")
         )
-                mainList.add(
-                    MainListModel(
-                        position = 1,
-                        viewType = ViewTypeModel.HEADER_TYPE,
-                        items = list
-                    )
-                )
+        mainList.add(
+            MainListModel(
+                position = 1,
+                viewType = ViewTypeModel.HEADER_TYPE,
+                items = list
+            )
+        )
 
-                mainList.add(
-                    MainListModel(
-                        position = 3,
-                        viewType = ViewTypeModel.ONE_ROW_TYPE,
-                        items = list2
-                    )
-                )
+        mainList.add(
+            MainListModel(
+                position = 3,
+                viewType = ViewTypeModel.ONE_ROW_TYPE,
+                items = list2
+            )
+        )
 
         mainList.sortBy { it.position }
         return mainList
