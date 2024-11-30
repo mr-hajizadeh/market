@@ -103,9 +103,6 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-
-        viewModel.getAllData()
-
     }
 
     private fun sliderListener() {
@@ -124,7 +121,6 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-        viewModel.getSliderList()
     }
 
     private fun initViews() {
