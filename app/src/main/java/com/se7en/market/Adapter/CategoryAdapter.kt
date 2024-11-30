@@ -4,8 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.se7en.market.Model.CategoryModel
 import com.se7en.market.Model.ListItemModel
+import com.se7en.market.Utils.Constance.Companion.IMAGE_URL_PATH
 import com.se7en.market.databinding.ViewHolderCategoryBinding
 
 class CategoryAdapter(private val items: MutableList<ListItemModel>) :
@@ -33,7 +35,9 @@ class CategoryAdapter(private val items: MutableList<ListItemModel>) :
     class CategoryViewHolder(val binding: ViewHolderCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun setData(item: CategoryModel, context: Context) {
-            binding.categoryImg.setImageDrawable(context.getDrawable(item.image))
+            Glide.with(context)
+                .load("$IMAGE_URL_PATH${item.image}")
+                .into(binding.categoryImg)
             binding.categoryTitleTxt.text = item.title
         }
     }

@@ -14,8 +14,14 @@ data class ProductModel(
 ) : ListItemModel
 
 data class CategoryModel(
-    var image: Int,
-    var title: String,
+    val id: Int = 0,
+    val title: String = "",
+    val description: String = "",
+    val image: String = "",
+    val tags: List<String> = listOf(),
+    val status: Int = 0,
+    val created_at: String = "",
+    val updated_at: String = "",
 ) : ListItemModel
 
 data class ShopModel(

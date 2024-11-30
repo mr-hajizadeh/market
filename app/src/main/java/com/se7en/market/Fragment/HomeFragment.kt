@@ -206,8 +206,24 @@ class HomeFragment : Fragment() {
     }
 
     private fun getMainList(data: HomeResponse.Data): MutableList<MainListModel> {
+        val mainList = listOfNotNull(
+            data.shops.takeIf { it.isNotEmpty() }?.let {
+                MainListModel(
+                    title = "${data.shops.size} فروشگاه اطراف شما ",
+                    position = 2,
+                    viewType = ViewTypeModel.SHOP_TYPE,
+                    items = it as MutableList<ListItemModel>
+                )
+            },
+            data.categories.takeIf { it.isNotEmpty() }?.let {
+                MainListModel(
+                    position = 0,
+                    viewType = ViewTypeModel.CATEGORY_TYPE,
+                    items = it as MutableList<ListItemModel>
+                )
+            }
+        ).sortedBy { it.position }.toMutableList()
 
-        val mainList: MutableList<MainListModel> = mutableListOf()
 
         val list: MutableList<ListItemModel> = mutableListOf(
             ProductModel(1, "40"),
@@ -235,65 +251,21 @@ class HomeFragment : Fragment() {
             ProductModel(110, "95"),
             ProductModel(111, "70")
         )
-        val category: MutableList<ListItemModel> = mutableListOf(
-            CategoryModel(R.drawable.t1, "میوه و سبزیجات تازه"),
-            CategoryModel(R.drawable.t2, "لبنیات و تخم مرغ"),
-            CategoryModel(R.drawable.t3, "نوشیدنی‌ها"),
-            CategoryModel(R.drawable.t1, "گوشت و مرغ"),
-            CategoryModel(R.drawable.t2, "مواد غذایی کنسروی"),
-            CategoryModel(R.drawable.t3, "نان و شیرینی"),
-            CategoryModel(R.drawable.t1, "آجیل و خشکبار"),
-            CategoryModel(R.drawable.t2, "غذاهای یخ‌زده"),
-            CategoryModel(R.drawable.t3, "مواد غذایی کودک"),
-            CategoryModel(R.drawable.t1, "مواد شوینده و بهداشتی"),
-            CategoryModel(R.drawable.t2, "محصولات پروتئینی"),
-            CategoryModel(R.drawable.t3, "آرایشی و بهداشتی"),
-            CategoryModel(R.drawable.t1, "لوازم خانه و آشپزخانه"),
-            CategoryModel(R.drawable.t2, "حبوبات و غلات"),
-            CategoryModel(R.drawable.t3, "سس‌ها و چاشنی‌ها"),
-            CategoryModel(R.drawable.t1, "تنقلات و میان‌وعده‌ها"),
-            CategoryModel(R.drawable.t2, "ادویه‌جات و افزودنی‌ها"),
-            CategoryModel(R.drawable.t3, "غذاهای آماده و نیمه‌آماده"),
-            CategoryModel(R.drawable.t1, "محصولات کم‌کالری و رژیمی"),
-            CategoryModel(R.drawable.t2, "لوازم التحریر و اداری")
-        )
-
-        when {
-            data.shops.isNotEmpty() -> {
                 mainList.add(
                     MainListModel(
-                        title = "${data.shops.size} فروشگاه اطراف شما ",
-                        position = 2,
-                        viewType = ViewTypeModel.SHOP_TYPE,
-                        items = data.shops as MutableList<ListItemModel>
+                        position = 1,
+                        viewType = ViewTypeModel.HEADER_TYPE,
+                        items = list
                     )
                 )
-            }
-        }
-        mainList.add(
-            MainListModel(
-                position = 0,
-                viewType = ViewTypeModel.CATEGORY_TYPE,
-                items = category
-            )
-        )
 
-        mainList.add(
-            MainListModel(
-                position = 1,
-                viewType = ViewTypeModel.HEADER_TYPE,
-                items = list
-            )
-        )
-
-        mainList.add(
-            MainListModel(
-                position = 3,
-                viewType = ViewTypeModel.ONE_ROW_TYPE,
-                items = list2
-            )
-        )
-
+                mainList.add(
+                    MainListModel(
+                        position = 3,
+                        viewType = ViewTypeModel.ONE_ROW_TYPE,
+                        items = list2
+                    )
+                )
 
         mainList.sortBy { it.position }
         return mainList
