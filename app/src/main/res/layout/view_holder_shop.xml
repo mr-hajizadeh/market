@@ -15,7 +15,7 @@
         android:id="@+id/shopNameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        tools:text="TextView"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,10 +36,10 @@
         app:layout_constraintTop_toBottomOf="@+id/shopNameTxt" />
 
     <TextView
-        android:id="@+id/textView25"
+        android:id="@+id/deliveryTimeTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="تحویل در 35 دقیقه"
+        tools:text="تحویل در 35 دقیقه"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -49,29 +49,29 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:layout_marginEnd="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView25"
-        app:layout_constraintEnd_toStartOf="@+id/textView25"
-        app:layout_constraintTop_toTopOf="@+id/textView25"
+        app:layout_constraintBottom_toBottomOf="@+id/deliveryTimeTxt"
+        app:layout_constraintEnd_toStartOf="@+id/deliveryTimeTxt"
+        app:layout_constraintTop_toTopOf="@+id/deliveryTimeTxt"
         app:srcCompat="@drawable/ic_energie" />
 
     <TextView
-        android:id="@+id/textView26"
+        android:id="@+id/courierFeeTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
-        android:text="رایگان"
+        tools:text="رایگان"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView10"
-        app:layout_constraintTop_toBottomOf="@+id/textView25" />
+        app:layout_constraintTop_toBottomOf="@+id/deliveryTimeTxt" />
 
     <ImageView
         android:id="@+id/imageView10"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView26"
+        app:layout_constraintBottom_toBottomOf="@+id/courierFeeTxt"
         app:layout_constraintStart_toStartOf="@+id/imageView9"
-        app:layout_constraintTop_toTopOf="@+id/textView26"
+        app:layout_constraintTop_toTopOf="@+id/courierFeeTxt"
         app:srcCompat="@drawable/ic_wallet" />
 </androidx.constraintlayout.widget.ConstraintLayout>

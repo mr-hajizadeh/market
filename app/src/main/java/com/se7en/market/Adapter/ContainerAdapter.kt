@@ -21,7 +21,7 @@ import com.se7en.market.databinding.ViewHolderShopListBinding
 class ContainerAdapter(
     private val items: MutableList<MainListModel>,
     private val categoryLayout: GridLayoutManager,
-    private val addToCartItem: (product: ProductModel, position: Int, adapter: ProductWithHeaderAdapter) -> Unit
+    private val addToCartItem: (product: ProductModel, position: Int, adapter: ProductWithHeaderAdapter) -> Unit,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -31,7 +31,6 @@ class ContainerAdapter(
         context = parent.context
         val viewTypeEnum = items.find { it.position == viewType }?.viewType
             ?: throw IllegalArgumentException("Invalid view type")
-        Log.i("TAG", "onCreateViewHolder: $viewTypeEnum")
         return viewTypeHolder(viewTypeEnum, parent)
     }
 
@@ -44,7 +43,7 @@ class ContainerAdapter(
             is HeaderViewHolder -> holder.bind(item.items)
             is TwoViewHolder -> holder.bind(item.items)
             is OneViewHolder -> holder.bind(item.items)
-            is ShopViewHolder -> holder.bind(item.items)
+            is ShopViewHolder -> holder.bind(item)
             is BrandViewHolder -> holder.bind(item.items)
         }
     }
@@ -69,7 +68,7 @@ class ContainerAdapter(
     class HeaderViewHolder(
         binding: ViewHolderProductListBinding,
         private val context: Context,
-        private val addToCartItem: (product: ProductModel, position: Int, adapter: ProductWithHeaderAdapter) -> Unit
+        private val addToCartItem: (product: ProductModel, position: Int, adapter: ProductWithHeaderAdapter) -> Unit,
     ) :
         RecyclerView.ViewHolder(binding.root) {
         private lateinit var adapter: ProductWithHeaderAdapter
@@ -102,7 +101,7 @@ class ContainerAdapter(
     class OneViewHolder(
         binding: ViewHolderProductListBinding,
         private val context: Context,
-        private val addToCartItem: (product: ProductModel, position: Int, adapter: ProductWithHeaderAdapter) -> Unit
+        private val addToCartItem: (product: ProductModel, position: Int, adapter: ProductWithHeaderAdapter) -> Unit,
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -128,7 +127,7 @@ class ContainerAdapter(
 
     class TwoViewHolder(
         binding: ViewHolderProductListBinding,
-        private val context: Context
+        private val context: Context,
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -154,18 +153,18 @@ class ContainerAdapter(
 
     class ShopViewHolder(
         binding: ViewHolderShopListBinding,
-        private val context: Context
+        private val context: Context,
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
         private var adapter: ShopAdapter? = null
         private val shopView: RecyclerView = binding.shopView
-//        private val shopBtn = binding.sho
+        private val title = binding.titleShop
 
-        fun bind(items: MutableList<ListItemModel>) {
-            adapter = ShopAdapter(items)
+        fun bind(item: MainListModel) {
+            adapter = ShopAdapter(item.items)
             shopView.adapter = adapter
-//            shopBtn.text = "${list.size} فروشگاه "
+            title.text = item.title
         }
     }
 
@@ -178,7 +177,7 @@ class ContainerAdapter(
 
     private fun viewTypeHolder(
         viewType: ViewTypeModel,
-        parent: ViewGroup
+        parent: ViewGroup,
     ): RecyclerView.ViewHolder {
         return when (viewType) {
             ViewTypeModel.CATEGORY_TYPE -> {

@@ -1,5 +1,6 @@
 package com.se7en.market.Adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -12,9 +13,15 @@ import com.se7en.market.Activity.CartActivity
 import com.se7en.market.Model.SliderModel
 import com.se7en.market.databinding.ViewHolderBannerBinding
 
-class SliderAdapter(private val items: List<SliderModel>) :
+class SliderAdapter :
     RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
+    private var items: List<SliderModel> = listOf()
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun setItems(newItems: List<SliderModel>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
@@ -38,7 +45,10 @@ class SliderAdapter(private val items: List<SliderModel>) :
         RecyclerView.ViewHolder(binding.root), OnClickListener {
 
         val context: Context = binding.root.context
-        init { binding.root.setOnClickListener(this) }
+
+        init {
+            binding.root.setOnClickListener(this)
+        }
 
         fun setData(item: SliderModel) {
             Glide.with(binding.root.context).load(item.banner).into(binding.sliderImg)

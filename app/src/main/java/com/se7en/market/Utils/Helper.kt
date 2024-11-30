@@ -43,13 +43,13 @@ class Helper(val context: Context) {
                     packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
 
                 val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                    packageInfo.signingInfo.apkContentsSigners
+                    packageInfo.signingInfo?.apkContentsSigners
                 else
                     packageInfo.signatures
 
                 signatures
-                    .mapNotNull { hash(packageName, it.toCharsString()) }
-                    .mapTo(appCodes) { String.format("%s", it) }
+                    ?.mapNotNull { hash(packageName, it.toCharsString()) }
+                    ?.mapTo(appCodes) { String.format("%s", it) }
             } catch (e: PackageManager.NameNotFoundException) {
                 Log.v(TAG, "Unable to find package to obtain hash.", e)
             }

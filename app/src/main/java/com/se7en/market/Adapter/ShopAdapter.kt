@@ -1,5 +1,6 @@
 package com.se7en.market.Adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import com.se7en.market.Activity.ShopActivity
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.ShopModel
 import com.se7en.market.R
+import com.se7en.market.Utils.Constance.Companion.KEY_SHOP_ID
 import com.se7en.market.databinding.ViewHolderShopBinding
 
 class ShopAdapter(private val shopList: MutableList<ListItemModel>) :
@@ -27,18 +29,25 @@ class ShopAdapter(private val shopList: MutableList<ListItemModel>) :
         )
     }
 
-    override fun getItemCount() = 3
+    override fun getItemCount() = if (shopList.size >= 3) 3 else shopList.size
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = shopList[position] as ShopModel
-        holder.shopName.text = item.name
+        holder.shopName.text = item.shop_name
+        holder.shopAddress.text = item.shop_address
+        holder.deliveryTime.text = "تحویل در ${item.delivery_time} دقیقه"
+        holder.courierFee.text =
+            "${item.formatPriceToPersianCourierFee()} ${context.getString(R.string.title_currency)}"
         if (position % 2 == 0)
             holder.shopName.setTextColor(context.getColor(R.color.blue))
         else
             holder.shopName.setTextColor(context.getColor(R.color.green))
 
         holder.itemView.setOnClickListener {
-            context.startActivity(Intent(context, ShopActivity::class.java))
+            val intent = Intent(context, ShopActivity::class.java)
+            intent.putExtra(KEY_SHOP_ID, item.id)
+            context.startActivity(intent)
         }
 
     }
@@ -46,6 +55,9 @@ class ShopAdapter(private val shopList: MutableList<ListItemModel>) :
     class ViewHolder(shopBinding: ViewHolderShopBinding) :
         RecyclerView.ViewHolder(shopBinding.root) {
         val shopName = shopBinding.shopNameTxt
+        val shopAddress = shopBinding.shopAddressTxt
+        val deliveryTime = shopBinding.deliveryTimeTxt
+        val courierFee = shopBinding.courierFeeTxt
     }
 
 }

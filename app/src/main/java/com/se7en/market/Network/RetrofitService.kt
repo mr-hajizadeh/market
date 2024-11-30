@@ -1,5 +1,7 @@
 package com.se7en.market.Network
 
+import android.util.Log
+import com.google.gson.GsonBuilder
 import com.se7en.market.Utils.Constance.Companion.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -13,7 +15,12 @@ class RetrofitService {
 
         private fun getInstance(baseUrl: String): Retrofit {
 
-            val loggingInterceptor = HttpLoggingInterceptor().apply {
+            val loggingInterceptor = HttpLoggingInterceptor { message ->
+                Log.i(
+                    "TAG",
+                    "RetrofitService log: $message"
+                )
+            }.apply {
                 level = HttpLoggingInterceptor.Level.BODY
             }
 

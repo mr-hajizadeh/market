@@ -1,12 +1,14 @@
 package com.se7en.market.Network
 
 import com.se7en.market.Model.AddressModel
+import com.se7en.market.Model.MainListModel
 import com.se7en.market.Model.ReverseGeocoding
 import com.se7en.market.Model.SliderModel
 import com.se7en.market.Model.UserModel
 import com.se7en.market.Response.Address.AddressList
 import com.se7en.market.Response.Address.DeleteAddress
 import com.se7en.market.Response.Address.StoreAddress
+import com.se7en.market.Response.Home.HomeResponse
 import com.se7en.market.Response.OTP.Code
 import com.se7en.market.Response.OTP.Confirm
 import com.se7en.market.Response.OTP.Token
@@ -77,5 +79,11 @@ interface ApiService {
 
     @GET("/api/v1/admin/slider")
     fun getSliderList(): Call<List<SliderModel>>
+
+    @POST("/api/v1/customer/home")
+    fun getAllData(
+        @Header("Authorization") token: String,
+        @Body latLon: Map<String, Double>
+    ): Call<HomeResponse>
 
 }

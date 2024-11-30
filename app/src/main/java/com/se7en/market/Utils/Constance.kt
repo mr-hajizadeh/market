@@ -10,6 +10,7 @@ class Constance {
         const val KEY_CODE = "code"
         const val KEY_ACTIVE_ADDRESS = "active_id"
         const val KEY_ADDRESS = "address"
+        const val KEY_SHOP_ID = "shop_id"
     }
 
 }
