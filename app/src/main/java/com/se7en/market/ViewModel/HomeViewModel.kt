@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.se7en.market.Repository.HomeRepository
 import com.se7en.market.Repository.PreferencesRepository
+import java.nio.DoubleBuffer
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -16,9 +17,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadActiveAddress() = preferencesRepository.loadActiveAddress()
     fun getSliderList() = homeRepository.getSliderList()
-    fun getAllData() = homeRepository.getAllData(
+    fun getAllData(lat: Double, lon: Double) = homeRepository.getAllData(
         "Bearer $token",
-        mapOf("latitude" to 36.320519437955, "longitude" to 59.667323402147)
+        mapOf("latitude" to lat, "longitude" to lon)
     )
 
 }

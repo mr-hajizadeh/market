@@ -10,7 +10,7 @@ import com.se7en.market.Activity.ShopActivity
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.ShopModel
 import com.se7en.market.R
-import com.se7en.market.Utils.Constance.Companion.KEY_SHOP_ID
+import com.se7en.market.Utils.Constance.Companion.KEY_SHOP
 import com.se7en.market.databinding.ViewHolderShopBinding
 
 class ShopAdapter(private val shopList: MutableList<ListItemModel>) :
@@ -34,19 +34,15 @@ class ShopAdapter(private val shopList: MutableList<ListItemModel>) :
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = shopList[position] as ShopModel
-        holder.shopName.text = item.shop_name
+        holder.shopName.text = " - ${item.shop_name}"
         holder.shopAddress.text = item.shop_address
         holder.deliveryTime.text = "تحویل در ${item.delivery_time} دقیقه"
         holder.courierFee.text =
             "${item.formatPriceToPersianCourierFee()} ${context.getString(R.string.title_currency)}"
-        if (position % 2 == 0)
-            holder.shopName.setTextColor(context.getColor(R.color.blue))
-        else
-            holder.shopName.setTextColor(context.getColor(R.color.green))
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ShopActivity::class.java)
-            intent.putExtra(KEY_SHOP_ID, item.id)
+            intent.putExtra(KEY_SHOP, item)
             context.startActivity(intent)
         }
 

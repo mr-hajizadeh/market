@@ -1,5 +1,9 @@
+@file:Suppress("DEPRECATED_ANNOTATION")
+
 package com.se7en.market.Model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
@@ -13,6 +17,7 @@ data class ProductModel(
     var loading: Boolean = false,
 ) : ListItemModel
 
+@Parcelize
 data class CategoryModel(
     val id: Int = 0,
     val title: String = "",
@@ -22,8 +27,9 @@ data class CategoryModel(
     val status: Int = 0,
     val created_at: String = "",
     val updated_at: String = "",
-) : ListItemModel
+) : ListItemModel, Parcelable
 
+@Parcelize
 data class ShopModel(
     var id: Int = 0,
     var user_id: Int = 0,
@@ -38,7 +44,7 @@ data class ShopModel(
     var updated_at: String = "",
     var distance: Double = 0.0,
     var formatted_distance: String = "",
-) : ListItemModel {
+) : ListItemModel, Parcelable {
     fun formatPriceToPersianCourierFee(): String {
         val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
         val decimalFormat = DecimalFormat("#,###", decimalFormatSymbols)

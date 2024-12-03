@@ -24,14 +24,12 @@ import com.se7en.market.Activity.Ui.AddressListBottomSheet
 import com.se7en.market.Adapter.ContainerAdapter
 import com.se7en.market.Adapter.SliderAdapter
 import com.se7en.market.Model.AddressModel
-import com.se7en.market.Model.CategoryModel
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.MainListModel
 import com.se7en.market.Model.ProductModel
 import com.se7en.market.Model.SliderModel
 import com.se7en.market.Model.ViewTypeModel
 import com.se7en.market.Network.NetworkResult
-import com.se7en.market.R
 import com.se7en.market.Response.Home.HomeResponse
 import com.se7en.market.ViewModel.HomeViewModel
 import com.se7en.market.databinding.FragmentHomeBinding
@@ -174,10 +172,11 @@ class HomeFragment : Fragment() {
 
     private fun activeAddress() {
         viewModel.loadActiveAddress().observe(viewLifecycleOwner) { address ->
-            Log.i("TAG", "activeAddress: ${address?.address}")
-            if (address != null)
+            if (address != null) {
                 setActiveAddress(address)
-            else {
+                viewModel.getAllData(address.latitude, address.longitude)
+                viewModel.getSliderList()
+            } else {
                 requireActivity().startActivity(
                     Intent(
                         requireActivity(),

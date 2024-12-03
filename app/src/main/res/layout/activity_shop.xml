@@ -95,7 +95,7 @@
                         <TextView
                             android:id="@+id/textView128"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="24dp"
                             android:layout_marginTop="4dp"
                             android:gravity="center"
                             android:text="@string/title_min_buy"
@@ -134,7 +134,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:gravity="center"
-                            android:text="@string/title_first_send_time"
+                            android:text="@string/title_delivery_time"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
                         <TextView
@@ -174,11 +174,11 @@
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall" />
 
                         <TextView
-                            android:id="@+id/sendPriceTxt"
+                            android:id="@+id/courierFeeTxt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="رایگان"
+                            android:text="@string/title_free"
                             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                             android:textStyle="bold" />
                     </LinearLayout>

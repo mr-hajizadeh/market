@@ -6,5 +6,5 @@ enum class ViewTypeModel {
     TWO_ROW_TYPE,
     ONE_ROW_TYPE,
     SHOP_TYPE,
-    BRAND_TYPE
+    BRAND_TYPE,
 }

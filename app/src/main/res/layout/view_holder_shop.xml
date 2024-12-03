@@ -12,14 +12,28 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/shopNameTxt"
+        android:id="@+id/shopTypeTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="TextView"
+        android:text="@string/title_supermarket"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="@color/green"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/shopNameTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintEnd_toStartOf="@+id/imageView9"
+        app:layout_constraintStart_toEndOf="@+id/shopTypeTxt"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="TextView" />
 
     <TextView
         android:id="@+id/shopAddressTxt"
@@ -33,7 +47,7 @@
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintEnd_toStartOf="@+id/imageView10"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shopNameTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/shopTypeTxt" />
 
     <TextView
         android:id="@+id/deliveryTimeTxt"

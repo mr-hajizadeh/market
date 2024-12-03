@@ -3,7 +3,7 @@ package com.se7en.market.Utils
 class Constance {
 
     companion object {
-//        const val BASE_URL = "http://192.168.1.100:8000/"
+        //        const val BASE_URL = "http://192.168.1.100:8000/"
         const val BASE_URL = "https://hajimarket.ir/"
         const val IMAGE_URL_PATH = "https://hajimarket.ir/storage/"
         const val KEY_PHONE = "phone"
@@ -11,7 +11,8 @@ class Constance {
         const val KEY_CODE = "code"
         const val KEY_ACTIVE_ADDRESS = "active_id"
         const val KEY_ADDRESS = "address"
-        const val KEY_SHOP_ID = "shop_id"
+        const val KEY_SHOP = "shop"
+        const val KEY_CATEGORY = "category"
     }
 
 }

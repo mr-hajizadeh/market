@@ -1,31 +1,43 @@
 package com.se7en.market.Activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import com.se7en.market.Adapter.ContainerAdapter
 import com.se7en.market.Model.CategoryModel
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.MainListModel
 import com.se7en.market.Model.ProductModel
+import com.se7en.market.Model.ShopModel
 import com.se7en.market.Model.ViewTypeModel
 import com.se7en.market.R
+import com.se7en.market.Utils.Constance.Companion.KEY_SHOP
 import com.se7en.market.databinding.ActivityShopBinding
 
 class ShopActivity : BaseActivity() {
 
     private lateinit var binding: ActivityShopBinding
     private lateinit var containerAdapter: ContainerAdapter
+    private lateinit var shopData: ShopModel
 
+    private var minPriceTxt: TextView? = null
+    private var firstTimeSendTxt: TextView? = null
+    private var totalPriceTxt: TextView? = null
+    private var courierFeeTxt: TextView? = null
+    private var shopNameTxt: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShopBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        shopData = intent.getParcelableExtra(KEY_SHOP)!!
         initViews()
+        setData()
         onclickButtons()
         setupShopView()
         manageBottomBar()
@@ -34,14 +46,28 @@ class ShopActivity : BaseActivity() {
 
     private fun initViews() {
 
-        val minPriceTxt = binding.minPriceTxt
-        val firstTimeSendTxt = binding.firstTimeSendTxt
-        val totalPriceTxt = binding.totalPriceTxt
+        minPriceTxt = binding.minPriceTxt
+        firstTimeSendTxt = binding.firstTimeSendTxt
+        totalPriceTxt = binding.totalPriceTxt
+        courierFeeTxt = binding.courierFeeTxt
+        shopNameTxt = binding.shopNameTxt
 
-        minPriceTxt.text = convertToPersianNumbers(minPriceTxt.text.toString())
-        firstTimeSendTxt.text = convertToPersianNumbers(firstTimeSendTxt.text.toString())
-        totalPriceTxt.text = convertToPersianNumbers(totalPriceTxt.text.toString())
+        totalPriceTxt?.text = convertToPersianNumbers(totalPriceTxt?.text.toString())
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setData() {
+
+        with(shopData) {
+            minPriceTxt?.text = convertToPersianNumbers(minPriceTxt?.text.toString())
+            firstTimeSendTxt?.text =
+                "${convertToPersianNumbers(delivery_time.toString())} ${getString(R.string.title_minute)}"
+            shopNameTxt?.text = shop_name
+            courierFeeTxt?.text = if (courier_fee == 0) getString(R.string.title_free)
+            else "${formatPriceToPersianCourierFee()} ${getString(R.string.title_currency)}"
+
+        }
     }
 
     private fun onclickButtons() {
@@ -127,9 +153,15 @@ class ShopActivity : BaseActivity() {
                 ViewTypeModel.ONE_ROW_TYPE,
                 list2
             ),
-            MainListModel(getString(R.string.title_recommended), 5, ViewTypeModel.BRAND_TYPE, list)
+            MainListModel(
+                getString(R.string.title_recommended),
+                5,
+                ViewTypeModel.BRAND_TYPE,
+                list
+            )
         ).apply { sortBy { it.position } }
-        val categoryLayoutManager = GridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false)
+        val categoryLayoutManager =
+            GridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false)
         containerAdapter =
             ContainerAdapter(lists, categoryLayoutManager) { product, position, adapter ->
                 Handler(Looper.getMainLooper()).postDelayed({

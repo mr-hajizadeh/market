@@ -58,7 +58,7 @@
     <string name="title_near_shop">فروشگاه های اظراف شما</string>
     <string name="title_continue_order">ادامه خرید</string>
     <string name="title_send_cost">هزینه ارسال</string>
-    <string name="title_first_send_time">اولین زمان ارسال</string>
+    <string name="title_delivery_time">زمان ارسال</string>
     <string name="title_min_buy">حداقل خرید</string>
     <string name="title_completion_order">تکمیل سفارش</string>
     <string name="title_total_buy">مجموع خرید</string>
@@ -83,6 +83,9 @@
     <string name="title_detail_product">جزئیات کالا</string>
     <string name="title_add">افزودن</string>
     <string name="title_item_exists_in_cart">این کالا در سبد خرید شما موجود میباشد.</string>
+    <string name="title_free">رایگان</string>
+    <string name="title_minute">دقیقه</string>
+    <string name="title_supermarket">سوپرمارکت</string>
 
     <string name="hint_search">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>
