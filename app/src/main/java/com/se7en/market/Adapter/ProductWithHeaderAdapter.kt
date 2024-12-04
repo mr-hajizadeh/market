@@ -21,10 +21,10 @@ import com.se7en.market.databinding.ViewHolderProductBinding
 class ProductWithHeaderAdapter(
     private val productList: MutableList<ListItemModel>,
     private val headerTitle: String,
-    private val headerIcon: Drawable,
+    private val headerIcon: Drawable? = null,
     private val itemColor: Int,
     private val isHeaderEnable: Boolean = false,
-    private val onItemUpdate: (position: Int, product: ProductModel) -> Unit
+    private val onItemUpdate: (position: Int, product: ProductModel) -> Unit,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
