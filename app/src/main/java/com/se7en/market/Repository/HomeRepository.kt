@@ -27,9 +27,9 @@ class HomeRepository {
     private var _homeStatus = MutableLiveData<NetworkResult<HomeResponse>>()
     val homeStatus get() = _homeStatus
 
-    fun getSliderList() {
+    fun getSliderList(token: String) {
         _sliderStatus.value = NetworkResult.Loading
-        RetrofitService.apiService().getSliderList().enqueue(object : Callback<List<SliderModel>> {
+        RetrofitService.apiService().getSliderList(token).enqueue(object : Callback<List<SliderModel>> {
             override fun onResponse(
                 call: Call<List<SliderModel>>,
                 response: Response<List<SliderModel>>,
@@ -52,20 +52,21 @@ class HomeRepository {
         latLon: Map<String, Double>,
     ) {
         _homeStatus.value = NetworkResult.Loading
-        RetrofitService.apiService().getAllData(token, latLon).enqueue(object : Callback<HomeResponse> {
-            override fun onResponse(
-                call: Call<HomeResponse>,
-                response: Response<HomeResponse>,
-            ) {
-                if (response.isSuccessful && response.body() != null) {
-                    _homeStatus.value = NetworkResult.Success(response.body()!!)
+        RetrofitService.apiService().getAllData(token, latLon)
+            .enqueue(object : Callback<HomeResponse> {
+                override fun onResponse(
+                    call: Call<HomeResponse>,
+                    response: Response<HomeResponse>,
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        _homeStatus.value = NetworkResult.Success(response.body()!!)
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<HomeResponse>, t: Throwable) {
-                _homeStatus.value = NetworkResult.Error("Error ${t.message}")
-            }
-        })
+                override fun onFailure(call: Call<HomeResponse>, t: Throwable) {
+                    _homeStatus.value = NetworkResult.Error("Error ${t.message}")
+                }
+            })
     }
 
 }

@@ -4,10 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.se7en.market.Activity.ProductByShopActivity
+import com.se7en.market.Activity.ProductWithShopActivity
 import com.se7en.market.Model.CategoryModel
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Utils.Constance.Companion.IMAGE_URL_PATH
@@ -35,7 +34,7 @@ class CategoryAdapter(private val items: MutableList<ListItemModel>) :
         val item = items[position] as CategoryModel
         holder.setData(item, context)
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, ProductByShopActivity::class.java)
+            val intent = Intent(context, ProductWithShopActivity::class.java)
             intent.putExtra(KEY_CATEGORY, item)
             context.startActivity(intent)
         }

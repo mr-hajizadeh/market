@@ -37,9 +37,9 @@ class CartFragment : Fragment() {
         val cartView = binding.cartView
 
         val items: MutableList<ProductModel> = mutableListOf(
-            ProductModel(1, "50", count = 2),
-            ProductModel(2, "50", count = 3),
-            ProductModel(3, "50", count = 4),
+            ProductModel(1, off_percent = 50, count = 2),
+            ProductModel(2, off_percent = 50, count = 3),
+            ProductModel(3, off_percent = 50, count = 4),
         )
         val list = mutableListOf(
             ShopOrderModel("سوپرمارکت قائم", 100000, items),

@@ -26,7 +26,7 @@ class OrderDetailFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentOrderDetailBinding.inflate(inflater, container, false)
         return binding.root
@@ -65,9 +65,9 @@ class OrderDetailFragment : Fragment() {
         val ordersView = binding.ordersView
         val totalItems = binding.totalItemsTxt
         val list: MutableList<ProductModel> = mutableListOf(
-            ProductModel(1, "40", count = 2),
-            ProductModel(2, "50", count = 3),
-            ProductModel(3, "10", count = 4),
+            ProductModel(1, off_percent = 40, count = 2),
+            ProductModel(2, off_percent = 50, count = 3),
+            ProductModel(3, off_percent = 10, count = 4),
         )
 
 

@@ -236,30 +236,30 @@ class HomeFragment : Fragment() {
 
 
         val list: MutableList<ListItemModel> = mutableListOf(
-            ProductModel(1, "40"),
-            ProductModel(2, "50"),
-            ProductModel(3, "10"),
-            ProductModel(4, "40"),
-            ProductModel(5, "20"),
-            ProductModel(6, "15"),
-            ProductModel(7, "35"),
-            ProductModel(8, "20"),
-            ProductModel(9, "5"),
-            ProductModel(10, "95"),
-            ProductModel(11, "70")
+            ProductModel(1, off_percent = 40),
+            ProductModel(2, off_percent = 50),
+            ProductModel(3, off_percent = 10),
+            ProductModel(4, off_percent = 40),
+            ProductModel(5, off_percent = 20),
+            ProductModel(6, off_percent = 15),
+            ProductModel(7, off_percent = 35),
+            ProductModel(8, off_percent = 20),
+            ProductModel(9, off_percent = 5),
+            ProductModel(10, off_percent = 95),
+            ProductModel(11, off_percent = 70)
         )
         val list2: MutableList<ListItemModel> = mutableListOf(
-            ProductModel(21, "40"),
-            ProductModel(12, "50"),
-            ProductModel(13, "10"),
-            ProductModel(14, "40"),
-            ProductModel(15, "20"),
-            ProductModel(16, "15"),
-            ProductModel(71, "35"),
-            ProductModel(81, "20"),
-            ProductModel(91, "5"),
-            ProductModel(110, "95"),
-            ProductModel(111, "70")
+            ProductModel(21, off_percent = 40),
+            ProductModel(12, off_percent = 50),
+            ProductModel(13, off_percent = 10),
+            ProductModel(14, off_percent = 40),
+            ProductModel(15, off_percent = 20),
+            ProductModel(16, off_percent = 15),
+            ProductModel(71, off_percent = 35),
+            ProductModel(81, off_percent = 20),
+            ProductModel(91, off_percent = 5),
+            ProductModel(110, off_percent = 95),
+            ProductModel(111, off_percent = 70)
         )
         mainList.add(
             MainListModel(

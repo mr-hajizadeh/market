@@ -12,6 +12,7 @@ import com.se7en.market.Response.Home.HomeResponse
 import com.se7en.market.Response.OTP.Code
 import com.se7en.market.Response.OTP.Confirm
 import com.se7en.market.Response.OTP.Token
+import com.se7en.market.Response.Seller.SellerItems
 import com.se7en.market.Response.User.UpdateProfile
 import com.se7en.market.Response.User.Profile
 import retrofit2.Call
@@ -31,7 +32,7 @@ interface ApiService {
     @GET("/v5/reverse")
     fun reverseGeocoding(
         @Query("lat") lat: Double,
-        @Query("lng") lon: Double
+        @Query("lng") lon: Double,
     ): Call<ReverseGeocoding>
 
     @POST("/api/v1/customer/auth/otp")
@@ -43,7 +44,7 @@ interface ApiService {
     @POST("/api/v1/customer/auth/otp/confirm")
     fun confirmCode(
         @Header("token") token: String,
-        @Body codeMap: Map<String, String>
+        @Body codeMap: Map<String, String>,
     ): Call<Confirm>
 
     @GET("/api/v1/customer/profile")
@@ -52,13 +53,13 @@ interface ApiService {
     @POST("/api/v1/customer/profile")
     fun updateProfile(
         @Header("Authorization") token: String,
-        @Body user: UserModel
+        @Body user: UserModel,
     ): Call<UpdateProfile>
 
     @POST("/api/v1/customer/address")
     fun storeAddress(
         @Header("Authorization") token: String,
-        @Body address: AddressModel
+        @Body address: AddressModel,
     ): Call<StoreAddress>
 
     @GET("/api/v1/customer/address")
@@ -67,23 +68,40 @@ interface ApiService {
     @DELETE("/api/v1/customer/address/{id}")
     fun deleteAddress(
         @Header("Authorization") token: String,
-        @Path("id") id: Int
+        @Path("id") id: Int,
     ): Call<DeleteAddress>
 
     @PUT("/api/v1/customer/address/{id}")
     fun editAddress(
         @Header("Authorization") token: String,
         @Path("id") id: Int,
-        @Body address: AddressModel
+        @Body address: AddressModel,
     ): Call<StoreAddress>
 
     @GET("/api/v1/admin/slider")
-    fun getSliderList(): Call<List<SliderModel>>
+    fun getSliderList(@Header("Authorization") token: String): Call<List<SliderModel>>
 
     @POST("/api/v1/customer/home")
     fun getAllData(
         @Header("Authorization") token: String,
-        @Body latLon: Map<String, Double>
+        @Body latLon: Map<String, Double>,
     ): Call<HomeResponse>
 
+    @GET("/api/v1/seller/{shopId}/items")
+    fun getShopItems(
+        @Header("Authorization") token: String,
+        @Path("shopId") shopId: Int,
+    ): Call<SellerItems>
+
+//    @GET("/seller/{shopId}/categories")
+//    fun getShopItems(
+//        @Header("Authorization") token: String,
+//        @Path("shopId") shopId: Int,
+//    ): Call<>
+
+//    @POST()
+//    fun createCartOrAddItem(
+//        @Header("Authorization") token: String,
+//        @Body mapData: Map<Int, Int>
+//    ):
 }

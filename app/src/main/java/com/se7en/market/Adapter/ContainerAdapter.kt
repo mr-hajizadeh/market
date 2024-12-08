@@ -40,7 +40,7 @@ class ContainerAdapter(
         val item = items[position]
         when (holder) {
             is CategoryViewHolder -> holder.bind(item.items)
-            is HeaderViewHolder -> holder.bind(item.items)
+            is HeaderViewHolder -> holder.bind(item)
             is TwoViewHolder -> holder.bind(item.items)
             is OneViewHolder -> holder.bind(item.items)
             is ShopViewHolder -> holder.bind(item)
@@ -73,6 +73,7 @@ class ContainerAdapter(
         RecyclerView.ViewHolder(binding.root) {
         private lateinit var adapter: ProductWithHeaderAdapter
         private val productView: RecyclerView = binding.productView
+        private val listTitle = binding.listTitle
         private var gridLayout =
             GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false).apply {
                 spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -84,11 +85,12 @@ class ContainerAdapter(
             }
 
         @SuppressLint("UseCompatLoadingForDrawables")
-        fun bind(items: MutableList<ListItemModel>) {
+        fun bind(item: MainListModel) {
             productView.layoutManager = gridLayout
+            listTitle.text = item.title
             adapter = ProductWithHeaderAdapter(
-                items,
-                context.getString(R.string.title_recommended),
+                item.items,
+                item.title,
                 context.getDrawable(R.drawable.ic_favorite)!!,
                 context.getColor(R.color.orange), true
             ) { position, product ->

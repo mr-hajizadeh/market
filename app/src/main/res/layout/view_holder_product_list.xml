@@ -12,7 +12,7 @@
     app:layout_constraintTop_toTopOf="parent">
 
     <TextView
-        android:id="@+id/discountTitle"
+        android:id="@+id/listTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -31,11 +31,11 @@
         android:text="00 : 00 : 30"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/discountTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/listTitle"
         app:layout_constraintEnd_toStartOf="@+id/discountBtn"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/discountTitle"
-        app:layout_constraintTop_toTopOf="@+id/discountTitle"
+        app:layout_constraintStart_toEndOf="@+id/listTitle"
+        app:layout_constraintTop_toTopOf="@+id/listTitle"
         tools:visibility="visible" />
 
     <TextView
@@ -46,9 +46,9 @@
         android:text="@string/title_see_all"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         app:drawableLeftCompat="@drawable/ic_arrow_left"
-        app:layout_constraintBottom_toBottomOf="@+id/discountTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/listTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/discountTitle" />
+        app:layout_constraintTop_toTopOf="@+id/listTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/productView"
@@ -63,7 +63,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/discountTitle"
+        app:layout_constraintTop_toBottomOf="@+id/listTitle"
         tools:clipToPadding="false"
         tools:listitem="@layout/view_holder_product" />
 </androidx.constraintlayout.widget.ConstraintLayout>

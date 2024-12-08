@@ -16,7 +16,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val homeStatus get() = homeRepository.homeStatus
 
     fun loadActiveAddress() = preferencesRepository.loadActiveAddress()
-    fun getSliderList() = homeRepository.getSliderList()
+    fun getSliderList() = homeRepository.getSliderList("Bearer $token")
     fun getAllData(lat: Double, lon: Double) = homeRepository.getAllData(
         "Bearer $token",
         mapOf("latitude" to lat, "longitude" to lon)

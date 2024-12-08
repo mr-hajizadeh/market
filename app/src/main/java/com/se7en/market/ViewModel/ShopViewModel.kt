@@ -1,0 +1,20 @@
+package com.se7en.market.ViewModel
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.se7en.market.Repository.PreferencesRepository
+import com.se7en.market.Repository.ShopRepository
+
+class ShopViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val repository = ShopRepository()
+    private val preferencesRepository = PreferencesRepository.getInstance(application)
+    private val token = preferencesRepository.getToken()
+
+    val itemsStatus = repository.itemsStatus
+
+    fun getShopItems(shopId: Int) {
+        repository.getShopItems("Bearer $token", shopId)
+    }
+
+}

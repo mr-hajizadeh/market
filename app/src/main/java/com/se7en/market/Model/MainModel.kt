@@ -12,10 +12,34 @@ interface ListItemModel
 
 data class ProductModel(
     var id: Int = 0,
-    var percent: String,
+    var seller_id: Int = 0,
+    var item_category_id: Int = 0,
+    var title: String = "",
+    var description: String = "",
+    var amount: Long = 0,
+    var off_percent: Int = 0,
+    var image: List<String?> = emptyList(),
+    var status: Boolean = false,
+    var sort_order: Int = 0,
+    var created_at: String = "",
+    var updated_at: String = "",
     var count: Int = 0,
     var loading: Boolean = false,
-) : ListItemModel
+) : ListItemModel {
+    fun formatPriceToPersianAmount(): String {
+        val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
+        val decimalFormat = DecimalFormat("#,###", decimalFormatSymbols)
+        val formattedPrice = decimalFormat.format(amount)
+
+        val persianDigits = arrayOf("۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹")
+        var persianPrice = formattedPrice
+        for (i in 0..9) {
+            persianPrice = persianPrice.replace(i.toString(), persianDigits[i])
+        }
+
+        return persianPrice
+    }
+}
 
 @Parcelize
 data class CategoryModel(

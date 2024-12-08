@@ -107,7 +107,11 @@ class Helper(val context: Context) {
             val spannablePrice = SpannableString(formattedPrice).apply {
                 setSpan(StrikethroughSpan(), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            return TextUtils.concat(spannablePrice, " ", currency)
+
+            return if (currency.isNotEmpty())
+                TextUtils.concat(spannablePrice, " ", currency)
+            else
+                spannablePrice
         }
 
 
@@ -123,7 +127,7 @@ class Helper(val context: Context) {
     fun createCustomShape(
         color: Int,
         cornerRadius: Float = 16f,
-        style: Paint.Style = Paint.Style.FILL
+        style: Paint.Style = Paint.Style.FILL,
     ): Drawable {
         val radius = dpToPx(context, cornerRadius)
 

@@ -10,16 +10,16 @@ import com.se7en.market.Model.ProductModel
 import com.se7en.market.Model.ShopModel
 import com.se7en.market.Model.ShopWithProductModel
 import com.se7en.market.Utils.Constance.Companion.KEY_CATEGORY
-import com.se7en.market.databinding.ActivityProductByShopBinding
+import com.se7en.market.databinding.ActivityProductWithShopBinding
 
-class ProductByShopActivity : AppCompatActivity() {
+class ProductWithShopActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityProductByShopBinding
+    private lateinit var binding: ActivityProductWithShopBinding
     private lateinit var categoryData: CategoryModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityProductByShopBinding.inflate(layoutInflater)
+        binding = ActivityProductWithShopBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         categoryData = intent.getParcelableExtra(KEY_CATEGORY)!!
@@ -32,17 +32,17 @@ class ProductByShopActivity : AppCompatActivity() {
 
         binding.titleTxt.text = categoryData.title
         val list: MutableList<ListItemModel> = mutableListOf(
-            ProductModel(1, "40"),
-            ProductModel(2, "50"),
-            ProductModel(3, "10"),
-            ProductModel(4, "40"),
-            ProductModel(5, "20"),
-            ProductModel(6, "15"),
-            ProductModel(7, "35"),
-            ProductModel(8, "20"),
-            ProductModel(9, "5"),
-            ProductModel(10, "95"),
-            ProductModel(11, "70")
+            ProductModel(1, off_percent = 40),
+            ProductModel(2, off_percent = 50),
+            ProductModel(3, off_percent = 10),
+            ProductModel(4, off_percent = 40),
+            ProductModel(5, off_percent = 20),
+            ProductModel(6, off_percent = 15),
+            ProductModel(7, off_percent = 35),
+            ProductModel(8, off_percent = 20),
+            ProductModel(9, off_percent = 5),
+            ProductModel(10, off_percent = 95),
+            ProductModel(11, off_percent = 70)
         )
         val shopList = listOf(
             ShopWithProductModel(
@@ -52,7 +52,7 @@ class ProductByShopActivity : AppCompatActivity() {
             ShopWithProductModel(
                 ShopModel(id = 0, shop_name = "کوروش 2", courier_fee = 20000, delivery_time = 21),
                 list
-            ),ShopWithProductModel(
+            ), ShopWithProductModel(
                 ShopModel(id = 0, shop_name = "کوروش 3", courier_fee = 15000, delivery_time = 10),
                 list
             )

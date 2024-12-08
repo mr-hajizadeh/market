@@ -1,5 +1,6 @@
 package com.se7en.market.Adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Paint
@@ -9,10 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Activity.Ui.ModalProductDetail
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.ProductModel
+import com.se7en.market.R
+import com.se7en.market.Utils.Constance.Companion.BASE_URL
+import com.se7en.market.Utils.Constance.Companion.IMAGE_URL_PATH
 import com.se7en.market.Utils.Helper
 import com.se7en.market.databinding.ViewHolderHeaderBinding
 import com.se7en.market.databinding.ViewHolderProductBinding
@@ -20,7 +25,7 @@ import com.se7en.market.databinding.ViewHolderProductBinding
 
 class ProductWithHeaderAdapter(
     private val productList: MutableList<ListItemModel>,
-    private val headerTitle: String,
+    private val headerTitle: String = "",
     private val headerIcon: Drawable? = null,
     private val itemColor: Int,
     private val isHeaderEnable: Boolean = false,
@@ -71,8 +76,11 @@ class ProductWithHeaderAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (isHeaderEnable) 11 else 10
+        val productListSize = (productList as MutableList<*>).size
+        val maxItemCount = if (productListSize >= 10) 11 else productListSize + 1
+        return if (isHeaderEnable) maxItemCount else productListSize
     }
+
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (isHeaderEnable && position == 0 && holder is HeaderViewHolder) {
@@ -81,7 +89,7 @@ class ProductWithHeaderAdapter(
             holder.headerLayout.background = customHeaderShape
         } else if (holder is ProductViewHolder) {
             val item = productList[if (isHeaderEnable) position - 1 else position] as ProductModel
-            holder.setData(item)
+            holder.setData(item, context)
             holder.discountPercentage.background = customPercentageShape
             holder.addBtn.imageTintList = ColorStateList.valueOf(itemColor)
             holder.loadingProgress.setIndicatorColor(itemColor)
@@ -128,10 +136,31 @@ class ProductWithHeaderAdapter(
         val loadingProgress = productBinding.loadingProgress
         val addBtn = productBinding.addBtn
         val discountPercentage = productBinding.discountPercentageTxt
+        private val offLayout = productBinding.offLayout
+        private val mainPrice = productBinding.mainPriceTxt
+        private val offPrice = productBinding.offPriceTxt
+        private val productImage = productBinding.productImg
         private val mainActivity = MainActivity()
 
-        fun setData(product: ProductModel) {
-            discountPercentage.text = mainActivity.convertToPersianNumbers("%${product.percent}")
+        @SuppressLint("SetTextI18n")
+        fun setData(product: ProductModel, context: Context) {
+
+            with(product) {
+
+                offLayout.visibility = if (off_percent > 0) View.VISIBLE else View.GONE
+                offPrice.text = Helper.getStrikethroughPriceWithCurrency(
+                    amount,
+                    ""
+                )
+                mainPrice.text =
+                    "${formatPriceToPersianAmount()} ${context.getString(R.string.title_currency)}"
+                discountPercentage.text = mainActivity.convertToPersianNumbers("%${off_percent}")
+
+                if (image.isNotEmpty())
+                    Glide.with(context)
+                        .load("$IMAGE_URL_PATH${image[0]}")
+                        .into(productImage)
+            }
         }
     }
 
