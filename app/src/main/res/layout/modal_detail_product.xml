@@ -2,9 +2,12 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/productDetailLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layoutDirection="rtl">
+    android:animateLayoutChanges="true"
+    android:layoutDirection="rtl"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +45,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/sliderView"
@@ -76,18 +79,28 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/textView29"
+            android:id="@+id/productTitleTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="نام محصول"
-            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+            tools:text="نام محصول" />
+
+        <TextView
+            android:id="@+id/productDescriptionTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            tools:text="TextView" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottomBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:animateLayoutChanges="true"
             android:padding="16dp">
@@ -96,32 +109,35 @@
                 android:id="@+id/finalPriceTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:layout_marginBottom="4dp"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/percentTxt"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="TextView" />
 
             <TextView
-                android:id="@+id/textView37"
+                android:id="@+id/offPriceTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
-                android:text="TextView"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/percentTxt"
                 app:layout_constraintEnd_toStartOf="@+id/percentTxt"
-                app:layout_constraintTop_toBottomOf="@+id/finalPriceTxt" />
+                app:layout_constraintTop_toTopOf="@+id/percentTxt"
+                tools:text="TextView" />
 
             <TextView
                 android:id="@+id/percentTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="4dp"
-                android:text="%50"
                 android:textColor="@color/white"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="%50" />
 
             <FrameLayout
                 android:id="@+id/addLayout"
@@ -147,7 +163,8 @@
                     android:layout_margin="8dp"
                     android:indeterminate="true"
                     android:visibility="gone"
-                    app:indicatorSize="20dp" />
+                    app:indicatorSize="20dp"
+                    tools:ignore="RtlHardcoded" />
 
 
             </FrameLayout>
@@ -156,12 +173,10 @@
                 android:id="@+id/existingMessageTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_item_exists_in_cart"
-                android:textColor="@color/green"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/finalPriceTxt"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/finalPriceTxt" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,20 +2,20 @@ package com.se7en.market.Adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.se7en.market.Activity.CartActivity
-import com.se7en.market.Model.ShopOrderModel
+import com.se7en.market.Model.CartModel
 import com.se7en.market.R
+import com.se7en.market.Utils.CartManager
 import com.se7en.market.Utils.Helper
 import com.se7en.market.databinding.ViewHolderCartListBinding
 
 class ShopOrderAdapter(
-    private val items: MutableList<ShopOrderModel>,
-    private val cartCount: (count: Int) -> Unit
+    private val items: MutableList<CartModel>,
+    private val deleteCart: (cartId: Int, position: Int) -> Unit,
+    private val cart: (cart: CartModel) -> Unit,
 ) : RecyclerView.Adapter<ShopOrderAdapter.ShopHolder>() {
 
     private lateinit var context: Context
@@ -33,11 +33,23 @@ class ShopOrderAdapter(
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: ShopHolder, position: Int) {
-        cartCount(itemCount)
-        holder.bind(items[position])
+        val item = items[position]
+        holder.bind(item)
+
+        if (item.loading) {
+            holder.loadingProgress.visibility = View.VISIBLE
+            holder.deleteBtn.visibility = View.INVISIBLE
+        } else {
+            holder.loadingProgress.visibility = View.INVISIBLE
+            holder.deleteBtn.visibility = View.VISIBLE
+        }
 
         holder.continueBtn.setOnClickListener {
-            context.startActivity(Intent(context, CartActivity::class.java))
+            cart(item)
+        }
+
+        holder.deleteBtn.setOnClickListener {
+            deleteCart(item.id, position)
         }
     }
 
@@ -46,22 +58,44 @@ class ShopOrderAdapter(
 
         val continueBtn = binding.continueBtn
         val context: Context = binding.root.context
-        val progressBar = binding.minPriceProgress
+        val deleteBtn = binding.deleteOrderBtn
+        val loadingProgress = binding.loadingProgress
+        private val progressBar = binding.minPriceProgress
+        private lateinit var adapter: CartAdapter
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: ShopOrderModel) {
-            binding.shopNameTxt.text = item.shopName
-            progressBar.max = item.minPrice.toInt()
-            binding.cartView.adapter = CartAdapter(item.items, 0, { _: Int ->
-            }, { price, profitPrice ->
-                val remainingPrice = item.minPrice - (price - profitPrice)
-                binding.remainingPriceTxt.text =
-                    "${Helper.formatPriceToPersian(remainingPrice)} باقی مانده"
-                progressBar.progress = remainingPrice.toInt()
-            })
-            binding.minPriceTxt.text =
-                "${Helper.formatPriceToPersian(item.minPrice)} ${context.getString(R.string.title_currency)}"
+        fun bind(item: CartModel) {
+            with(item.seller) {
+                binding.shopNameTxt.text = shop_name
+                progressBar.max = /*item.minPrice.toInt()*/0
+                adapter =
+                    CartAdapter(0, CartManager, { _: Int ->
+                    }, { price, profitPrice ->
+                        val remainingPrice = /*item.minPrice*/ 0 - (price - profitPrice)
+                        binding.remainingPriceTxt.text =
+                            "${Helper.formatPriceToPersian(remainingPrice)} ${context.getString(R.string.title_remaining)}"
+                        progressBar.progress = remainingPrice.toInt()
+                    })
+                binding.minPriceTxt.text =
+                    "${Helper.formatPriceToPersian(/*item.minPrice*/ 0)} ${context.getString(R.string.title_currency)}"
+                adapter.setCartList(item.card_details)
+                binding.cartView.adapter = adapter
+            }
+
         }
+    }
+
+    fun deleteItem(position: Int) {
+        if (position in 0 until items.size) {
+            items.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, items.size)
+        }
+    }
+
+    fun loadingItem(position: Int) {
+        items[position].loading = !items[position].loading
+        notifyItemChanged(position)
     }
 
 }

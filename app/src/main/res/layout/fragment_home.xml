@@ -21,8 +21,7 @@
             android:layoutDirection="rtl"
             app:contentScrim="@color/primary_gray"
             app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
-            app:layout_scrollInterpolator="@android:anim/decelerate_interpolator"
-            app:toolbarId="@+id/toolbar">
+            app:layout_scrollInterpolator="@android:anim/decelerate_interpolator">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/appBarLayout"

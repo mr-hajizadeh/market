@@ -2,14 +2,13 @@ package com.se7en.market.Adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Model.ShopWithProductModel
 import com.se7en.market.R
+import com.se7en.market.Utils.CartManager
 import com.se7en.market.databinding.ViewHolderShopWithProductBinding
 
 class ProductByShopAdapter(
@@ -58,19 +57,13 @@ class ProductByShopAdapter(
                     "",
                     null,
                     context.getColor(R.color.green),
-                    false
-                ) { position, product ->
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        adapter.updateItem(
-                            position,
-                            product
-                        )
-                    }, 3000)
-                }
+                    false,
+                    CartManager,
+                    binding.root,
+                )
                 binding.productView.adapter = adapter
             }
         }
 
     }
-
 }

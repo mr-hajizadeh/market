@@ -7,6 +7,7 @@
     android:layout_marginTop="8dp"
     android:layout_marginEnd="16dp"
     android:layout_marginBottom="8dp"
+    android:animateLayoutChanges="true"
     android:background="@drawable/white_bg">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -20,14 +21,102 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/productImageStyle" />
 
+    <TextView
+        android:id="@+id/productTittleTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="نام کالا"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productImg" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/quantityLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:layoutDirection="ltr"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/productImg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/minusBtn"
+            android:layout_width="@dimen/navigate_button"
+            android:layout_height="@dimen/navigate_button"
+            android:layout_marginEnd="4dp"
+            android:background="@color/light_red"
+            app:contentPaddingEnd="5dp"
+            app:contentPaddingStart="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/plusBtn"
+            app:layout_constraintEnd_toStartOf="@+id/countTxt"
+            app:layout_constraintTop_toTopOf="@+id/plusBtn"
+            app:shapeAppearance="@style/roundedImageView2"
+            app:srcCompat="@drawable/ic_minus"
+            app:tint="@color/red" />
+
+        <TextView
+            android:id="@+id/countTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="4dp"
+            android:gravity="center"
+            android:maxLength="3"
+            android:paddingHorizontal="8dp"
+            android:text="111"
+            app:layout_constraintBottom_toBottomOf="@+id/plusBtn"
+            app:layout_constraintEnd_toStartOf="@+id/plusBtn"
+            app:layout_constraintTop_toTopOf="@+id/plusBtn" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/quantityProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:indicatorSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/countTxt"
+            app:layout_constraintEnd_toEndOf="@+id/countTxt"
+            app:layout_constraintStart_toStartOf="@+id/countTxt"
+            app:layout_constraintTop_toTopOf="@+id/countTxt"
+            app:trackThickness="1dp"
+            tools:visibility="visible" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/plusBtn"
+            android:layout_width="@dimen/navigate_button"
+            android:layout_height="@dimen/navigate_button"
+            android:background="@color/light_green"
+            app:contentPaddingEnd="5dp"
+            app:contentPaddingStart="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:shapeAppearance="@style/roundedImageView2"
+            app:srcCompat="@drawable/ic_plus"
+            app:tint="@color/green" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <FrameLayout
+        android:id="@+id/addLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginBottom="4dp"
         android:animateLayoutChanges="true"
         app:layout_constraintBottom_toBottomOf="@+id/productImg"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="gone">
 
         <ImageView
             android:id="@+id/addBtn"
@@ -60,7 +149,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productImg">
+        app:layout_constraintTop_toBottomOf="@+id/productTittleTxt">
 
         <TextView
             android:id="@+id/offPriceTxt"

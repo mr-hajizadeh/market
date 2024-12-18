@@ -3,21 +3,23 @@ package com.se7en.market.Activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.lifecycle.MutableLiveData
 import com.se7en.market.Adapter.ContainerAdapter
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.MainListModel
-import com.se7en.market.Model.ProductModel
 import com.se7en.market.Model.ShopModel
 import com.se7en.market.Model.ViewTypeModel
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.R
 import com.se7en.market.Utils.Constance.Companion.KEY_SHOP
+import com.se7en.market.Utils.Helper
+import com.se7en.market.ViewModel.CartViewModel
 import com.se7en.market.ViewModel.ShopViewModel
 import com.se7en.market.databinding.ActivityShopBinding
 
@@ -27,15 +29,23 @@ class ShopActivity : BaseActivity() {
     private lateinit var binding: ActivityShopBinding
     private lateinit var containerAdapter: ContainerAdapter
     private lateinit var shopData: ShopModel
+    private lateinit var bottomBar: LinearLayout
+    private lateinit var containerView: CoordinatorLayout
 
     private val viewModel: ShopViewModel by viewModels<ShopViewModel>()
+    private val cartViewModel: CartViewModel by viewModels<CartViewModel>()
 
     private var minPriceTxt: TextView? = null
     private var firstTimeSendTxt: TextView? = null
     private var totalPriceTxt: TextView? = null
     private var courierFeeTxt: TextView? = null
     private var shopNameTxt: TextView? = null
+    private var totalItemsTxt: TextView? = null
+    private var oldCartSize: Int = 0
+    private var newCartSize: Int = 0
+    private var isOldSizeSet: Boolean = false
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShopBinding.inflate(layoutInflater)
@@ -43,10 +53,10 @@ class ShopActivity : BaseActivity() {
 
         shopData = intent.getParcelableExtra(KEY_SHOP)!!
         initViews()
-        setData()
         onclickButtons()
         setupShopView()
         manageBottomBar()
+        setData()
 
     }
 
@@ -57,8 +67,9 @@ class ShopActivity : BaseActivity() {
         totalPriceTxt = binding.totalPriceTxt
         courierFeeTxt = binding.courierFeeTxt
         shopNameTxt = binding.shopNameTxt
-
-        totalPriceTxt?.text = convertToPersianNumbers(totalPriceTxt?.text.toString())
+        containerView = binding.shopContainer
+        totalItemsTxt = binding.totalItemsTxt
+        bottomBar = binding.bottomBar
 
     }
 
@@ -67,6 +78,7 @@ class ShopActivity : BaseActivity() {
 
         with(shopData) {
             viewModel.getShopItems(id)
+            viewModel.getShopCategories(id)
             minPriceTxt?.text = convertToPersianNumbers(minPriceTxt?.text.toString())
             firstTimeSendTxt?.text =
                 "${convertToPersianNumbers(delivery_time.toString())} ${getString(R.string.title_minute)}"
@@ -91,42 +103,28 @@ class ShopActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun setupShopView() {
 
         val shopMainView = binding.shopMainView
+        val dataStatus = MutableLiveData<MutableList<Boolean>>()
+        val statusList = mutableListOf<Boolean>()
+        val mainList = mutableListOf<MainListModel>()
 
-        viewModel.itemsStatus.observe(this) { result ->
+        viewModel.categoriesStatus.observe(this) { result ->
             when (result) {
                 is NetworkResult.Loading -> {}
                 is NetworkResult.Success -> {
-                    Log.i("TAG", "setupShopView: ${result.response}")
-                    val mainList = mutableListOf(
-//            MainListModel(
-//                "pos 0",
-//                0,
-//                ViewTypeModel.CATEGORY_TYPE,
-//                category
-//            ),
+                    Log.i("TAG", "setupShopView: ${result.response.data}")
+                    mainList.add(
                         MainListModel(
-                            "تست",
-                            2,
-                            ViewTypeModel.HEADER_TYPE,
-                            result.response.data as MutableList<ListItemModel>
+                            position = 0,
+                            viewType = ViewTypeModel.CATEGORY_TYPE,
+                            items = result.response.data as MutableList<ListItemModel>
                         )
-                    ).apply { sortBy { it.position } }.toMutableList()
-                    val categoryLayoutManager =
-                        GridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false)
-                    containerAdapter =
-                        ContainerAdapter(
-                            mainList,
-                            categoryLayoutManager
-                        ) { product, position, adapter ->
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                adapter.updateItem(position, product)
-                            }, 3000)
-                        }
-                    shopMainView.adapter = containerAdapter
-
+                    )
+                    statusList.add(true)
+                    dataStatus.value = statusList
                 }
 
                 is NetworkResult.Error -> {
@@ -134,11 +132,81 @@ class ShopActivity : BaseActivity() {
                 }
             }
         }
+
+        viewModel.itemsStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> {}
+                is NetworkResult.Success -> {
+                    mainList.add(
+                        MainListModel(
+                            title = getString(R.string.title_recommended),
+                            position = 1,
+                            viewType = ViewTypeModel.HEADER_TYPE,
+                            items = result.response.data as MutableList<ListItemModel>
+                        )
+                    )
+                    statusList.add(true)
+                    dataStatus.value = statusList
+                }
+
+                is NetworkResult.Error -> {
+                    Log.i("TAG", "setupShopView: ${result.message}")
+                }
+            }
+        }
+
+        dataStatus.observe(this) { data ->
+            data?.takeIf { it.all { status -> status } }?.let {
+                mainList.sortBy { it.position }
+                containerAdapter = ContainerAdapter(mainList, true, shopMainView, containerView)
+
+                shopMainView.adapter = containerAdapter
+                containerAdapter.notifyDataSetChanged()
+            }
+            getAllCart()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun getAllCart() {
+        cartViewModel.cartsStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> {
+                }
+
+                is NetworkResult.Success -> {
+                    val cartCount =
+                        result.response.data.sumOf { it.card_details.sumOf { cartDetail -> cartDetail.quantity } }
+                    if (!isOldSizeSet) {
+                        oldCartSize = cartCount
+                        isOldSizeSet = true
+                    }
+                    newCartSize = cartCount
+
+                    containerAdapter.syncCartWithProducts(result.response.data)
+                    result.response.data.find { it.seller_id == shopData.id }?.let { cart ->
+                        bottomBar.visibility =
+                            if (cart.card_details.isNotEmpty()) View.VISIBLE else View.GONE
+                        val totalAmount = cart.card_details.sumOf {
+                            val itemTotal = it.quantity * it.item.amount
+                            val discount = itemTotal * it.item.off_percent / 100
+                            itemTotal - discount
+                        }
+                        val productCount = cart.card_details.sumOf { it.quantity }
+                        totalItemsTxt?.text = convertToPersianNumbers(
+                            "${getString(R.string.title_total_items)} (${productCount} کالا)"
+                        )
+                        totalPriceTxt?.text =
+                            "${Helper.formatPriceToPersian(totalAmount)} ${getString(R.string.title_currency)}"
+                    } ?: run { bottomBar.visibility = View.GONE }
+                }
+
+                is NetworkResult.Error -> {}
+            }
+        }
     }
 
     private fun manageBottomBar() {
-        val bottomBar = binding.bottomBar
-
         binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             if (scrollY > oldScrollY) {
                 bottomBar.animate().translationY(bottomBar.height.toFloat()).duration = 300
@@ -146,6 +214,12 @@ class ShopActivity : BaseActivity() {
                 bottomBar.animate().translationY(0f).duration = 300
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (newCartSize != oldCartSize)
+            cartViewModel.getAllCarts()
     }
 
 }

@@ -73,13 +73,15 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                tools:visibility="gone">
 
                 <ImageView
                     android:id="@+id/locationImg"
@@ -131,7 +133,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                tools:visibility="gone">
 
                 <ImageView
                     android:id="@+id/clockIcon"
@@ -210,7 +213,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
 
-                >
+                tools:visibility="gone">
 
                 <ImageView
                     android:id="@+id/percentImg"
@@ -517,7 +520,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView31"
+                    android:id="@+id/totalProductTxt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
@@ -534,9 +537,9 @@
                     android:layout_marginEnd="4dp"
                     android:text="170,000"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView31"
+                    app:layout_constraintBottom_toBottomOf="@+id/totalProductTxt"
                     app:layout_constraintEnd_toStartOf="@+id/textView19"
-                    app:layout_constraintTop_toTopOf="@+id/textView31" />
+                    app:layout_constraintTop_toTopOf="@+id/totalProductTxt" />
 
                 <TextView
                     android:id="@+id/textView19"
@@ -569,6 +572,16 @@
                     app:layout_constraintTop_toTopOf="@+id/serviceCostPriceTxt" />
 
                 <TextView
+                    android:id="@+id/courierFeeCurrencyTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_currency"
+                    android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    app:layout_constraintBottom_toBottomOf="@+id/courierFeeTxt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/courierFeeTxt" />
+
+                <TextView
                     android:id="@+id/textView43"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -587,7 +600,7 @@
                     android:text="@string/title_profit"
                     app:layout_constraintEnd_toStartOf="@+id/profitTxt"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView31" />
+                    app:layout_constraintTop_toBottomOf="@+id/totalProductTxt" />
 
                 <TextView
                     android:id="@+id/profitTxt"
@@ -645,14 +658,15 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView36" />
 
                 <TextView
-                    android:id="@+id/sendCostPrice"
+                    android:id="@+id/courierFeeTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="رایگان"
+                    android:layout_marginEnd="4dp"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="@+id/textView42"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView42" />
+                    app:layout_constraintEnd_toStartOf="@+id/courierFeeCurrencyTxt"
+                    app:layout_constraintTop_toTopOf="@+id/textView42"
+                    tools:text="رایگان" />
 
                 <TextView
                     android:id="@+id/textView42"
@@ -661,7 +675,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:text="@string/title_send_cost"
-                    app:layout_constraintEnd_toStartOf="@+id/sendCostPrice"
+                    app:layout_constraintEnd_toStartOf="@+id/courierFeeTxt"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView44" />
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,10 +11,15 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
     private val preferencesRepository = PreferencesRepository.getInstance(application)
     private val token = preferencesRepository.getToken()
 
-    val itemsStatus = repository.itemsStatus
+    val itemsStatus get() = repository.itemsStatus
+    val categoriesStatus get() = repository.categoriesStatus
 
     fun getShopItems(shopId: Int) {
         repository.getShopItems("Bearer $token", shopId)
+    }
+
+    fun getShopCategories(shopId: Int) {
+        repository.getShopCategories("Bearer $token", shopId)
     }
 
 }

@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -31,6 +30,8 @@ import com.se7en.market.Model.SliderModel
 import com.se7en.market.Model.ViewTypeModel
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.Response.Home.HomeResponse
+import com.se7en.market.Utils.CartManager
+import com.se7en.market.ViewModel.CartViewModel
 import com.se7en.market.ViewModel.HomeViewModel
 import com.se7en.market.databinding.FragmentHomeBinding
 import koleton.api.hideSkeleton
@@ -46,6 +47,7 @@ class HomeFragment : Fragment() {
     private lateinit var containerView: RecyclerView
 
     private val viewModel by viewModels<HomeViewModel>()
+    private val cartViewModel by viewModels<CartViewModel>()
 
     private var _viewPager: ViewPager2? = null
     private val viewPager get() = _viewPager!!
@@ -90,7 +92,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun dataListener() {
-//        containerView.loadSkeleton()
         viewModel.homeStatus.observe(requireActivity()) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
@@ -99,10 +100,6 @@ class HomeFragment : Fragment() {
 
                 is NetworkResult.Success -> {
                     setupContainerView(result.response)
-//                    Handler(Looper.getMainLooper()).postDelayed(
-//                        { containerView.hideSkeleton() },
-//                        1000
-//                    )
                 }
 
                 is NetworkResult.Error -> {
@@ -173,6 +170,8 @@ class HomeFragment : Fragment() {
     private fun activeAddress() {
         viewModel.loadActiveAddress().observe(viewLifecycleOwner) { address ->
             if (address != null) {
+                CartManager.activeAddress = address
+                CartManager.setValues(cartViewModel, viewLifecycleOwner)
                 setActiveAddress(address)
                 viewModel.getAllData(address.latitude, address.longitude)
                 viewModel.getSliderList()
@@ -197,27 +196,40 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupContainerView(response: HomeResponse) {
-
         val containerView = binding.containerView
-        val categoryLayoutManager =
-            GridLayoutManager(nonNullContext, 1, GridLayoutManager.HORIZONTAL, false)
-        containerAdapter =
-            ContainerAdapter(
-                getMainList(response.data),
-                categoryLayoutManager
-            ) { product, position, adapter ->
-                Handler(Looper.getMainLooper()).postDelayed({
-                    adapter.updateItem(position, product)
-                }, 3000)
-            }
+        containerAdapter = ContainerAdapter(
+            getMainList(response.data),
+            false,
+            containerView,
+            binding.homeFragmentContainer
+        )
         containerView.adapter = containerAdapter
-
-
+        getAllCarts()
     }
+
+    private fun getAllCarts() {
+        cartViewModel.cartsStatus.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResult.Loading -> {
+                    Log.i("TAG", "setupCartView: Loading")
+                }
+
+                is NetworkResult.Success -> {
+                    Log.i("TAG", "setupCartView: Response ${result.response}")
+                    val carts = result.response.data
+                    containerAdapter.syncCartWithProducts(carts)
+                }
+
+                is NetworkResult.Error -> {}
+            }
+        }
+    }
+
 
     private fun getMainList(data: HomeResponse.Data): MutableList<MainListModel> {
         val mainList = listOfNotNull(
             data.shops.takeIf { it.isNotEmpty() }?.let {
+                cartViewModel.updateShopList(it)
                 MainListModel(
                     title = "${data.shops.size} فروشگاه اطراف شما ",
                     position = 2,

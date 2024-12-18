@@ -19,7 +19,7 @@ class PreferencesManager private constructor(context: Context) {
     private val gson = Gson()
 
     private val _activeAddress = MutableLiveData<AddressModel?>()
-    val activeAddress: LiveData<AddressModel?> = _activeAddress
+    val activeAddress: LiveData<AddressModel?> get() = _activeAddress
 
     companion object {
         @Volatile

@@ -34,7 +34,6 @@ class SplashActivity : AppCompatActivity() {
     private var errorMessage: TextView? = null
     private var tryBtn: MaterialButton? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)

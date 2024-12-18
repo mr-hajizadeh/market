@@ -1,30 +1,36 @@
 package com.se7en.market.Activity
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import com.se7en.market.R
+import androidx.activity.viewModels
+import com.se7en.market.ViewModel.CartViewModel
 import com.se7en.market.databinding.ActivityCartBinding
 
 class CartActivity : BaseActivity() {
 
     private lateinit var binding: ActivityCartBinding
+    private val cartViewModel: CartViewModel by viewModels<CartViewModel>()
+
+    companion object {
+        var oldCartSize: Int = 0
+        var newCartSize: Int = 0
+        var isOldSizeSet: Boolean = false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        onClickButtons()
     }
 
-    private fun onClickButtons() {
-
+    override fun onDestroy() {
+        super.onDestroy()
+        if (newCartSize != oldCartSize) {
+            oldCartSize = 0
+            newCartSize = 0
+            isOldSizeSet = false
+            cartViewModel.getAllCarts()
+        }
     }
+
 }

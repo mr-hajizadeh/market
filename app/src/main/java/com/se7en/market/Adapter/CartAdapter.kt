@@ -3,33 +3,43 @@ package com.se7en.market.Adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.se7en.market.Activity.CartActivity
-import com.se7en.market.Model.ProductModel
+import com.se7en.market.Model.CartDetailModel
 import com.se7en.market.R
+import com.se7en.market.Utils.Constance.Companion.IMAGE_URL_PATH
 import com.se7en.market.Utils.Helper
 import com.se7en.market.databinding.ViewHolderProductCartBinding
 import com.se7en.market.databinding.ViewHolderProductCartWithButtonsBinding
 
 class CartAdapter(
-    private val items: MutableList<ProductModel>,
     private val cartViewType: Int,
+    private val changeQuantityListener: ChangeQuantityListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
+    private var items: MutableList<CartDetailModel> = mutableListOf()
     private var changeItemCount: ((count: Int) -> Unit)? = null
     private var totalPrice: ((price: Long, profitPrice: Long) -> Unit)? = null
 
     constructor(
-        items: MutableList<ProductModel>,
         cartViewType: Int,
+        changeQuantityListener: ChangeQuantityListener,
         changeItemCount: (count: Int) -> Unit,
-        totalPrice: (price: Long, profitPrice: Long) -> Unit
-    ) : this(items, cartViewType) {
+        totalPrice: (price: Long, profitPrice: Long) -> Unit,
+    ) : this(cartViewType, changeQuantityListener) {
         this.changeItemCount = changeItemCount
         this.totalPrice = totalPrice
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setCartList(items: MutableList<CartDetailModel>) {
+        this.items = items
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -46,38 +56,49 @@ class CartAdapter(
                     LayoutInflater.from(context), parent, false
                 )
             )
-
     }
 
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = items[position]
+        val cartDetail = items[position]
 
-        updateItemCount()
         calculateTotal()
+        changeItemCount?.invoke(items.sumOf { it.quantity })
 
         when (holder) {
-            is CartHolder -> holder.bind(item)
+            is CartHolder -> holder.bind(cartDetail)
             is HorizontalCartHolder -> {
-                holder.bind(item)
+                holder.bind(cartDetail)
+                holder.changeCounterTextView(cartDetail.quantity)
 
+                val product = cartDetail.item
                 holder.plusBtn.setOnClickListener {
-                    if (item.count <= 999) {
-                        item.count += 1
-                        holder.changeCounterTextView(item.count)
-                        notifyItemChanged(position)
-                    }
+                    changeQuantityListener.incrementItem(
+                        cartDetail,
+                        product,
+                        position,
+                        this@CartAdapter,
+                    )
                 }
                 holder.minusBtn.setOnClickListener {
-                    if (item.count > 1) {
-                        item.count -= 1
-                        holder.changeCounterTextView(item.count)
-                        notifyItemChanged(position)
-                    }
+                    changeQuantityListener.decrementItem(
+                        cartDetail,
+                        product,
+                        position,
+                        this@CartAdapter,
+                    )
                 }
 
-                if (item.count == 1)
+                if (cartDetail.item.quantityLoading) {
+                    holder.counterView.visibility = View.INVISIBLE
+                    holder.loadingProgress.visibility = View.VISIBLE
+                } else {
+                    holder.counterView.visibility = View.VISIBLE
+                    holder.loadingProgress.visibility = View.INVISIBLE
+                }
+
+                if (cartDetail.quantity == 1)
                     holder.minusBtn.setImageDrawable(
                         ContextCompat.getDrawable(
                             context,
@@ -97,27 +118,47 @@ class CartAdapter(
     }
 
     private fun calculateTotal() {
-        var total = 0L
-        var profitTotal = 0L
+        var totalWithoutDiscount = 0L
+        var totalWithDiscount = 0L
 
-        for (item in items) {
-            total += 7000 * item.count
-            profitTotal += 3500 * item.count
+        for (cartDetail in items) {
+            val originalPrice = cartDetail.item.amount * cartDetail.quantity
+            val discountAmount =
+                (cartDetail.item.amount * cartDetail.item.off_percent / 100) * cartDetail.quantity
+            val finalPrice = originalPrice - discountAmount
+
+            totalWithoutDiscount += originalPrice
+            totalWithDiscount += finalPrice
         }
 
-        totalPrice?.invoke(total, profitTotal)
+        val discountPercentage = if (totalWithoutDiscount > 0)
+            100 * (totalWithoutDiscount - totalWithDiscount) / totalWithoutDiscount
+        else
+            0
+
+        totalPrice?.invoke(totalWithDiscount, discountPercentage)
     }
 
     class CartHolder(val binding: ViewHolderProductCartBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        private val percentView = binding.percentTxt
         private val counterView = binding.productCountTxt
+        private val context: Context = binding.root.context
 
-
-        fun bind(item: ProductModel) {
-            binding.productImg.setImageDrawable(binding.root.context.getDrawable(R.drawable.t3))
-            counterView.text = CartActivity().convertToPersianNumbers(item.count.toString())
-            binding.percentTxt.text = "%${CartActivity().convertToPersianNumbers("50")}"
+        @SuppressLint("SetTextI18n")
+        fun bind(cartDetail: CartDetailModel) {
+            val productItem = cartDetail.item
+            counterView.text =
+                CartActivity().convertToPersianNumbers(cartDetail.quantity.toString())
+            percentView.visibility = if (productItem.off_percent > 0) View.VISIBLE else View.GONE
+            percentView.text =
+                "%${CartActivity().convertToPersianNumbers(productItem.off_percent.toString())}"
+            if (productItem.image.isNotEmpty())
+                Glide.with(context)
+                    .load("$IMAGE_URL_PATH${productItem.image[0]}")
+                    .placeholder(R.mipmap.ic_launcher)
+                    .into(binding.productImg)
         }
     }
 
@@ -126,21 +167,33 @@ class CartAdapter(
 
         val plusBtn = binding.plusBtn
         val minusBtn = binding.minusBtn
-        private val counterView = binding.countTxt
+        val counterView = binding.countTxt
+        val loadingProgress = binding.loadingProgress
+        private val percentView = binding.percentTxt
+        private val productPrice = binding.productPriceTxt
         private val context: Context = binding.root.context
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: ProductModel) {
-            counterView.text = CartActivity().convertToPersianNumbers(item.count.toString())
-            binding.productImg.setImageDrawable(binding.root.context.getDrawable(R.drawable.t3))
-            binding.productPriceTxt.text = Helper.getStrikethroughPriceWithCurrency(
-                7000,
+        fun bind(cartDetail: CartDetailModel) {
+            val productItem = cartDetail.item
+            counterView.text =
+                CartActivity().convertToPersianNumbers(cartDetail.quantity.toString())
+            productPrice.visibility = if (productItem.off_percent > 0) View.VISIBLE else View.GONE
+            productPrice.text = Helper.getStrikethroughPriceWithCurrency(
+                productItem.amount,
                 context.getString(R.string.title_currency)
             )
-            val productPrice = 3500 * item.count
+            val productPrice = productItem.amount * cartDetail.quantity
             binding.finalPriceTxt.text =
-                "${Helper.formatPriceToPersian(productPrice.toLong())} ${context.getString(R.string.title_currency)}"
-            binding.percentTxt.text = "%${CartActivity().convertToPersianNumbers("50")}"
+                "${Helper.formatPriceToPersian(productPrice)} ${context.getString(R.string.title_currency)}"
+            percentView.visibility = if (productItem.off_percent > 0) View.VISIBLE else View.GONE
+            percentView.text =
+                "%${CartActivity().convertToPersianNumbers(productItem.off_percent.toString())}"
+            if (productItem.image.isNotEmpty())
+                Glide.with(context)
+                    .load("$IMAGE_URL_PATH${productItem.image[0]}")
+                    .placeholder(R.mipmap.ic_launcher)
+                    .into(binding.productImg)
         }
 
         fun changeCounterTextView(count: Int) {
@@ -149,8 +202,31 @@ class CartAdapter(
 
     }
 
-    private fun updateItemCount() =
-        changeItemCount?.invoke(items.sumOf { it.count })
+    fun loadingQuantity(position: Int, cartDetail: CartDetailModel) {
+        if (position in 0 until items.size) {
+            cartDetail.item.quantityLoading = !cartDetail.item.quantityLoading
+            notifyItemChanged(position)
+        }
+    }
 
+    fun updateQuantity(position: Int, cartDetail: CartDetailModel) {
+        if (position in 0 until items.size) {
+            items[position] = cartDetail
+            notifyItemChanged(position)
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun retainList(newCartDetailList: MutableList<CartDetailModel>) {
+        if (newCartDetailList.size == 0)
+            totalPrice?.invoke(0, 0)
+        val iterator = items.iterator()
+        while (iterator.hasNext()) {
+            val item = iterator.next()
+            if (newCartDetailList.none { it.item_id == item.item_id })
+                iterator.remove()
+        }
+        notifyDataSetChanged()
+    }
 
 }

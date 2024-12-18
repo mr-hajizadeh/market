@@ -18,13 +18,15 @@ data class ProductModel(
     var description: String = "",
     var amount: Long = 0,
     var off_percent: Int = 0,
-    var image: List<String?> = emptyList(),
+    var image: List<String> = listOf(),
     var status: Boolean = false,
     var sort_order: Int = 0,
     var created_at: String = "",
     var updated_at: String = "",
-    var count: Int = 0,
+    var quantity: Int = 0,
     var loading: Boolean = false,
+    var quantityLoading: Boolean = false,
+    var cartDetail: CartDetailModel? = null,
 ) : ListItemModel {
     fun formatPriceToPersianAmount(): String {
         val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
@@ -44,13 +46,15 @@ data class ProductModel(
 @Parcelize
 data class CategoryModel(
     val id: Int = 0,
+    val seller_id: Int = 0,
     val title: String = "",
     val description: String = "",
     val image: String = "",
     val tags: List<String> = listOf(),
-    val status: Int = 0,
+//    val status: Int = 0,
     val created_at: String = "",
     val updated_at: String = "",
+    val sort_order: Int = 0,
 ) : ListItemModel, Parcelable
 
 @Parcelize

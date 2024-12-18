@@ -1,26 +1,31 @@
 package com.se7en.market.Network
 
 import com.se7en.market.Model.AddressModel
-import com.se7en.market.Model.MainListModel
 import com.se7en.market.Model.ReverseGeocoding
 import com.se7en.market.Model.SliderModel
 import com.se7en.market.Model.UserModel
 import com.se7en.market.Response.Address.AddressList
 import com.se7en.market.Response.Address.DeleteAddress
 import com.se7en.market.Response.Address.StoreAddress
+import com.se7en.market.Response.Cart.CreateOrAddToCart
+import com.se7en.market.Response.Cart.DeleteCart
+import com.se7en.market.Response.Cart.GetAllCarts
+import com.se7en.market.Response.Cart.GetCartDetails
 import com.se7en.market.Response.Home.HomeResponse
 import com.se7en.market.Response.OTP.Code
 import com.se7en.market.Response.OTP.Confirm
 import com.se7en.market.Response.OTP.Token
+import com.se7en.market.Response.Seller.SellerCategories
 import com.se7en.market.Response.Seller.SellerItems
-import com.se7en.market.Response.User.UpdateProfile
 import com.se7en.market.Response.User.Profile
+import com.se7en.market.Response.User.UpdateProfile
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -93,15 +98,45 @@ interface ApiService {
         @Path("shopId") shopId: Int,
     ): Call<SellerItems>
 
-//    @GET("/seller/{shopId}/categories")
-//    fun getShopItems(
-//        @Header("Authorization") token: String,
-//        @Path("shopId") shopId: Int,
-//    ): Call<>
+    @GET("/api/v1/seller/{shopId}/categories")
+    fun getShopCategories(
+        @Header("Authorization") token: String,
+        @Path("shopId") shopId: Int,
+    ): Call<SellerCategories>
 
-//    @POST()
-//    fun createCartOrAddItem(
-//        @Header("Authorization") token: String,
-//        @Body mapData: Map<Int, Int>
-//    ):
+    @POST("/api/v1/customer/card")
+    fun createCartOrAddItem(
+        @Header("Authorization") token: String,
+        @Body mapData: Map<String, Int>,
+    ): Call<CreateOrAddToCart>
+
+    @GET("/api/v1/customer/card")
+    fun getAllCarts(@Header("Authorization") token: String): Call<GetAllCarts>
+
+    @GET("/api/v1/customer/card/{cartId}")
+    fun getCartDetails(
+        @Header("Authorization") token: String,
+        @Path("cartId") cartId: Int,
+    ): Call<GetCartDetails>
+
+    @DELETE("/api/v1/customer/card/{cartId}")
+    fun deleteCart(
+        @Header("Authorization") token: String,
+        @Path("cartId") cartId: Int,
+    ): Call<DeleteCart>
+
+    @PATCH("/api/v1/customer/card/{cartId}/items/{itemId}/increment")
+    fun incrementItemQuantity(
+        @Header("Authorization") token: String,
+        @Path("cartId") cartId: Int,
+        @Path("itemId") itemId: Int,
+    ): Call<GetCartDetails>
+
+    @PATCH("/api/v1/customer/card/{cartId}/items/{itemId}/decrement")
+    fun decrementItemQuantity(
+        @Header("Authorization") token: String,
+        @Path("cartId") cartId: Int,
+        @Path("itemId") itemId: Int,
+    ): Call<GetCartDetails>
+
 }

@@ -11,7 +11,7 @@ data class HomeResponse(
     val errors: List<Any>
 ) {
     data class Data(
-        val shops: MutableList<ShopModel?>,
+        val shops: MutableList<ShopModel>,
         val categories: MutableList<CategoryModel?>
     )
 }

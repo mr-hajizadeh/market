@@ -49,6 +49,7 @@
         android:id="@+id/minusBtn"
         android:layout_width="@dimen/navigate_button"
         android:layout_height="@dimen/navigate_button"
+        android:layout_marginEnd="4dp"
         android:background="@color/light_red"
         app:contentPaddingEnd="5dp"
         app:contentPaddingStart="5dp"
@@ -63,13 +64,30 @@
         android:id="@+id/countTxt"
         android:layout_width="40dp"
         android:layout_height="0dp"
+        android:layout_marginEnd="4dp"
         android:gravity="center"
         android:maxLength="3"
         android:paddingHorizontal="8dp"
-        android:text="111"
+        android:text="0"
         app:layout_constraintBottom_toBottomOf="@+id/minusBtn"
         app:layout_constraintEnd_toStartOf="@+id/plusBtn"
         app:layout_constraintTop_toTopOf="@+id/minusBtn" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loadingProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/countTxt"
+        app:layout_constraintEnd_toEndOf="@+id/countTxt"
+        app:layout_constraintStart_toEndOf="@+id/minusBtn"
+        app:layout_constraintStart_toStartOf="@+id/countTxt"
+        app:layout_constraintTop_toTopOf="@+id/countTxt"
+        app:trackThickness="1dp"
+        tools:visibility="visible" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/plusBtn"

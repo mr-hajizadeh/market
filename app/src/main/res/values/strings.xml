@@ -82,10 +82,12 @@
     <string name="title_total_price">جمع کل</string>
     <string name="title_detail_product">جزئیات کالا</string>
     <string name="title_add">افزودن</string>
-    <string name="title_item_exists_in_cart">این کالا در سبد خرید شما موجود میباشد.</string>
+    <string name="title_item_exists_in_cart1">این کالا در </string>
+    <string name="title_item_exists_in_cart2"> شما موجود میباشد.</string>
     <string name="title_free">رایگان</string>
     <string name="title_minute">دقیقه</string>
     <string name="title_supermarket">سوپرمارکت</string>
+    <string name="title_remaining">باقی مانده</string>
 
     <string name="hint_search">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>

@@ -114,9 +114,7 @@ class Helper(val context: Context) {
                 spannablePrice
         }
 
-
     }
-
 
     private fun dpToPx(context: Context, dp: Float) = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
