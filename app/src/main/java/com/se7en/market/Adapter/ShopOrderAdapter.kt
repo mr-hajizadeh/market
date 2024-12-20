@@ -61,12 +61,17 @@ class ShopOrderAdapter(
         val deleteBtn = binding.deleteOrderBtn
         val loadingProgress = binding.loadingProgress
         private val progressBar = binding.minPriceProgress
+        private val deliveryTimeTxt = binding.deliveryTimeTxt
+        private val courierFeeTxt = binding.courierFeeTxt
         private lateinit var adapter: CartAdapter
 
         @SuppressLint("SetTextI18n")
         fun bind(item: CartModel) {
             with(item.seller) {
                 binding.shopNameTxt.text = shop_name
+                deliveryTimeTxt.text = "تحویل در $delivery_time دقیقه"
+                courierFeeTxt.text =
+                    "${formatPriceToPersianCourierFee()} ${context.getString(R.string.title_currency)}"
                 progressBar.max = /*item.minPrice.toInt()*/0
                 adapter =
                     CartAdapter(0, CartManager, { _: Int ->

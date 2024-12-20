@@ -1,5 +1,11 @@
+@file:Suppress("DEPRECATED_ANNOTATION")
+
 package com.se7en.market.Model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class CartDetailModel(
     var id: Int = 0,
     var card_id: Int = 0,
@@ -8,4 +14,4 @@ data class CartDetailModel(
     var created_at: String = "",
     var updated_at: String = "",
     var item: ProductModel = ProductModel(),
-)
+) : Parcelable

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.ActionBar.LayoutParams
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +35,7 @@ class ProductWithHeaderAdapter(
     private val isHeaderEnable: Boolean = false,
     private val changeQuantityListener: ChangeQuantityListener,
     private val containerView: View,
+    private val isMathParent: Boolean = false,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -76,7 +78,7 @@ class ProductWithHeaderAdapter(
                     LayoutInflater.from(context),
                     parent,
                     false
-                )
+                ), isMathParent
             )
         }
     }
@@ -202,28 +204,32 @@ class ProductWithHeaderAdapter(
 
     class ProductViewHolder(
         productBinding: ViewHolderProductBinding,
+        private val isMathParent: Boolean,
     ) :
         RecyclerView.ViewHolder(productBinding.root) {
 
         val loadingProgress = productBinding.loadingProgress
         val addBtn = productBinding.addBtn
         val discountPercentage = productBinding.discountPercentageTxt
-        private val productTitle = productBinding.productTittleTxt
-        private val offLayout = productBinding.offLayout
-        private val mainPrice = productBinding.mainPriceTxt
-        private val offPrice = productBinding.offPriceTxt
-        private val productImage = productBinding.productImg
         val addLayout = productBinding.addLayout
         val quantityLayout = productBinding.quantityLayout
         val quantityProgress = productBinding.quantityProgress
         val plusBtn = productBinding.plusBtn
         val minusBtn = productBinding.minusBtn
         val counterView = productBinding.countTxt
+        private val productTitle = productBinding.productTittleTxt
+        private val offLayout = productBinding.offLayout
+        private val mainPrice = productBinding.mainPriceTxt
+        private val offPrice = productBinding.offPriceTxt
+        private val productImage = productBinding.productImg
+        private val productBg = productBinding.productBg
         private val mainActivity = MainActivity()
 
         @SuppressLint("SetTextI18n")
         fun setData(product: ProductModel, context: Context) {
-
+            val params = productBg.layoutParams
+            params.width = if (isMathParent) LayoutParams.MATCH_PARENT else params.width
+            productBg.layoutParams = params
             with(product) {
                 productTitle.text = title
                 offLayout.visibility = if (off_percent > 0) View.VISIBLE else View.GONE
@@ -286,13 +292,18 @@ class ProductWithHeaderAdapter(
 
         productList.forEachIndexed { index, product ->
             if (product is ProductModel) {
-                cartMap[product.id]?.let { cartDetail ->
+                val cartDetail = cartMap[product.id]
+                if (cartDetail != null) {
                     product.quantity = cartDetail.quantity
                     product.cartDetail = cartDetail
-                    notifyItemChanged(if (isHeaderEnable) index + 1 else index)
+                } else if (product.quantity > 0) {
+                    product.quantity = 0
+                    product.cartDetail = null
                 }
+                notifyItemChanged(if (isHeaderEnable) index + 1 else index)
             }
         }
     }
+
 
 }

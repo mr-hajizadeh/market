@@ -155,7 +155,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                     s: CharSequence?,
                     start: Int,
                     count: Int,
-                    after: Int
+                    after: Int,
                 ) {
                 }
 
@@ -322,7 +322,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
 
                 is NetworkResult.Success -> {
                     loginLoading()
-                    val token = result.response.data.token.substringAfterLast("|")
+                    val token = result.response.data.token
                     viewModel.saveLoginInfo(LoginInfoModel(phoneWithoutZero(phone), token))
                     Log.i("TAG", "getLoginInfo: ${viewModel.getLoginInfo().value}")
                     val user = result.response.data.user

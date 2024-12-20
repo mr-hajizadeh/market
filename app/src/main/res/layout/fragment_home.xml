@@ -20,7 +20,8 @@
             android:background="@color/primary_gray"
             android:layoutDirection="rtl"
             app:contentScrim="@color/primary_gray"
-            app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
+            app:layout_scrollEffect="compress"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             app:layout_scrollInterpolator="@android:anim/decelerate_interpolator">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -98,6 +99,8 @@
                     android:id="@+id/sliderView"
                     android:layout_width="0dp"
                     android:layout_height="200dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
                     android:paddingVertical="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

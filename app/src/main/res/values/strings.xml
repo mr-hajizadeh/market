@@ -88,6 +88,7 @@
     <string name="title_minute">دقیقه</string>
     <string name="title_supermarket">سوپرمارکت</string>
     <string name="title_remaining">باقی مانده</string>
+    <string name="title_your_distance">فاضله شما تا فروشگاه</string>
 
     <string name="hint_search">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>

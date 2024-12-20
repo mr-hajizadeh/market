@@ -85,7 +85,7 @@ class ContainerAdapter(
             else
                 GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
             categoryView.layoutManager = categoryLayoutManager
-            categoryView.adapter = CategoryAdapter(items)
+            categoryView.adapter = CategoryAdapter(items, !isVerticalGridLayout)
         }
     }
 

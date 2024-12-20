@@ -3,6 +3,7 @@ package com.se7en.market.Repository
 import androidx.lifecycle.MutableLiveData
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.Network.RetrofitService
+import com.se7en.market.Response.Seller.GetCategoryItems
 import com.se7en.market.Response.Seller.SellerCategories
 import com.se7en.market.Response.Seller.SellerItems
 import retrofit2.Call
@@ -16,6 +17,9 @@ class ShopRepository {
 
     private var _categoriesStatus = MutableLiveData<NetworkResult<SellerCategories>>()
     val categoriesStatus get() = _categoriesStatus
+
+    private var _categoryItemStatus = MutableLiveData<NetworkResult<GetCategoryItems>>()
+    val categoryItemStatus get() = _categoryItemStatus
 
     fun getShopItems(token: String, shopId: Int) {
         _itemsStatus.value = NetworkResult.Loading
@@ -52,6 +56,24 @@ class ShopRepository {
 
                 override fun onFailure(call: Call<SellerCategories>, t: Throwable) {
                     _categoriesStatus.value = NetworkResult.Error("Error ${t.message}")
+                }
+            })
+    }
+
+    fun getCategoryItems(token: String, categoryId: Int) {
+        _categoryItemStatus.value = NetworkResult.Loading
+        RetrofitService.apiService().getCategoryItems(token, categoryId)
+            .enqueue(object : Callback<GetCategoryItems> {
+                override fun onResponse(
+                    call: Call<GetCategoryItems>,
+                    response: Response<GetCategoryItems>,
+                ) {
+                    if (response.isSuccessful)
+                        _categoryItemStatus.value = NetworkResult.Success(response.body()!!)
+                }
+
+                override fun onFailure(call: Call<GetCategoryItems>, t: Throwable) {
+                    _categoryItemStatus.value = NetworkResult.Error("Error ${t.message}")
                 }
             })
     }

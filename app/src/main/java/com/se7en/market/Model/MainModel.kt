@@ -10,6 +10,7 @@ import java.util.Locale
 
 interface ListItemModel
 
+@Parcelize
 data class ProductModel(
     var id: Int = 0,
     var seller_id: Int = 0,
@@ -27,7 +28,7 @@ data class ProductModel(
     var loading: Boolean = false,
     var quantityLoading: Boolean = false,
     var cartDetail: CartDetailModel? = null,
-) : ListItemModel {
+) : ListItemModel, Parcelable {
     fun formatPriceToPersianAmount(): String {
         val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
         val decimalFormat = DecimalFormat("#,###", decimalFormatSymbols)
@@ -48,7 +49,7 @@ data class CategoryModel(
     val id: Int = 0,
     val seller_id: Int = 0,
     val title: String = "",
-    val description: String = "",
+    val description: String? = null,
     val image: String = "",
     val tags: List<String> = listOf(),
 //    val status: Int = 0,
@@ -63,15 +64,16 @@ data class ShopModel(
     var user_id: Int = 0,
     var shop_name: String = "",
     var shop_address: String = "",
-    var latitude: String = "",
-    var longitude: String = "",
-    var service_distance: Int = 0,
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0,
+    var service_distance: Float = 0f,
     var courier_fee: Int = 0,
     var delivery_time: Int = 0,
     var created_at: String = "",
     var updated_at: String = "",
     var distance: Double = 0.0,
     var formatted_distance: String = "",
+    val items: MutableList<ProductModel> = mutableListOf(),
 ) : ListItemModel, Parcelable {
     fun formatPriceToPersianCourierFee(): String {
         val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))

@@ -13,13 +13,17 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
 
     val itemsStatus get() = repository.itemsStatus
     val categoriesStatus get() = repository.categoriesStatus
+    val categoryItemStatus get() = repository.categoryItemStatus
 
-    fun getShopItems(shopId: Int) {
+    fun getShopItems(shopId: Int) =
         repository.getShopItems("Bearer $token", shopId)
-    }
 
-    fun getShopCategories(shopId: Int) {
+
+    fun getShopCategories(shopId: Int) =
         repository.getShopCategories("Bearer $token", shopId)
-    }
+
+
+    fun getCategoryItems(categoryId: Int) =
+        repository.getCategoryItems("Bearer $token", categoryId)
 
 }

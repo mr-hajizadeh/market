@@ -3,8 +3,6 @@ package com.se7en.market.Fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -86,7 +84,9 @@ class CartFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
-                    manageSkeletonLoading(true)
+                    Log.i(TAG, "getAllCarts: ${result.message}")
+                    manageView()
+                    manageSkeletonLoading()
                 }
             }
         }
@@ -118,11 +118,9 @@ class CartFragment : Fragment() {
 
     private fun manageSkeletonLoading(loading: Boolean = false) {
         if (loading)
-            cartView.loadSkeleton()
+            cartView.loadSkeleton(R.layout.view_holder_cart_list)
         else
-            Handler(Looper.getMainLooper()).postDelayed({
-                cartView.hideSkeleton()
-            }, 1000)
+            cartView.hideSkeleton()
     }
 
     private fun manageView(emptyCart: Boolean = true) {

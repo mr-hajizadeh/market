@@ -7,6 +7,7 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.se7en.market.Activity.ShopActivity
 import com.se7en.market.Adapter.CartAdapter
 import com.se7en.market.Adapter.ChangeQuantityListener
 import com.se7en.market.Adapter.ProductWithHeaderAdapter
@@ -14,6 +15,7 @@ import com.se7en.market.Model.AddressModel
 import com.se7en.market.Model.CartDetailModel
 import com.se7en.market.Model.ProductModel
 import com.se7en.market.Network.NetworkResult
+import com.se7en.market.R
 import com.se7en.market.ViewModel.CartViewModel
 
 object CartManager : ChangeQuantityListener {
@@ -62,7 +64,12 @@ object CartManager : ChangeQuantityListener {
                                 containerView,
                                 result.response.messages[0],
                                 Snackbar.LENGTH_SHORT
-                            ).show()
+                            ).apply {
+                                if (containerView.context is ShopActivity)
+                                    anchorView =
+                                        (containerView.context as ShopActivity).findViewById(R.id.bottomAppBar)
+                                show()
+                            }
                         }
                         Log.i(TAG, "Success: position $position")
                         Log.i(TAG, "Success: id=${product.id} loading=${product.loading} \n")
@@ -194,7 +201,6 @@ object CartManager : ChangeQuantityListener {
                 }
             }
     }
-
 
     private fun updateItemWithDelay(
         position: Int,

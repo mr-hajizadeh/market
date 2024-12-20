@@ -32,16 +32,73 @@
         app:layout_constraintStart_toEndOf="@+id/shopImg"
         app:layout_constraintTop_toTopOf="@+id/shopImg" />
 
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/hint_address"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintEnd_toStartOf="@+id/imageView16"
+        app:layout_constraintStart_toStartOf="@+id/shopNameTxt"
+        app:layout_constraintTop_toBottomOf="@+id/shopNameTxt" />
+
+    <TextView
+        android:id="@+id/courierFeeTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+        app:layout_constraintBottom_toTopOf="@+id/cartView"
+        app:layout_constraintEnd_toEndOf="@+id/deliveryTimeTxt"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageView16"
+        app:layout_constraintTop_toBottomOf="@+id/shopNameTxt"
+        tools:text="رایگان" />
+
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/courierFeeTxt"
+        app:layout_constraintStart_toStartOf="@+id/imageView17"
+        app:layout_constraintTop_toTopOf="@+id/courierFeeTxt"
+        app:srcCompat="@drawable/ic_wallet" />
+
+    <TextView
+        android:id="@+id/deliveryTimeTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+        app:layout_constraintBottom_toBottomOf="@+id/shopNameTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/shopNameTxt"
+        tools:text="تحویل در 35 دقیقه" />
+
+    <ImageView
+        android:id="@+id/imageView17"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/deliveryTimeTxt"
+        app:layout_constraintEnd_toStartOf="@+id/deliveryTimeTxt"
+        app:layout_constraintTop_toTopOf="@+id/deliveryTimeTxt"
+        app:srcCompat="@drawable/ic_energie" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:orientation="horizontal"
+        android:paddingVertical="8dp"
         android:paddingStart="8dp"
         android:paddingTop="8dp"
         android:paddingEnd="0dp"
-        android:paddingVertical="8dp"
         android:paddingBottom="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
@@ -130,4 +187,5 @@
         app:layout_constraintStart_toStartOf="@+id/deleteOrderBtn"
         app:layout_constraintTop_toTopOf="@+id/deleteOrderBtn"
         app:trackThickness="1dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
