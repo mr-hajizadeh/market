@@ -7,6 +7,18 @@
     android:layout_marginTop="16dp"
     android:background="@drawable/white_bg">
 
+    <TextView
+        android:id="@+id/shopTypeTxt"
+        style="@style/customTextTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="سوپر مارکت"
+        android:textColor="@color/green"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/shopImg"
+        app:layout_constraintTop_toTopOf="@+id/shopImg" />
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/shopImg"
         android:layout_width="60dp"
@@ -23,13 +35,17 @@
 
     <TextView
         android:id="@+id/shopNameTxt"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="TextView"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text=" - TextView"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
         android:textColor="@color/text_color"
-        app:layout_constraintStart_toEndOf="@+id/shopImg"
+        app:layout_constraintBottom_toBottomOf="@+id/shopTypeTxt"
+        app:layout_constraintEnd_toStartOf="@+id/imageView17"
+        app:layout_constraintStart_toEndOf="@+id/shopTypeTxt"
         app:layout_constraintTop_toTopOf="@+id/shopImg" />
 
     <TextView
@@ -43,7 +59,7 @@
         android:text="@string/hint_address"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintEnd_toStartOf="@+id/imageView16"
-        app:layout_constraintStart_toStartOf="@+id/shopNameTxt"
+        app:layout_constraintStart_toStartOf="@+id/shopTypeTxt"
         app:layout_constraintTop_toBottomOf="@+id/shopNameTxt" />
 
     <TextView

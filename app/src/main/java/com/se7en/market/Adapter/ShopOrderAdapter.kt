@@ -68,7 +68,7 @@ class ShopOrderAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(item: CartModel) {
             with(item.seller) {
-                binding.shopNameTxt.text = shop_name
+                binding.shopNameTxt.text = " - $shop_name"
                 deliveryTimeTxt.text = "تحویل در $delivery_time دقیقه"
                 courierFeeTxt.text =
                     "${formatPriceToPersianCourierFee()} ${context.getString(R.string.title_currency)}"
