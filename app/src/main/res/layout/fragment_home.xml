@@ -30,16 +30,18 @@
                 android:layout_height="wrap_content"
                 android:layoutDirection="rtl">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/imageView8"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
+                    app:contentPadding="-12dp"
                     android:contentDescription="@string/app_name"
-                    android:src="@mipmap/ic_launcher_foreground"
+                    android:src="@drawable/logo"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearance="@style/roundedImageView" />
 
                 <TextView
                     android:id="@+id/activeAddressTxt"

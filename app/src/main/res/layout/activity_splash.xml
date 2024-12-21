@@ -8,15 +8,18 @@
     android:background="@color/green"
     tools:context=".Activity.SplashActivity">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageView7"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:src="@mipmap/ic_launcher"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo"
+        app:contentPadding="-32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/logoStyle" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -45,10 +48,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
-            app:icon="@drawable/ic_try_again"
             android:backgroundTint="@color/secondary_green"
             android:fontFamily="@font/vazir"
-            android:text="@string/title_try_again" />
+            android:text="@string/title_try_again"
+            app:icon="@drawable/ic_try_again" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loading"
