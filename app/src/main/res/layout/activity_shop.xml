@@ -13,8 +13,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:liftOnScroll="true">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
@@ -30,7 +29,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/appBarLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layoutDirection="rtl">
 
                 <ImageView
                     android:id="@+id/backBtn"

@@ -108,7 +108,7 @@ class ModalProductDetail(
 
         addBtn.setOnClickListener {
             loading(true)
-            changeQuantityListener?.onAdd(product, -1, null, binding.productDetailLayout)
+            changeQuantityListener?.onAdd(product, -1, null, requireActivity())
         }
 
     }

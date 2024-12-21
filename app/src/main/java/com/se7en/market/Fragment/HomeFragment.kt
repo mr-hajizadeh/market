@@ -29,6 +29,7 @@ import com.se7en.market.Model.ProductModel
 import com.se7en.market.Model.SliderModel
 import com.se7en.market.Model.ViewTypeModel
 import com.se7en.market.Network.NetworkResult
+import com.se7en.market.R
 import com.se7en.market.Response.Home.HomeResponse
 import com.se7en.market.Utils.CartManager
 import com.se7en.market.ViewModel.CartViewModel
@@ -275,7 +276,9 @@ class HomeFragment : Fragment() {
         )
         mainList.add(
             MainListModel(
+                title = "title",
                 position = 1,
+                color = nonNullContext.getColor(R.color.orange),
                 viewType = ViewTypeModel.HEADER_TYPE,
                 items = list
             )
@@ -283,7 +286,9 @@ class HomeFragment : Fragment() {
 
         mainList.add(
             MainListModel(
+                title = "title2",
                 position = 3,
+                color = nonNullContext.getColor(R.color.green),
                 viewType = ViewTypeModel.ONE_ROW_TYPE,
                 items = list2
             )

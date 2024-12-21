@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
@@ -36,6 +37,7 @@ class ShopActivity : BaseActivity() {
     private lateinit var shopData: ShopModel
     private lateinit var bottomAppBar: BottomAppBar
     private lateinit var containerView: CoordinatorLayout
+    private lateinit var appbarLayout: ConstraintLayout
 
     private val viewModel: ShopViewModel by viewModels<ShopViewModel>()
     private val cartViewModel: CartViewModel by viewModels<CartViewModel>()
@@ -66,14 +68,15 @@ class ShopActivity : BaseActivity() {
 
     private fun initViews() {
 
-//        minPriceTxt = binding.minPriceTxt
-//        firstTimeSendTxt = binding.firstTimeSendTxt
+        minPriceTxt = binding.minPriceTxt
+        firstTimeSendTxt = binding.firstTimeSendTxt
         totalPriceTxt = binding.totalPriceTxt
-//        courierFeeTxt = binding.courierFeeTxt
-//        shopNameTxt = binding.shopNameTxt
+        courierFeeTxt = binding.courierFeeTxt
+        shopNameTxt = binding.shopNameTxt
         containerView = binding.shopActivityContainer
         totalItemsTxt = binding.totalItemsTxt
         bottomAppBar = binding.bottomAppBar
+        appbarLayout = binding.appBarLayout
 
         bottomAppBar.background = ContextCompat.getDrawable(this, R.drawable.gradient_white_bg)
 
@@ -97,7 +100,7 @@ class ShopActivity : BaseActivity() {
 
     private fun onclickButtons() {
 
-//        binding.backBtn.setOnClickListener { finish() }
+        binding.backBtn.setOnClickListener { finish() }
 
         binding.searchViewBtn.setOnClickListener {
             startActivity(
@@ -117,6 +120,7 @@ class ShopActivity : BaseActivity() {
         val statusList = mutableListOf<Boolean>()
         val mainList = mutableListOf<MainListModel>()
         shopMainView.loadSkeleton(R.layout.view_holder_product_list)
+        appbarLayout.loadSkeleton()
 
         viewModel.categoriesStatus.observe(this) { result ->
             when (result) {
@@ -150,6 +154,7 @@ class ShopActivity : BaseActivity() {
                         MainListModel(
                             title = getString(R.string.title_recommended),
                             position = 1,
+                            color = getColor(R.color.orange),
                             viewType = ViewTypeModel.HEADER_TYPE,
                             items = result.response.data as MutableList<ListItemModel>
                         )
@@ -158,6 +163,7 @@ class ShopActivity : BaseActivity() {
                         MainListModel(
                             title = getString(R.string.title_recommended),
                             position = 2,
+                            color = getColor(R.color.green),
                             viewType = ViewTypeModel.ONE_ROW_TYPE,
                             items = result.response.data as MutableList<ListItemModel>
                         )
@@ -166,6 +172,7 @@ class ShopActivity : BaseActivity() {
                         MainListModel(
                             title = getString(R.string.title_recommended),
                             position = 3,
+                            color = getColor(R.color.green),
                             viewType = ViewTypeModel.ONE_ROW_TYPE,
                             items = result.response.data as MutableList<ListItemModel>
                         )
@@ -174,6 +181,7 @@ class ShopActivity : BaseActivity() {
                         MainListModel(
                             title = getString(R.string.title_recommended),
                             position = 4,
+                            color = getColor(R.color.orange),
                             viewType = ViewTypeModel.HEADER_TYPE,
                             items = result.response.data as MutableList<ListItemModel>
                         )
@@ -190,7 +198,10 @@ class ShopActivity : BaseActivity() {
 
         dataStatus.observe(this) { data ->
             data?.takeIf { it.all { status -> status } }?.let {
-                Handler(Looper.getMainLooper()).postDelayed({ shopMainView.hideSkeleton() }, 1000)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    shopMainView.hideSkeleton()
+                    appbarLayout.hideSkeleton()
+                }, 1000)
                 mainList.sortBy { it.position }
                 containerAdapter =
                     ContainerAdapter(mainList, true, shopMainView, binding.root)

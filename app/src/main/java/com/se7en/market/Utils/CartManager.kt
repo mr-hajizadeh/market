@@ -1,13 +1,12 @@
 package com.se7en.market.Utils
 
+import android.app.Activity
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.se7en.market.Activity.ShopActivity
 import com.se7en.market.Adapter.CartAdapter
 import com.se7en.market.Adapter.ChangeQuantityListener
 import com.se7en.market.Adapter.ProductWithHeaderAdapter
@@ -15,7 +14,6 @@ import com.se7en.market.Model.AddressModel
 import com.se7en.market.Model.CartDetailModel
 import com.se7en.market.Model.ProductModel
 import com.se7en.market.Network.NetworkResult
-import com.se7en.market.R
 import com.se7en.market.ViewModel.CartViewModel
 
 object CartManager : ChangeQuantityListener {
@@ -36,7 +34,7 @@ object CartManager : ChangeQuantityListener {
         product: ProductModel,
         position: Int,
         adapter: ProductWithHeaderAdapter?,
-        containerView: View,
+        activity: Activity,
     ) {
 
         if (!::viewModel.isInitialized) return
@@ -58,19 +56,11 @@ object CartManager : ChangeQuantityListener {
                                 product.quantity = it.quantity
                                 product.cartDetail = it
                             }
-                        if (adapter != null && position != -1) {
+                        if (adapter != null && position != -1)
                             updateItemWithDelay(position, adapter, product)
-                            Snackbar.make(
-                                containerView,
-                                result.response.messages[0],
-                                Snackbar.LENGTH_SHORT
-                            ).apply {
-                                if (containerView.context is ShopActivity)
-                                    anchorView =
-                                        (containerView.context as ShopActivity).findViewById(R.id.bottomAppBar)
-                                show()
-                            }
-                        }
+
+                        Log.i(TAG, "onAdd: $activity")
+                        showSnackBar(activity, result.response.messages[0])
                         Log.i(TAG, "Success: position $position")
                         Log.i(TAG, "Success: id=${product.id} loading=${product.loading} \n")
                     }
@@ -78,7 +68,7 @@ object CartManager : ChangeQuantityListener {
                     is NetworkResult.Error -> {
                         if (adapter != null && position != -1)
                             updateItemWithDelay(position, adapter, product)
-                        Snackbar.make(containerView, result.message, Snackbar.LENGTH_SHORT).show()
+                        showSnackBar(activity, result.message)
                         Log.e(TAG, "Failed to add product: ${result.message}")
                     }
                 }
@@ -211,6 +201,12 @@ object CartManager : ChangeQuantityListener {
             adapter.updateItem(position, product)
             Log.i(TAG, "Error: $product")
         }, 500)
+    }
+
+    private fun showSnackBar(activity: Activity, message: String) {
+        Snackbar.make(
+            activity.findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT
+        ).show()
     }
 
 }

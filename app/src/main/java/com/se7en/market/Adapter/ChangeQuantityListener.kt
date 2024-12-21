@@ -1,6 +1,6 @@
 package com.se7en.market.Adapter
 
-import android.view.View
+import android.app.Activity
 import androidx.recyclerview.widget.RecyclerView
 import com.se7en.market.Model.CartDetailModel
 import com.se7en.market.Model.ProductModel
@@ -10,7 +10,7 @@ interface ChangeQuantityListener {
         product: ProductModel,
         position: Int,
         adapter: ProductWithHeaderAdapter?,
-        containerView: View,
+        activity: Activity,
     )
 
     fun <T : RecyclerView.Adapter<RecyclerView.ViewHolder>> incrementItem(

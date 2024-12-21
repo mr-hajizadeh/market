@@ -99,8 +99,10 @@ class ShopOrderAdapter(
     }
 
     fun loadingItem(position: Int) {
-        items[position].loading = !items[position].loading
-        notifyItemChanged(position)
+        if (position in 0 until items.size) {
+            items[position].loading = !items[position].loading
+            notifyItemChanged(position)
+        }
     }
 
 }

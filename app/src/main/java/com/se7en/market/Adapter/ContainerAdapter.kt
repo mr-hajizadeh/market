@@ -2,21 +2,26 @@ package com.se7en.market.Adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.se7en.market.Activity.ListActivity
 import com.se7en.market.Model.CartModel
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.MainListModel
 import com.se7en.market.Model.ViewTypeModel
 import com.se7en.market.R
 import com.se7en.market.Utils.CartManager
+import com.se7en.market.Utils.Constance.Companion.KEY_PRODUCT_LIST
+import com.se7en.market.Utils.Constance.Companion.KEY_SHOP
 import com.se7en.market.databinding.ViewHolderBrandListBinding
 import com.se7en.market.databinding.ViewHolderCategoryListBinding
 import com.se7en.market.databinding.ViewHolderProductListBinding
@@ -92,7 +97,6 @@ class ContainerAdapter(
     class ProductViewHolder(
         binding: ViewHolderProductListBinding,
         private val context: Context,
-        private val color: Int,
         private val containerView: View,
         private val isGrid: Boolean = false,
         private val isHeaderEnable: Boolean = false,
@@ -100,6 +104,7 @@ class ContainerAdapter(
 
         private lateinit var adapter: ProductWithHeaderAdapter
         private val productView: RecyclerView = binding.productView
+        private val moreBtn: TextView = binding.moreBtn
 
         @SuppressLint("UseCompatLoadingForDrawables")
         fun bind(item: MainListModel) {
@@ -119,13 +124,17 @@ class ContainerAdapter(
                 item.items,
                 context.getString(R.string.title_recommended),
                 context.getDrawable(R.drawable.ic_favorite),
-                color,
+                item.color,
                 isHeaderEnable,
-                CartManager,
-                containerView,
+                changeQuantityListener = CartManager,
             )
             productView.layoutManager = layoutManager
             productView.adapter = adapter
+            moreBtn.setOnClickListener {
+                val intent = Intent(context, ListActivity::class.java)
+                intent.putExtra(KEY_PRODUCT_LIST, item)
+                context.startActivity(intent)
+            }
         }
 
         fun syncCartWithProducts(newCartList: MutableList<CartModel>) {
@@ -135,17 +144,24 @@ class ContainerAdapter(
 
     class ShopViewHolder(
         binding: ViewHolderShopListBinding,
+        private val context: Context,
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
         private var adapter: ShopAdapter? = null
         private val shopView: RecyclerView = binding.shopView
         private val title = binding.titleShop
+        private val allShopBtn = binding.allShopBtn
 
         fun bind(item: MainListModel) {
             adapter = ShopAdapter(item.items)
             shopView.adapter = adapter
             title.text = item.title
+            allShopBtn.setOnClickListener {
+                val intent = Intent(context, ListActivity::class.java)
+                intent.putParcelableArrayListExtra(KEY_SHOP, ArrayList(item.items))
+                context.startActivity(intent)
+            }
         }
     }
 
@@ -178,7 +194,6 @@ class ContainerAdapter(
                         parent, false
                     ),
                     context,
-                    context.getColor(R.color.orange),
                     containerView,
                     isGrid = true,
                     isHeaderEnable = true
@@ -192,7 +207,6 @@ class ContainerAdapter(
                         parent, false
                     ),
                     context,
-                    context.getColor(R.color.green),
                     containerView,
                     isGrid = true,
                     isHeaderEnable = false
@@ -206,7 +220,6 @@ class ContainerAdapter(
                         parent, false
                     ),
                     context,
-                    context.getColor(R.color.green),
                     containerView,
                     isGrid = false,
                     isHeaderEnable = false
@@ -218,7 +231,7 @@ class ContainerAdapter(
                     ViewHolderShopListBinding.inflate(
                         LayoutInflater.from(context),
                         parent, false
-                    )
+                    ), context
                 )
             }
 

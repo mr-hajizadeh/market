@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.se7en.market.Activity.CategoryActivity
-import com.se7en.market.Activity.ProductListActivity
+import com.se7en.market.Activity.ListActivity
 import com.se7en.market.Model.CategoryModel
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Utils.Constance.Companion.IMAGE_URL_PATH
@@ -45,7 +45,7 @@ class CategoryAdapter(
                 intent.putExtra(KEY_CATEGORY, item)
                 context.startActivity(intent)
             } else {
-                val intent = Intent(context, ProductListActivity::class.java)
+                val intent = Intent(context, ListActivity::class.java)
                 intent.putExtra(KEY_CATEGORY, item)
                 context.startActivity(intent)
             }

@@ -1,6 +1,7 @@
 package com.se7en.market.Adapter
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Paint
@@ -33,9 +34,8 @@ class ProductWithHeaderAdapter(
     private val headerIcon: Drawable? = null,
     private val itemColor: Int,
     private val isHeaderEnable: Boolean = false,
-    private val changeQuantityListener: ChangeQuantityListener,
-    private val containerView: View,
     private val isMathParent: Boolean = false,
+    private val changeQuantityListener: ChangeQuantityListener,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -121,7 +121,7 @@ class ProductWithHeaderAdapter(
                         item,
                         position,
                         this,
-                        containerView
+                        context as Activity
                     )
             }
 

@@ -74,8 +74,7 @@ class ShopWithProductAdapter(
                 null,
                 context.getColor(R.color.green),
                 false,
-                CartManager,
-                binding.root,
+                changeQuantityListener = CartManager
             )
             binding.productView.adapter = adapter
         }

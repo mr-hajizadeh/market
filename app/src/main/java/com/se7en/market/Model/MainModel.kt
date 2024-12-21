@@ -8,7 +8,7 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
-interface ListItemModel
+interface ListItemModel : Parcelable
 
 @Parcelize
 data class ProductModel(
@@ -90,7 +90,8 @@ data class ShopModel(
     }
 }
 
+@Parcelize
 data class BannerModel(
     var bannerId: Int,
     var imageUrl: String,
-) : ListItemModel
+) : ListItemModel, Parcelable
