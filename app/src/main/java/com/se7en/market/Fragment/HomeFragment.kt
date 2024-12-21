@@ -137,6 +137,7 @@ class HomeFragment : Fragment() {
         _viewPager = binding.sliderView
         activeAddressTxt = binding.activeAddressTxt
         containerView = binding.containerView
+        binding.appbar.setExpanded(true, true)
     }
 
     private fun initSlider(sliderList: List<SliderModel>) {
