@@ -38,8 +38,10 @@ class AddressListFragment : Fragment(), AddressAdapter.onClickAddressListener {
     private val noneNullContext get() = _context!!
 
     private val viewModel by viewModels<AddressViewModel>()
-    private var adapter: AddressAdapter? = null
     private var addressView: RecyclerView? = null
+
+    private lateinit var adapter: AddressAdapter
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -151,8 +153,8 @@ class AddressListFragment : Fragment(), AddressAdapter.onClickAddressListener {
                 is NetworkResult.Success -> {
                     Log.i("TAG", "deleteAddress: success ${result.response.status}")
                     hideSkeleton()
-                    adapter?.removeItem(item)
-                    adapter?.getAddressList()?.let {
+                    adapter.removeItem(item)
+                    adapter.getAddressList().let {
                         if (it.size == 0) {
                             startActivity(Intent(requireActivity(), MapActivity::class.java))
                             requireActivity().finish()

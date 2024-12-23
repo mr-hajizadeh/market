@@ -51,133 +51,133 @@ interface ApiService {
         @Query("destinations") destinations: String
     ): Call<DistanceMatrixResponse>
 
-    @POST("/api/v1/customer/auth/otp")
     @Headers("Accept: application/json")
+    @POST("/api/v1/customer/auth/otp")
     fun sendPhone(@Body phoneMap: Map<String, String>): Call<Token>
 
-    @GET("/api/v1/customer/auth/otp/return")
     @Headers("Accept: application/json")
+    @GET("/api/v1/customer/auth/otp/return")
     fun otpCode(@Header("token") token: String): Call<Code>
 
-    @POST("/api/v1/customer/auth/otp/confirm")
     @Headers("Accept: application/json")
+    @POST("/api/v1/customer/auth/otp/confirm")
     fun confirmCode(
         @Header("token") token: String,
         @Body codeMap: Map<String, String>,
     ): Call<Confirm>
 
-    @GET("/api/v1/customer/profile")
     @Headers("Accept: application/json")
+    @GET("/api/v1/customer/profile")
     fun getProfile(@Header("Authorization") token: String): Call<Profile>
 
-    @POST("/api/v1/customer/profile")
     @Headers("Accept: application/json")
+    @POST("/api/v1/customer/profile")
     fun updateProfile(
         @Header("Authorization") token: String,
         @Body user: UserModel,
     ): Call<UpdateProfile>
 
-    @POST("/api/v1/customer/address")
     @Headers("Accept: application/json")
+    @POST("/api/v1/customer/address")
     fun storeAddress(
         @Header("Authorization") token: String,
         @Body address: AddressModel,
     ): Call<StoreAddress>
 
-    @GET("/api/v1/customer/address")
     @Headers("Accept: application/json")
+    @GET("/api/v1/customer/address")
     fun getAddressList(@Header("Authorization") token: String): Call<AddressList>
 
-    @DELETE("/api/v1/customer/address/{id}")
     @Headers("Accept: application/json")
+    @DELETE("/api/v1/customer/address/{id}")
     fun deleteAddress(
         @Header("Authorization") token: String,
         @Path("id") id: Int,
     ): Call<DeleteAddress>
 
-    @PUT("/api/v1/customer/address/{id}")
     @Headers("Accept: application/json")
+    @PUT("/api/v1/customer/address/{id}")
     fun editAddress(
         @Header("Authorization") token: String,
         @Path("id") id: Int,
         @Body address: AddressModel,
     ): Call<StoreAddress>
 
-    @GET("/api/v1/admin/slider")
     @Headers("Accept: application/json")
+    @GET("/api/v1/admin/slider")
     fun getSliderList(@Header("Authorization") token: String): Call<List<SliderModel>>
 
-    @POST("/api/v1/customer/home")
     @Headers("Accept: application/json")
+    @POST("/api/v1/customer/home")
     fun getAllData(
         @Header("Authorization") token: String,
         @Body latLon: Map<String, Double>,
     ): Call<HomeResponse>
 
-    @POST("/api/v1/customer/globalCategories/{categoryId}/sellers/items")
     @Headers("Accept: application/json")
+    @POST("/api/v1/customer/globalCategories/{categoryId}/sellers/items")
     fun getGlobalCategoryItems(
         @Header("Authorization") token: String,
         @Path("categoryId") categoryId: Int,
         @Body latLon: Map<String, Double>,
     ): Call<GlobalCategoryItem>
 
-    @GET("/api/v1/seller/{shopId}/items")
     @Headers("Accept: application/json")
+    @GET("/api/v1/seller/{shopId}/items")
     fun getShopItems(
         @Header("Authorization") token: String,
         @Path("shopId") shopId: Int,
     ): Call<SellerItems>
 
-    @GET("/api/v1/seller/categories/{categoryId}/items")
     @Headers("Accept: application/json")
+    @GET("/api/v1/seller/categories/{categoryId}/items")
     fun getCategoryItems(
         @Header("Authorization") token: String,
         @Path("categoryId") categoryId: Int,
     ): Call<GetCategoryItems>
 
-    @GET("/api/v1/seller/{shopId}/categories")
     @Headers("Accept: application/json")
+    @GET("/api/v1/seller/{shopId}/categories")
     fun getShopCategories(
         @Header("Authorization") token: String,
         @Path("shopId") shopId: Int,
     ): Call<SellerCategories>
 
-    @POST("/api/v1/customer/card")
     @Headers("Accept: application/json")
+    @POST("/api/v1/customer/card")
     fun createCartOrAddItem(
         @Header("Authorization") token: String,
         @Body mapData: Map<String, Int>,
     ): Call<CreateOrAddToCart>
 
-    @GET("/api/v1/customer/card")
     @Headers("Accept: application/json")
+    @GET("/api/v1/customer/card")
     fun getAllCarts(@Header("Authorization") token: String): Call<GetAllCarts>
 
-    @GET("/api/v1/customer/card/{cartId}")
     @Headers("Accept: application/json")
+    @GET("/api/v1/customer/card/{cartId}")
     fun getCartDetails(
         @Header("Authorization") token: String,
         @Path("cartId") cartId: Int,
     ): Call<GetCartDetails>
 
-    @DELETE("/api/v1/customer/card/{cartId}")
     @Headers("Accept: application/json")
+    @DELETE("/api/v1/customer/card/{cartId}")
     fun deleteCart(
         @Header("Authorization") token: String,
         @Path("cartId") cartId: Int,
     ): Call<DeleteCart>
 
-    @PATCH("/api/v1/customer/card/{cartId}/items/{itemId}/increment")
     @Headers("Accept: application/json")
+    @PATCH("/api/v1/customer/card/{cartId}/items/{itemId}/increment")
     fun incrementItemQuantity(
         @Header("Authorization") token: String,
         @Path("cartId") cartId: Int,
         @Path("itemId") itemId: Int,
     ): Call<GetCartDetails>
 
-    @PATCH("/api/v1/customer/card/{cartId}/items/{itemId}/decrement")
     @Headers("Accept: application/json")
+    @PATCH("/api/v1/customer/card/{cartId}/items/{itemId}/decrement")
     fun decrementItemQuantity(
         @Header("Authorization") token: String,
         @Path("cartId") cartId: Int,

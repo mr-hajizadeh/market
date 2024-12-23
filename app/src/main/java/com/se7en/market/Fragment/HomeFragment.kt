@@ -180,10 +180,7 @@ class HomeFragment : Fragment() {
                 viewModel.getSliderList()
             } else {
                 requireActivity().startActivity(
-                    Intent(
-                        requireActivity(),
-                        MapActivity::class.java
-                    )
+                    Intent(requireActivity(), MapActivity::class.java)
                 )
                 requireActivity().finish()
             }

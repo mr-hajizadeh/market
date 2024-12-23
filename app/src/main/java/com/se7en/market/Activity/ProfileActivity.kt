@@ -20,7 +20,7 @@ import java.util.Locale
 class ProfileActivity : BaseActivity(), BirthdayChangeListener {
 
     private lateinit var binding: ActivityProfileBinding
-    private lateinit var user: UserModel
+    private var user: UserModel = UserModel()
     private val viewModel: ProfileViewModel by viewModels<ProfileViewModel>()
     private var _editTexts: List<EditText>? = null
     private val editTexts get() = _editTexts!!
@@ -37,16 +37,15 @@ class ProfileActivity : BaseActivity(), BirthdayChangeListener {
 
         initViews()
         setGender()
-        getProfile()
         onClickButtons()
         showCalendarModal()
         setDefaultBirthday()
+        getProfile()
 
     }
 
     private fun initViews() {
 
-        user = UserModel()
         emailEdt = binding.emailEdt
         firstnameEdt = binding.firstnameEdt
         lastnameEdt = binding.lastnameEdt
@@ -119,7 +118,9 @@ class ProfileActivity : BaseActivity(), BirthdayChangeListener {
                     emailEdt?.setText(user.email)
                     firstnameEdt?.setText(user.first_name)
                     lastnameEdt?.setText(user.last_name)
-                    persianCalendar.timeInMillis = user.date_of_birth?.let { convertDateToMillis(it) }!!
+                    val dateOfBirth = user.date_of_birth
+                    persianCalendar.timeInMillis =
+                        if (!dateOfBirth.isNullOrEmpty()) convertDateToMillis(dateOfBirth) else System.currentTimeMillis()
                     birthdayEdt?.text = convertToPersianNumbers(persianCalendar.longDate)
                     if (user.gender == "male")
                         binding.maleRd.isChecked = true
@@ -173,15 +174,10 @@ class ProfileActivity : BaseActivity(), BirthdayChangeListener {
         }
     }
 
-    private fun convertDateToMillis(dateString: String): Long? {
+    private fun convertDateToMillis(dateString: String): Long {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        return try {
-            val date = dateFormat.parse(dateString)
-            date?.time
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+        val date = dateFormat.parse(dateString)
+        return date?.time ?: System.currentTimeMillis()
     }
 
     override fun onBirthdayChange(vararg date: Int) {
