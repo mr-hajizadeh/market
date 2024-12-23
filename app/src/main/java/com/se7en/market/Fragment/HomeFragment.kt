@@ -172,6 +172,7 @@ class HomeFragment : Fragment() {
     private fun activeAddress() {
         viewModel.loadActiveAddress().observe(viewLifecycleOwner) { address ->
             if (address != null) {
+                Log.i("TAG", "activeAddress: ${address.latitude} lon ${address.longitude}")
                 CartManager.activeAddress = address
                 CartManager.setValues(cartViewModel, viewLifecycleOwner)
                 setActiveAddress(address)
@@ -307,6 +308,11 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         sliderHandler.postDelayed(sliderRunnable, 5000)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

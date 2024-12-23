@@ -13,6 +13,7 @@ import com.se7en.market.Response.Cart.GetAllCarts
 import com.se7en.market.Response.Cart.GetCartDetails
 import com.se7en.market.Response.Home.GlobalCategoryItem
 import com.se7en.market.Response.Home.HomeResponse
+import com.se7en.market.Response.Neshan.DistanceMatrixResponse
 import com.se7en.market.Response.OTP.Code
 import com.se7en.market.Response.OTP.Confirm
 import com.se7en.market.Response.OTP.Token
@@ -41,6 +42,14 @@ interface ApiService {
         @Query("lat") lat: Double,
         @Query("lng") lon: Double,
     ): Call<ReverseGeocoding>
+
+    @Headers("Api-Key: service.b8ad9848b3614526bcd2dfb35fae9b14")
+    @GET("v1/distance-matrix")
+    fun getDistanceMatrix(
+        @Query("type") type: String,
+        @Query("origins") origins: String,
+        @Query("destinations") destinations: String
+    ): Call<DistanceMatrixResponse>
 
     @POST("/api/v1/customer/auth/otp")
     @Headers("Accept: application/json")

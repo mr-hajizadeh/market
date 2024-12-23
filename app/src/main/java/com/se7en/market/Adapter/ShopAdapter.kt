@@ -3,6 +3,7 @@ package com.se7en.market.Adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -34,6 +35,7 @@ class ShopAdapter(private val shopList: MutableList<ListItemModel>) :
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = shopList[position] as ShopModel
+        Log.i("TAG", "location: ${item.latitude} lon ${item.longitude}")
         holder.shopName.text = " - ${item.shop_name}"
         holder.shopAddress.text = item.shop_address
         holder.deliveryTime.text = "تحویل در ${item.delivery_time} دقیقه"
