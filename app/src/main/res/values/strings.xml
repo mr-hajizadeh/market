@@ -91,6 +91,7 @@
     <string name="title_your_distance">فاضله شما تا فروشگاه</string>
     <string name="title_your_courier">پیک شما</string>
     <string name="title_your_address">آدرس شما</string>
+    <string name="title_order_detail">جزئیات سفارش</string>
 
     <string name="hint_search">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>

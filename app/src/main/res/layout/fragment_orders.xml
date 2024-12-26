@@ -55,18 +55,26 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/orderView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="true"
+                android:clipToPadding="false"
+                android:orientation="vertical"
                 android:paddingStart="16dp"
-                android:paddingTop="16dp"
-                android:visibility="gone" />
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp"
+                android:visibility="visible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/view_holder_order_list"
+                tools:visibility="visible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="gone">
 
                 <ImageView
                     android:id="@+id/imageView6"

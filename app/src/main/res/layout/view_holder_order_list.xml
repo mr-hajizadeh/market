@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:background="@drawable/white_bg"
+    android:layoutDirection="rtl"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/shopTypeTxt"
+        style="@style/customTextTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_supermarket"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="@color/green"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/shopNameTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text=" - حاجی"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/shopTypeTxt"
+        app:layout_constraintStart_toEndOf="@+id/shopTypeTxt"
+        app:layout_constraintTop_toTopOf="@+id/shopTypeTxt" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/orderStatusTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/light_orange_bg"
+        android:paddingHorizontal="8dp"
+        android:text="تحویل شده"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="@color/orange"
+        app:layout_constraintBottom_toBottomOf="@+id/shopTypeTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/shopNameTxt"
+        app:layout_constraintTop_toTopOf="@+id/shopTypeTxt" />
+
+    <ImageView
+        android:id="@+id/imageView19"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/receiveTimeTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/receiveTimeTxt"
+        app:srcCompat="@drawable/ic_clock"
+        app:tint="@color/light_gray" />
+
+    <TextView
+        android:id="@+id/receiveTimeTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="16:12 - 1403/9/22"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintStart_toEndOf="@+id/imageView19"
+        app:layout_constraintTop_toBottomOf="@+id/shopTypeTxt" />
+
+    <ImageView
+        android:id="@+id/imageView20"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:contentDescription="@string/title_submit_location"
+        app:layout_constraintBottom_toBottomOf="@+id/distanceAddressTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/distanceAddressTxt"
+        app:srcCompat="@drawable/ic_location"
+        app:tint="@color/light_gray" />
+
+    <TextView
+        android:id="@+id/distanceAddressTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxLines="1"
+        android:text="@string/hint_address"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintStart_toEndOf="@+id/imageView20"
+        app:layout_constraintTop_toBottomOf="@+id/receiveTimeTxt" />
+
+    <ImageView
+        android:id="@+id/imageView22"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:contentDescription="@string/title_submit_location"
+        app:layout_constraintBottom_toBottomOf="@+id/totalFinanceTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/totalFinanceTxt"
+        app:srcCompat="@drawable/selector_orders"
+        app:tint="@color/light_gray" />
+
+    <TextView
+        android:id="@+id/totalFinanceTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxLines="1"
+        android:text="جمع فاکتور:  128,800 تومان"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintStart_toEndOf="@+id/imageView20"
+        app:layout_constraintTop_toBottomOf="@+id/distanceAddressTxt" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/orderProductView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="-8dp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:paddingVertical="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalFinanceTxt"
+        tools:listitem="@layout/view_holder_product_cart" />
+
+    <Button
+        android:id="@+id/orderDetailBtn"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/title_order_detail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/orderProductView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

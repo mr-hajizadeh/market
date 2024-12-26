@@ -111,7 +111,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun sliderListener() {
-        viewModel.sliderStatus.observe(viewLifecycleOwner) { result ->
+        viewModel.sliderStatus.observe(requireActivity()) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
                     binding.homeContainer.loadSkeleton()
@@ -170,11 +170,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun activeAddress() {
-        viewModel.loadActiveAddress().observe(viewLifecycleOwner) { address ->
+        viewModel.loadActiveAddress().observe(requireActivity()) { address ->
             if (address != null) {
                 Log.i("TAG", "activeAddress: ${address.latitude} lon ${address.longitude}")
                 CartManager.activeAddress = address
-                CartManager.setValues(cartViewModel, viewLifecycleOwner)
+                CartManager.setValues(cartViewModel, requireActivity())
                 setActiveAddress(address)
                 viewModel.getAllData(address.latitude, address.longitude)
                 viewModel.getSliderList()
@@ -208,7 +208,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun getAllCarts() {
-        cartViewModel.cartsStatus.observe(viewLifecycleOwner) { result ->
+        cartViewModel.cartsStatus.observe(requireActivity()) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
                     Log.i("TAG", "setupCartView: Loading")
@@ -224,7 +224,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
 
     private fun getMainList(data: HomeResponse.Data): MutableList<MainListModel> {
         val mainList = listOfNotNull(
