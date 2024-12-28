@@ -43,9 +43,9 @@ class SplashActivity : AppCompatActivity() {
 
         initViews()
         tryToConnect()
-        addressListListener()
         checkInternetConnection()
         responseListener()
+        addressListListener()
     }
 
     private fun tryToConnect() {

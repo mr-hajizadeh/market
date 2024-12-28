@@ -31,8 +31,8 @@ import java.util.Locale
 class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
 
     private lateinit var binding: ActivityLoginBinding
+    private var smsReceiver: SmsBroadcastReceiver = SmsBroadcastReceiver()
     private val viewModel: LoginViewModel by viewModels<LoginViewModel>()
-    private var smsReceiver: SmsBroadcastReceiver? = null
     private var authenticationLayout: LinearLayout? = null
     private var receiveCodeLayout: LinearLayout? = null
     private var phoneEdt: EditText? = null
@@ -62,13 +62,16 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
 
+        smsReceiver.initOTPListener(this)
         initViews()
         setContentView(binding.root)
         startSMSListener()
         sendPhone()
         otpListener()
-        otpCodeListener()
+//        otpCodeListener()
         confirmCodeListener()
+//        val helper = Helper(this)
+//        Log.i("TAG", "appSignatures: ${helper.appSignatures}")
     }
 
     private fun initViews() {
@@ -118,7 +121,8 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
         timer.start()
 
         resendBtn.setOnClickListener {
-            viewModel.sendPhone(phone)
+            viewModel.sendPhone(phoneWithoutZero(phone))
+            timer.start()
         }
 
         changePhoneNumberBtn.setOnClickListener {
@@ -194,15 +198,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
 
     private fun startSMSListener() {
         try {
-            smsReceiver = SmsBroadcastReceiver()
-            smsReceiver!!.initOTPListener(this)
-
-//            val intentFilter = IntentFilter()
-//            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
-//            this.registerReceiver(smsReceiver, intentFilter)
-
             val client = SmsRetriever.getClient(this)
-
             val task = client.startSmsRetriever()
             task.addOnSuccessListener {
                 // API successfully started
@@ -217,7 +213,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
     }
 
     private fun extractVerificationCode(message: String): String? {
-        val regex = Regex("\\d{6}")
+        val regex = Regex("\\d{5}")
         val matchResult = regex.find(message)
         return matchResult?.value
     }
@@ -252,7 +248,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                     authLoading()
                     setupAuthenticationViews(phone)
                     _token = result.response.data.token
-                    viewModel.otpCode(token)
+//                    viewModel.otpCode(token)
                     Log.i("TAG", "otpListener: ${result.response}")
                 }
 
@@ -264,6 +260,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun sendPhone() {
         submitBtn?.setOnClickListener {
             _phone = phoneEdt?.text.toString()
@@ -343,12 +340,11 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
 
     override fun onOTPReceived(otp: String) {
         val code = extractVerificationCode(otp).toString()
-        Log.i("TAG", "onOTPReceived: $code")
+        Log.i("onOTPReceived", "activityCode: $code")
         populateVerificationCode(code)
+        Log.i("onOTPReceived", "activityToken: $token")
         viewModel.confirmCode(token, code)
-        if (smsReceiver != null) {
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(smsReceiver!!)
-        }
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(smsReceiver)
     }
 
     override fun onOTPTimeOut() {
