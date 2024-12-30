@@ -12,6 +12,7 @@
     <string name="title_support">پشتیبانی</string>
     <string name="title_logout">خروج از حساب کاربری</string>
     <string name="title_favorite">علاقه مندی ها</string>
+    <string name="title_wallet">کیف پول</string>
     <string name="title_your_credit">اعتبار شما</string>
     <string name="title_zero">0</string>
     <string name="title_price_unit">ريال</string>
@@ -93,6 +94,8 @@
     <string name="title_your_address">آدرس شما</string>
     <string name="title_order_detail">جزئیات سفارش</string>
     <string name="title_send_message">ارسال پیام</string>
+    <string name="title_increase_credit">افزایش اعتبار</string>
+    <string name="title_transactions_history">تاریخچه تراکنش ها</string>
 
     <string name="hint_search">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>

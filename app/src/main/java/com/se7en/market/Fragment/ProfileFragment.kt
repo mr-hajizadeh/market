@@ -16,6 +16,7 @@ import com.se7en.market.Activity.ChatActivity
 import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Activity.ProfileActivity
 import com.se7en.market.Activity.Ui.LogoutBottomSheet
+import com.se7en.market.Activity.WalletActivity
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.R
 import com.se7en.market.Utils.Helper
@@ -84,6 +85,15 @@ class ProfileFragment : Fragment(), LifecycleObserver {
                 Intent(
                     noneNullContext,
                     ChatActivity::class.java
+                )
+            )
+        }
+
+        binding.walletBtn.setOnClickListener {
+            startActivity(
+                Intent(
+                    noneNullContext,
+                    WalletActivity::class.java
                 )
             )
         }

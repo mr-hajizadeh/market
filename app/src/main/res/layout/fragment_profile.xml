@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/profile_bg"
+                android:background="@drawable/dark_bg"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -190,6 +190,48 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/walletBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/button_ripple_profile_menu"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    android:visibility="visible"
+                    tools:ignore="TouchTargetSizeCheck">
+
+                    <ImageView
+                        android:id="@+id/imageView1133"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/title_favorite"
+                        android:src="@drawable/ic_wallet"
+                        app:tint="@color/dark_gray" />
+
+                    <TextView
+                        android:id="@+id/textView1231"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:gravity="start|center_vertical"
+                        android:text="@string/title_wallet"
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:id="@+id/imageView1132"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/title_wallet"
+                        android:src="@drawable/ic_arrow_right"
+                        app:tint="@color/dark_gray" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/discountBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -309,48 +351,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:contentDescription="@string/title_orders"
-                        android:src="@drawable/ic_arrow_right"
-                        app:tint="@color/dark_gray" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/favoriteBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/button_ripple_profile_menu"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="8dp"
-                    android:visibility="gone"
-                    tools:ignore="TouchTargetSizeCheck">
-
-                    <ImageView
-                        android:id="@+id/imageView1133"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/title_favorite"
-                        android:src="@drawable/ic_favorite"
-                        app:tint="@color/dark_gray" />
-
-                    <TextView
-                        android:id="@+id/textView1231"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1"
-                        android:gravity="start|center_vertical"
-                        android:text="@string/title_favorite"
-                        android:textColor="@color/black" />
-
-                    <ImageView
-                        android:id="@+id/imageView1132"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/title_favorite"
                         android:src="@drawable/ic_arrow_right"
                         app:tint="@color/dark_gray" />
                 </LinearLayout>

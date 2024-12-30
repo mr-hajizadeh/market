@@ -12,5 +12,18 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        initViews()
+        onClickButtons()
     }
+
+    private fun initViews() {
+
+    }
+
+
+    private fun onClickButtons() {
+        binding.backBtn.setOnClickListener { finish() }
+    }
+
 }
