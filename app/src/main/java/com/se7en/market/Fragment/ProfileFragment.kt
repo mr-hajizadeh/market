@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleObserver
 import com.se7en.market.Activity.AddressActivity
+import com.se7en.market.Activity.ChatActivity
 import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Activity.ProfileActivity
 import com.se7en.market.Activity.Ui.LogoutBottomSheet
@@ -74,6 +75,15 @@ class ProfileFragment : Fragment(), LifecycleObserver {
                 Intent(
                     noneNullContext,
                     ProfileActivity::class.java
+                )
+            )
+        }
+
+        binding.supportBtn.setOnClickListener {
+            startActivity(
+                Intent(
+                    noneNullContext,
+                    ChatActivity::class.java
                 )
             )
         }

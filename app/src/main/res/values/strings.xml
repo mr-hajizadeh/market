@@ -92,6 +92,7 @@
     <string name="title_your_courier">پیک شما</string>
     <string name="title_your_address">آدرس شما</string>
     <string name="title_order_detail">جزئیات سفارش</string>
+    <string name="title_send_message">ارسال پیام</string>
 
     <string name="hint_search">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>
@@ -104,6 +105,7 @@
     <string name="hint_last_name">نام خانوادگی خود را وارد کنید</string>
     <string name="hint_email">ایمیل خود را وارد کنید</string>
     <string name="hint_discount_code">لطفا کد تخفیف خود را وارد کنید</string>
+    <string name="hint_message">پیام …</string>
 
 
     <string name="permission_denied_message">
