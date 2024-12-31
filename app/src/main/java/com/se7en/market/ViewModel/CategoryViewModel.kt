@@ -1,7 +1,6 @@
 package com.se7en.market.ViewModel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.se7en.market.Network.NetworkResult
@@ -24,7 +23,6 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
     fun loadActiveAddress() = preferencesRepository.loadActiveAddress()
 
     fun getGlobalCategoryItem(categoryInt: Int, latLon: Map<String, Double>) {
-        Log.i("TAG", "getGlobalCategoryItem: $token")
         _globalCategoryStatus.value = NetworkResult.Loading
         repository.getGlobalCategoryItem("Bearer $token", categoryInt, latLon)
             .enqueue(object : Callback<GlobalCategoryItem> {

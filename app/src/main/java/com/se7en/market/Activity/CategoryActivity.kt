@@ -2,6 +2,8 @@ package com.se7en.market.Activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +18,7 @@ import com.se7en.market.databinding.ActivityCategoryBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
 
+@Suppress("DEPRECATION")
 class CategoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCategoryBinding
@@ -75,14 +78,22 @@ class CategoryActivity : AppCompatActivity() {
     private fun getGlobalCategoryItem() {
         categoryViewModel.globalCategoryStatus.observe(this) { result ->
             when (result) {
-                is NetworkResult.Loading -> recyclerView.loadSkeleton()
+                is NetworkResult.Loading -> {
+                    recyclerView.loadSkeleton()
+                }
 
                 is NetworkResult.Success -> {
-                    recyclerView.hideSkeleton()
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+                            recyclerView.hideSkeleton()
+                        }, 1000
+                    )
                     Log.i(TAG, "getGlobalCategoryItem: ${result.response}")
-                    adapter = ShopWithProductAdapter(result.response.data, recyclerView)
+                    val shopList = result.response.data.filter { it.items.isNotEmpty() }
+                    adapter = ShopWithProductAdapter(shopList, recyclerView)
                     recyclerView.adapter = adapter
-                    getAllCart()
+                    recyclerView.post { getAllCart() }
+
                 }
 
                 is NetworkResult.Error -> {

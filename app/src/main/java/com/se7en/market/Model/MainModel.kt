@@ -16,7 +16,7 @@ data class ProductModel(
     var seller_id: Int = 0,
     var item_category_id: Int = 0,
     var title: String = "",
-    var description: String = "",
+    var description: String? = null,
     var amount: Long = 0,
     var off_percent: Int = 0,
     var image: List<String> = listOf(),
@@ -30,17 +30,21 @@ data class ProductModel(
     var cartDetail: CartDetailModel? = null,
 ) : ListItemModel, Parcelable {
     fun formatPriceToPersianAmount(): String {
+        val offPrice = ((off_percent.toDouble() / 100) * amount)
         val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
         val decimalFormat = DecimalFormat("#,###", decimalFormatSymbols)
-        val formattedPrice = decimalFormat.format(amount)
+        val formattedPrice = decimalFormat.format((amount - offPrice))
 
         val persianDigits = arrayOf("۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹")
         var persianPrice = formattedPrice
         for (i in 0..9) {
             persianPrice = persianPrice.replace(i.toString(), persianDigits[i])
         }
-
         return persianPrice
+    }
+
+    fun offPrice(): Double {
+        return amount - ((off_percent.toDouble() / 100) * amount)
     }
 }
 

@@ -89,8 +89,7 @@ class OrderDetailFragment : Fragment() {
                     requireActivity().finish()
                 totalProductPriceTxt.text = Helper.formatPriceToPersian(totalPrice)
                 profitTxt.text = Helper.formatPriceToPersian(profitPrice)
-                totalPriceTxt.text =
-                    Helper.formatPriceToPersian(if (profitPrice > 0) (totalPrice - profitPrice) else totalPrice)
+                totalPriceTxt.text = Helper.formatPriceToPersian(totalPrice)
             })
 
         ordersView.adapter = adapter

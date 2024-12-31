@@ -8,6 +8,7 @@ data class MainListModel(
     val title: String = "",
     val position: Int = 0,
     val color: Int = 0,
+    val icon: Int = 0,
     val viewType: ViewTypeModel = ViewTypeModel.HEADER_TYPE,
     val items: MutableList<ListItemModel> = mutableListOf(),
 ) : Parcelable

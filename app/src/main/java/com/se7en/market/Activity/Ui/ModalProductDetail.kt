@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -38,7 +37,6 @@ class ModalProductDetail(
 
     private val cartViewModel: CartViewModel by viewModels<CartViewModel>()
 
-    var aaaaa: ConstraintLayout? = null
     private lateinit var addBtn: Button
     private lateinit var discountPercentage: TextView
     private lateinit var existingMessage: TextView
@@ -76,7 +74,6 @@ class ModalProductDetail(
         discountPercentage = binding.percentTxt
         existingMessage = binding.existingMessageTxt
         loadingProgress = binding.loadingProgress
-        aaaaa = binding.bottomBarLayout
 
         discountPercentage.background = customShape
         addBtn.backgroundTintList = ColorStateList.valueOf(color)

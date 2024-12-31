@@ -140,7 +140,7 @@ class PayFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun calculate(cartDetail: MutableList<CartDetailModel>, courierFee: Int) {
-        val totalProductPrice = cartDetail.sumOf { it.item.amount * it.quantity }
+        val totalProductPrice = cartDetail.sumOf { it.item.offPrice() * it.quantity }.toLong()
 
         val productCount = cartDetail.sumOf { it.quantity }
 
@@ -149,7 +149,7 @@ class PayFragment : Fragment() {
         }
 
         val serviceCost = 3000L
-        val totalPrice = totalProductPrice - buyerProfit + serviceCost + courierFee
+        val totalPrice = totalProductPrice + serviceCost + courierFee
 
         binding.totalProductTxt.text =
             "${requireActivity().getString(R.string.title_total_items)} (${
@@ -157,7 +157,7 @@ class PayFragment : Fragment() {
             })"
         binding.totalProductPriceTxt.text = Helper.formatPriceToPersian(totalProductPrice)
         binding.profitTxt.text = Helper.formatPriceToPersian(buyerProfit)
-        binding.discountPriceTxt.text = Helper.formatPriceToPersian(buyerProfit)
+        binding.discountPriceTxt.text = Helper.formatPriceToPersian(0)
         binding.serviceCostPriceTxt.text = Helper.formatPriceToPersian(serviceCost)
         binding.totalPriceTxt.text = Helper.formatPriceToPersian(totalPrice)
     }

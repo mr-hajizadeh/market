@@ -123,20 +123,14 @@ class CartAdapter(
 
         for (cartDetail in items) {
             val originalPrice = cartDetail.item.amount * cartDetail.quantity
-            val discountAmount =
-                (cartDetail.item.amount * cartDetail.item.off_percent / 100) * cartDetail.quantity
+            val discountAmount = (cartDetail.item.offPrice() * cartDetail.quantity).toLong()
             val finalPrice = originalPrice - discountAmount
 
             totalWithoutDiscount += originalPrice
             totalWithDiscount += finalPrice
         }
 
-        val discountPercentage = if (totalWithoutDiscount > 0)
-            100 * (totalWithoutDiscount - totalWithDiscount) / totalWithoutDiscount
-        else
-            0
-
-        totalPrice?.invoke(totalWithDiscount, discountPercentage)
+        totalPrice?.invoke((totalWithoutDiscount - totalWithDiscount), totalWithDiscount)
     }
 
     class CartHolder(val binding: ViewHolderProductCartBinding) :
@@ -183,9 +177,9 @@ class CartAdapter(
                 productItem.amount,
                 context.getString(R.string.title_currency)
             )
-            val productPrice = productItem.amount * cartDetail.quantity
+            val productPrice = cartDetail.item.offPrice() * cartDetail.quantity
             binding.finalPriceTxt.text =
-                "${Helper.formatPriceToPersian(productPrice)} ${context.getString(R.string.title_currency)}"
+                "${Helper.formatPriceToPersian(productPrice.toLong())} ${context.getString(R.string.title_currency)}"
             percentView.visibility = if (productItem.off_percent > 0) View.VISIBLE else View.GONE
             percentView.text =
                 "%${CartActivity().convertToPersianNumbers(productItem.off_percent.toString())}"

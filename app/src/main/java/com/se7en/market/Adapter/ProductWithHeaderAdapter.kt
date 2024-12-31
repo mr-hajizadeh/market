@@ -31,7 +31,7 @@ import com.se7en.market.databinding.ViewHolderProductBinding
 class ProductWithHeaderAdapter(
     private val productList: MutableList<ListItemModel>,
     private val headerTitle: String = "",
-    private val headerIcon: Drawable? = null,
+    private val headerIcon: Int = 0,
     private val itemColor: Int,
     private val isHeaderEnable: Boolean = false,
     private val isMathParent: Boolean = false,
@@ -95,7 +95,7 @@ class ProductWithHeaderAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (isHeaderEnable && position == 0 && holder is HeaderViewHolder) {
             holder.headerTxt.text = headerTitle
-            holder.headerIcon.setImageDrawable(headerIcon)
+            holder.headerIcon.setImageResource(headerIcon)
             holder.headerLayout.background = customHeaderShape
         } else if (holder is ProductViewHolder) {
             val item = productList[if (isHeaderEnable) position - 1 else position] as ProductModel
@@ -232,7 +232,7 @@ class ProductWithHeaderAdapter(
             productBg.layoutParams = params
             with(product) {
                 productTitle.text = title
-                offLayout.visibility = if (off_percent > 0) View.VISIBLE else View.GONE
+                offLayout.visibility = if (off_percent > 0) View.VISIBLE else View.INVISIBLE
                 offPrice.text = Helper.getStrikethroughPriceWithCurrency(
                     amount,
                     ""

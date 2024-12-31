@@ -9,7 +9,7 @@
     android:adjustViewBounds="true"
     android:scaleType="fitXY"
     app:shapeAppearance="@style/roundedImageView"
-    app:srcCompat="@drawable/t1"
+    app:srcCompat="@drawable/logo"
     tools:adjustViewBounds="true">
 
 </com.google.android.material.imageview.ShapeableImageView>

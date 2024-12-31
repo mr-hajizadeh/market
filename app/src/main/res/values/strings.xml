@@ -96,6 +96,8 @@
     <string name="title_send_message">ارسال پیام</string>
     <string name="title_increase_credit">افزایش اعتبار</string>
     <string name="title_transactions_history">تاریخچه تراکنش ها</string>
+    <string name="title_popular">محبوب ترین ها</string>
+    <string name="title_offers">بیشترین تخفیف</string>
 
     <string name="hint_search">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>

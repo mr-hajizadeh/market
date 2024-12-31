@@ -25,7 +25,6 @@ import com.se7en.market.Adapter.SliderAdapter
 import com.se7en.market.Model.AddressModel
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.MainListModel
-import com.se7en.market.Model.ProductModel
 import com.se7en.market.Model.SliderModel
 import com.se7en.market.Model.ViewTypeModel
 import com.se7en.market.Network.NetworkResult
@@ -201,7 +200,6 @@ class HomeFragment : Fragment() {
             getMainList(response.data),
             false,
             containerView,
-            binding.homeFragmentContainer
         )
         containerView.adapter = containerAdapter
         getAllCarts()
@@ -242,57 +240,26 @@ class HomeFragment : Fragment() {
                     viewType = ViewTypeModel.CATEGORY_TYPE,
                     items = it as MutableList<ListItemModel>
                 )
+            },
+            data.offers.takeIf { it.isNotEmpty() }?.let {
+                MainListModel(
+                    title = getString(R.string.title_offers),
+                    position = 1,
+                    color = nonNullContext.getColor(R.color.orange),
+                    icon = R.drawable.ic_percent,
+                    viewType = ViewTypeModel.HEADER_TYPE,
+                    items = it as MutableList<ListItemModel>
+                )
+            },
+            data.populars.takeIf { it.isNotEmpty() }?.let {
+                MainListModel(
+                    title = getString(R.string.title_popular),
+                    position = 3,
+                    viewType = ViewTypeModel.ONE_ROW_TYPE,
+                    items = it as MutableList<ListItemModel>
+                )
             }
         ).sortedBy { it.position }.toMutableList()
-
-
-        val list: MutableList<ListItemModel> = mutableListOf(
-            ProductModel(1, off_percent = 40),
-            ProductModel(2, off_percent = 50),
-            ProductModel(3, off_percent = 10),
-            ProductModel(4, off_percent = 40),
-            ProductModel(5, off_percent = 20),
-            ProductModel(6, off_percent = 15),
-            ProductModel(7, off_percent = 35),
-            ProductModel(8, off_percent = 20),
-            ProductModel(9, off_percent = 5),
-            ProductModel(10, off_percent = 95),
-            ProductModel(11, off_percent = 70)
-        )
-        val list2: MutableList<ListItemModel> = mutableListOf(
-            ProductModel(1, off_percent = 40),
-            ProductModel(2, off_percent = 50),
-            ProductModel(3, off_percent = 10),
-            ProductModel(4, off_percent = 40),
-            ProductModel(5, off_percent = 20),
-            ProductModel(6, off_percent = 15),
-            ProductModel(7, off_percent = 35),
-            ProductModel(8, off_percent = 20),
-            ProductModel(9, off_percent = 5),
-            ProductModel(10, off_percent = 95),
-            ProductModel(11, off_percent = 70)
-        )
-        mainList.add(
-            MainListModel(
-                title = "title",
-                position = 1,
-                color = nonNullContext.getColor(R.color.orange),
-                viewType = ViewTypeModel.HEADER_TYPE,
-                items = list
-            )
-        )
-
-        mainList.add(
-            MainListModel(
-                title = "title2",
-                position = 3,
-                color = nonNullContext.getColor(R.color.green),
-                viewType = ViewTypeModel.ONE_ROW_TYPE,
-                items = list2
-            )
-        )
-
-        mainList.sortBy { it.position }
         return mainList
     }
 

@@ -204,8 +204,7 @@ class ShopActivity : BaseActivity() {
                 }, 1000)
                 mainList.sortBy { it.position }
                 containerAdapter =
-                    ContainerAdapter(mainList, true, shopMainView, binding.root)
-
+                    ContainerAdapter(mainList, true, shopMainView)
                 shopMainView.adapter = containerAdapter
                 getAllCart()
             }

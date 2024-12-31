@@ -14,6 +14,8 @@ import com.se7en.market.Model.ShopModel
 import com.se7en.market.R
 import com.se7en.market.Utils.CartManager
 import com.se7en.market.databinding.ViewHolderShopWithProductBinding
+import koleton.api.hideSkeleton
+import koleton.api.loadSkeleton
 
 class ShopWithProductAdapter(
     private val items: List<ShopModel>,
@@ -54,6 +56,7 @@ class ShopWithProductAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var adapter: ProductWithHeaderAdapter
+        var productView = binding.productView
 
         @Suppress("UNCHECKED_CAST")
         @SuppressLint("SetTextI18n")
@@ -71,12 +74,14 @@ class ShopWithProductAdapter(
             adapter = ProductWithHeaderAdapter(
                 (shop.items as MutableList<ListItemModel>),
                 "",
-                null,
+                0,
                 context.getColor(R.color.green),
                 false,
                 changeQuantityListener = CartManager
             )
-            binding.productView.adapter = adapter
+            productView.adapter = adapter
+            productView.loadSkeleton(R.layout.view_holder_product)
+            Handler(Looper.getMainLooper()).postDelayed({ productView.hideSkeleton() }, 1000)
         }
 
         fun syncCartWithProducts(newCartList: MutableList<CartModel>) {

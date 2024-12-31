@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,7 +17,6 @@ import com.se7en.market.Model.CartModel
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.MainListModel
 import com.se7en.market.Model.ViewTypeModel
-import com.se7en.market.R
 import com.se7en.market.Utils.CartManager
 import com.se7en.market.Utils.Constance.Companion.KEY_PRODUCT_LIST
 import com.se7en.market.Utils.Constance.Companion.KEY_SHOP
@@ -31,7 +29,6 @@ class ContainerAdapter(
     private val items: MutableList<MainListModel>,
     private val isVerticalGridLayout: Boolean,
     private val recyclerView: RecyclerView,
-    private val containerView: View,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
@@ -97,7 +94,6 @@ class ContainerAdapter(
     class ProductViewHolder(
         binding: ViewHolderProductListBinding,
         private val context: Context,
-        private val containerView: View,
         private val isGrid: Boolean = false,
         private val isHeaderEnable: Boolean = false,
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -105,9 +101,11 @@ class ContainerAdapter(
         private lateinit var adapter: ProductWithHeaderAdapter
         private val productView: RecyclerView = binding.productView
         private val moreBtn: TextView = binding.moreBtn
+        private val listTitle: TextView = binding.listTitle
 
         @SuppressLint("UseCompatLoadingForDrawables")
         fun bind(item: MainListModel) {
+            listTitle.text = item.title
             val layoutManager = if (isGrid) {
                 GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false).apply {
                     if (isHeaderEnable)
@@ -117,13 +115,13 @@ class ContainerAdapter(
                             }
                         }
                 }
-            } else {
+            } else
                 LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            }
+
             adapter = ProductWithHeaderAdapter(
                 item.items,
-                context.getString(R.string.title_recommended),
-                context.getDrawable(R.drawable.ic_favorite),
+                item.title,
+                item.icon,
                 item.color,
                 isHeaderEnable,
                 changeQuantityListener = CartManager,
@@ -194,7 +192,6 @@ class ContainerAdapter(
                         parent, false
                     ),
                     context,
-                    containerView,
                     isGrid = true,
                     isHeaderEnable = true
                 )
@@ -207,7 +204,6 @@ class ContainerAdapter(
                         parent, false
                     ),
                     context,
-                    containerView,
                     isGrid = true,
                     isHeaderEnable = false
                 )
@@ -220,7 +216,6 @@ class ContainerAdapter(
                         parent, false
                     ),
                     context,
-                    containerView,
                     isGrid = false,
                     isHeaderEnable = false
                 )

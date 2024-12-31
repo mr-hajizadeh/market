@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/roundedImageView"
-        app:srcCompat="@drawable/t1" />
+        app:srcCompat="@drawable/logo" />
 
     <TextView
         android:id="@+id/categoryTitleTxt"

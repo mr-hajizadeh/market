@@ -137,7 +137,7 @@ class ListActivity : BaseActivity() {
         adapter = ProductWithHeaderAdapter(
             (data as MutableList<ListItemModel>),
             "",
-            null,
+            0,
             color,
             false,
             isMathParent = true,
