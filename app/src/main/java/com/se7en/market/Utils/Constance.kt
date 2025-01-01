@@ -15,6 +15,7 @@ class Constance {
         const val KEY_SHOP = "shop"
         const val KEY_CATEGORY = "category"
         const val KEY_PRODUCT_LIST = "product_list"
+        const val KEY_SLIDER = "slider"
     }
 
 }

@@ -2,6 +2,7 @@ package com.se7en.market.Network
 
 import com.se7en.market.Model.AddressModel
 import com.se7en.market.Model.ReverseGeocoding
+import com.se7en.market.Model.SearchTags
 import com.se7en.market.Model.SliderModel
 import com.se7en.market.Model.UserModel
 import com.se7en.market.Response.Address.AddressList
@@ -17,6 +18,7 @@ import com.se7en.market.Response.Neshan.DistanceMatrixResponse
 import com.se7en.market.Response.OTP.Code
 import com.se7en.market.Response.OTP.Confirm
 import com.se7en.market.Response.OTP.Token
+import com.se7en.market.Response.Search.SearchResponse
 import com.se7en.market.Response.Seller.GetCategoryItems
 import com.se7en.market.Response.Seller.SellerCategories
 import com.se7en.market.Response.Seller.SellerItems
@@ -183,5 +185,12 @@ interface ApiService {
         @Path("cartId") cartId: Int,
         @Path("itemId") itemId: Int,
     ): Call<GetCartDetails>
+
+    @Headers("Accept: application/json")
+    @POST("/api/v1/customer/search/items")
+    fun globalItemSearch(
+        @Header("Authorization") token: String,
+        @Body tags: SearchTags
+    ): Call<SearchResponse>
 
 }

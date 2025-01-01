@@ -130,6 +130,7 @@
 
     <string name="message_cart">می توانید از صفحه خانه از فروشگاه های اطراف خود خرید کنید.</string>
     <string name="message_logout">کاربر عزیز مطمئنید میخواهید خارج شوید؟</string>
+    <string name="message_not_found_data">موردی یافت نشد!</string>
 
     <string name="title_hint">عنوان</string>
     <string name="hint_address">استان خراسان رضوی، شهر مشهد، مقداد 28، پلاک 32</string>

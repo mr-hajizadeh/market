@@ -3,6 +3,8 @@ package com.se7en.market.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,14 +16,19 @@ import com.se7en.market.Model.CategoryModel
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.MainListModel
 import com.se7en.market.Model.ProductModel
+import com.se7en.market.Model.SearchTags
 import com.se7en.market.Model.ShopModel
+import com.se7en.market.Model.SliderModel
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.R
 import com.se7en.market.Utils.CartManager
 import com.se7en.market.Utils.Constance.Companion.KEY_CATEGORY
 import com.se7en.market.Utils.Constance.Companion.KEY_PRODUCT_LIST
 import com.se7en.market.Utils.Constance.Companion.KEY_SHOP
+import com.se7en.market.Utils.Constance.Companion.KEY_SLIDER
+import com.se7en.market.ViewModel.AddressViewModel
 import com.se7en.market.ViewModel.CartViewModel
+import com.se7en.market.ViewModel.SearchViewModel
 import com.se7en.market.ViewModel.ShopViewModel
 import com.se7en.market.databinding.ActivityListBinding
 import koleton.api.hideSkeleton
@@ -32,10 +39,13 @@ class ListActivity : BaseActivity() {
     private lateinit var binding: ActivityListBinding
     private lateinit var titleTxt: TextView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyLayout: LinearLayout
     private lateinit var adapter: ProductWithHeaderAdapter
 
     private val cartViewModel: CartViewModel by viewModels<CartViewModel>()
     private val shopViewModel: ShopViewModel by viewModels<ShopViewModel>()
+    private val searchViewModel: SearchViewModel by viewModels<SearchViewModel>()
+    private val addressViewModel: AddressViewModel by viewModels<AddressViewModel>()
 
     @Suppress("DEPRECATION", "UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,16 +56,17 @@ class ListActivity : BaseActivity() {
         initViews()
         buttonsClick()
         getCategoryItemsListener()
+        globalSearch()
 
         val categoryData: CategoryModel? = intent.getParcelableExtra(KEY_CATEGORY)
         val mainListModel: MainListModel? = intent.getParcelableExtra(KEY_PRODUCT_LIST)
         val shopModel: ArrayList<ShopModel>? = intent.getParcelableArrayListExtra(KEY_SHOP)
+        val slider: SliderModel? = intent.getParcelableExtra(KEY_SLIDER)
 
         when {
             categoryData != null -> {
                 titleTxt.text = categoryData.title
                 shopViewModel.getCategoryItems(categoryData.id)
-                recyclerView.loadSkeleton(R.layout.view_holder_product)
             }
 
             mainListModel != null -> {
@@ -66,12 +77,16 @@ class ListActivity : BaseActivity() {
                 )
                 window.statusBarColor = mainListModel.color
                 recyclerView.hideSkeleton()
-
             }
 
             shopModel != null -> {
                 titleTxt.text = getString(R.string.title_near_shop)
                 initShopRecyclerView(shopModel)
+            }
+
+            slider != null -> {
+                searchRequest(slider.tags)
+                titleTxt.text = slider.title
             }
         }
 
@@ -81,6 +96,9 @@ class ListActivity : BaseActivity() {
 
         recyclerView = binding.containerView
         titleTxt = binding.titleTxt
+        emptyLayout = binding.emptyLayout
+
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
     }
 
     private fun buttonsClick() {
@@ -100,7 +118,7 @@ class ListActivity : BaseActivity() {
     private fun getCategoryItemsListener() {
         shopViewModel.categoryItemStatus.observe(this) { result ->
             when (result) {
-                is NetworkResult.Loading -> {}
+                is NetworkResult.Loading -> recyclerView.loadSkeleton()
 
                 is NetworkResult.Success -> {
                     recyclerView.hideSkeleton()
@@ -124,7 +142,11 @@ class ListActivity : BaseActivity() {
                     adapter.syncCartWithProducts(result.response.data)
                 }
 
-                is NetworkResult.Error -> {}
+                is NetworkResult.Error -> {
+                    recyclerView.hideSkeleton()
+                    emptyLayout.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                }
             }
         }
     }
@@ -153,6 +175,45 @@ class ListActivity : BaseActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = ShopAdapter(shopList.toMutableList())
     }
+
+    private fun globalSearch() {
+        searchViewModel.searchStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> recyclerView.loadSkeleton()
+                is NetworkResult.Success -> {
+                    val data = result.response.data
+                    if (data.isNotEmpty()) {
+                        initProductRecyclerView(result.response.data)
+                    } else {
+                        emptyLayout.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
+                    }
+                    recyclerView.hideSkeleton()
+                }
+
+                is NetworkResult.Error -> {
+                    Log.i(TAG, "globalSearch: ${result.message}")
+                    recyclerView.hideSkeleton()
+                    emptyLayout.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun searchRequest(tags: List<String>) {
+        addressViewModel.getActiveAddress().observe(this) { address ->
+            if (address != null)
+                searchViewModel.globalSearch(SearchTags(tags, address.latitude, address.longitude))
+            else {
+                startActivity(
+                    Intent(this, MapActivity::class.java)
+                )
+                finish()
+            }
+        }
+    }
+
 
     companion object {
         private const val TAG = "ProductListActivity"
