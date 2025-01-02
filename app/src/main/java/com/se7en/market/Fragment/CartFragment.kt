@@ -15,6 +15,7 @@ import com.se7en.market.Adapter.ShopOrderAdapter
 import com.se7en.market.Model.CartModel
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.R
+import com.se7en.market.Utils.Constance.Companion.KEY_ID
 import com.se7en.market.ViewModel.CartViewModel
 import com.se7en.market.databinding.FragmentCartBinding
 import koleton.api.hideSkeleton
@@ -56,7 +57,9 @@ class CartFragment : Fragment() {
             deleteCart(cartId, position)
         }, { cart: CartModel ->
             cartViewModel.getCartDetails(cart.id)
-            startActivity(Intent(context, CartActivity::class.java))
+            val intent = Intent(context, CartActivity::class.java)
+            intent.putExtra(KEY_ID, cart.id)
+            startActivity(intent)
         })
         cartView.adapter = orderAdapter
     }

@@ -13,5 +13,7 @@ data class CartDetailModel(
     var quantity: Int = 0,
     var created_at: String = "",
     var updated_at: String = "",
+    var total_price: Long = 0,
+    var final_price: Long = 0,
     var item: ProductModel = ProductModel(),
 ) : Parcelable

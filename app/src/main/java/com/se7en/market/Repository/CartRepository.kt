@@ -169,4 +169,57 @@ class CartRepository {
         return decrementItemStatus
     }
 
+    fun setDiscountCode(
+        token: String,
+        cartId: Int,
+        mapData: Map<String, String>
+    ): MutableLiveData<NetworkResult<GetCartDetails>> {
+
+        val discountCode = MutableLiveData<NetworkResult<GetCartDetails>>()
+        discountCode.value = NetworkResult.Loading
+        RetrofitService.apiService().setDiscountCode(token, cartId, mapData)
+            .enqueue(object : Callback<GetCartDetails> {
+                override fun onResponse(
+                    call: Call<GetCartDetails>,
+                    response: Response<GetCartDetails>
+                ) {
+                    if (response.isSuccessful && response.body() != null)
+                        discountCode.value = NetworkResult.Success(response.body()!!)
+                }
+
+                override fun onFailure(call: Call<GetCartDetails>, t: Throwable) {
+                    discountCode.value = NetworkResult.Error("Error ${t.message}")
+                }
+            })
+
+        return discountCode
+
+    }
+
+    fun unsetDiscountCode(
+        token: String,
+        cartId: Int,
+    ): MutableLiveData<NetworkResult<GetCartDetails>> {
+
+        val discountCode = MutableLiveData<NetworkResult<GetCartDetails>>()
+        discountCode.value = NetworkResult.Loading
+        RetrofitService.apiService().unsetDiscountCode(token, cartId)
+            .enqueue(object : Callback<GetCartDetails> {
+                override fun onResponse(
+                    call: Call<GetCartDetails>,
+                    response: Response<GetCartDetails>
+                ) {
+                    if (response.isSuccessful && response.body() != null)
+                        discountCode.value = NetworkResult.Success(response.body()!!)
+                }
+
+                override fun onFailure(call: Call<GetCartDetails>, t: Throwable) {
+                    discountCode.value = NetworkResult.Error("Error ${t.message}")
+                }
+            })
+
+        return discountCode
+
+    }
+
 }

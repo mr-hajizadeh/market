@@ -76,6 +76,7 @@
     <string name="title_wallet_payment">پرداخت با کیف پول</string>
     <string name="title_on_site_payment">پرداخت در محل</string>
     <string name="title_submit_discount_code">اعمال کد</string>
+    <string name="title_remove_discount_code">حذف کد</string>
     <string name="title_service_cost">هزینه خدمات</string>
     <string name="title_total_items">مجموع خرید شما</string>
     <string name="title_profit">سود شما از این خرید</string>

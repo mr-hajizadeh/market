@@ -7,6 +7,7 @@
     android:background="@color/primary_gray"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:layoutDirection="rtl"
     tools:context=".Fragment.PayFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -81,6 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
+                android:layoutDirection="rtl"
                 tools:visibility="gone">
 
                 <ImageView
@@ -134,6 +136,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
+                android:layoutDirection="rtl"
                 tools:visibility="gone">
 
                 <ImageView
@@ -213,7 +216,9 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
 
-                tools:visibility="gone">
+                android:animateLayoutChanges="true"
+                android:layoutDirection="rtl"
+                tools:visibility="visible">
 
                 <ImageView
                     android:id="@+id/percentImg"
@@ -245,6 +250,7 @@
                     android:background="@null"
                     android:ems="10"
                     android:fontFamily="@font/vazir"
+                    android:gravity="right"
                     android:hint="@string/hint_discount_code"
                     android:inputType="text"
                     android:lines="1"
@@ -263,12 +269,30 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/submitDiscountBtn"
                     style="@style/SmallMaterialButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="@string/title_submit_discount_code"
                     app:layout_constraintBottom_toBottomOf="@+id/discountCodeEdt"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/discountCodeEdt" />
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_margin="8dp"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:indicatorColor="@color/orange"
+                    app:indicatorSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/submitDiscountBtn"
+                    app:layout_constraintEnd_toEndOf="@+id/submitDiscountBtn"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/discountCodeEdt"
+                    app:layout_constraintTop_toTopOf="@+id/submitDiscountBtn"
+                    app:trackThickness="1dp"
+                    tools:indicatorSize="1dp" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -284,7 +308,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:layoutDirection="rtl">
 
                 <ImageView
                     android:id="@+id/paymentIcon"
@@ -327,6 +352,7 @@
                         android:checked="true"
                         android:clickable="true"
                         android:focusable="true"
+                        android:layoutDirection="rtl"
                         android:padding="8dp"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="16dp">
@@ -390,6 +416,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
+                            android:layoutDirection="rtl"
                             android:orientation="horizontal"
                             android:padding="8dp"
                             android:tag="@string/title_wallet_payment">
@@ -445,6 +472,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
+                            android:layoutDirection="rtl"
                             android:orientation="horizontal"
                             android:padding="8dp"
                             android:tag="@string/title_on_site_payment">
@@ -503,6 +531,7 @@
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layoutDirection="rtl"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -521,12 +550,14 @@
 
                 <TextView
                     android:id="@+id/totalProductTxt"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="8dp"
+                    android:gravity="right"
                     android:text="مجموع خرید شما (5 کالا)"
                     app:layout_constraintEnd_toStartOf="@+id/totalProductPriceTxt"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView30" />
 
@@ -535,7 +566,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
-                    android:text="170,000"
+                    android:text="100,000"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="@+id/totalProductTxt"
                     app:layout_constraintEnd_toStartOf="@+id/textView19"
@@ -567,6 +598,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/title_currency"
                     android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/serviceCostPriceTxt"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/serviceCostPriceTxt" />
@@ -593,12 +625,14 @@
 
                 <TextView
                     android:id="@+id/textView34"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
+                    android:gravity="right"
                     android:text="@string/title_profit"
                     app:layout_constraintEnd_toStartOf="@+id/profitTxt"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/totalProductTxt" />
 
@@ -607,7 +641,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
-                    android:text="5,000"
+                    android:text="100,000"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="@+id/textView34"
                     app:layout_constraintEnd_toStartOf="@+id/textView33"
@@ -615,12 +649,14 @@
 
                 <TextView
                     android:id="@+id/textView36"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
+                    android:gravity="right"
                     android:text="@string/title_discount_code"
                     app:layout_constraintEnd_toStartOf="@+id/discountPriceTxt"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView34" />
 
@@ -629,7 +665,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="4dp"
-                    android:text="0"
+                    android:text="100,000"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="@+id/textView36"
                     app:layout_constraintEnd_toStartOf="@+id/textView43"
@@ -642,6 +678,7 @@
                     android:layout_marginEnd="4dp"
                     android:text="3,000"
                     android:textColor="@color/black"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/textView44"
                     app:layout_constraintEnd_toStartOf="@+id/textView41"
                     app:layout_constraintTop_toTopOf="@+id/textView44" />
@@ -653,6 +690,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:text="@string/title_service_cost"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toStartOf="@+id/serviceCostPriceTxt"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView36" />
@@ -666,16 +704,18 @@
                     app:layout_constraintBottom_toBottomOf="@+id/textView42"
                     app:layout_constraintEnd_toStartOf="@+id/courierFeeCurrencyTxt"
                     app:layout_constraintTop_toTopOf="@+id/textView42"
-                    tools:text="رایگان" />
+                    tools:text="100,000" />
 
                 <TextView
                     android:id="@+id/textView42"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
+                    android:gravity="right"
                     android:text="@string/title_send_cost"
                     app:layout_constraintEnd_toStartOf="@+id/courierFeeTxt"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView44" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -702,7 +742,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/totalPriceTxt"
+            android:id="@+id/finalPriceTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
@@ -720,9 +760,9 @@
             android:layout_height="wrap_content"
             android:text="@string/title_currency"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-            app:layout_constraintBottom_toBottomOf="@+id/totalPriceTxt"
+            app:layout_constraintBottom_toBottomOf="@+id/finalPriceTxt"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/totalPriceTxt" />
+            app:layout_constraintTop_toTopOf="@+id/finalPriceTxt" />
 
         <TextView
             android:id="@+id/textView27"
@@ -730,7 +770,7 @@
             android:layout_height="wrap_content"
             android:text="@string/title_total_price"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-            app:layout_constraintBottom_toTopOf="@+id/totalPriceTxt"
+            app:layout_constraintBottom_toTopOf="@+id/finalPriceTxt"
             app:layout_constraintEnd_toEndOf="@+id/currencyTxt"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

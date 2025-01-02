@@ -193,4 +193,19 @@ interface ApiService {
         @Body tags: SearchTags
     ): Call<SearchResponse>
 
+    @Headers("Accept: application/json")
+    @POST("/api/v1/customer/card/{cartId}/discount/set")
+    fun setDiscountCode(
+        @Header("Authorization") token: String,
+        @Path("cartId") cartId: Int,
+        @Body mapData: Map<String, String>
+    ): Call<GetCartDetails>
+
+    @Headers("Accept: application/json")
+    @POST("/api/v1/customer/card/{cartId}/discount/unset")
+    fun unsetDiscountCode(
+        @Header("Authorization") token: String,
+        @Path("cartId") cartId: Int
+    ): Call<GetCartDetails>
+
 }

@@ -39,4 +39,10 @@ class CartViewModel(application: Application) : AndroidViewModel(application) {
             return it
         }
 
+    fun setDiscountCode(cartId: Int, mapData: Map<String, String>) =
+        repository.setDiscountCode("Bearer $token", cartId, mapData)
+
+    fun unsetDiscountCode(cartId: Int) =
+        repository.unsetDiscountCode("Bearer $token", cartId)
+
 }
