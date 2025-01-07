@@ -35,7 +35,6 @@ import com.se7en.market.databinding.FragmentPayBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
 
-
 class PayFragment : Fragment() {
 
     private var _binding: FragmentPayBinding? = null

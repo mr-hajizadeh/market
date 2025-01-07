@@ -169,7 +169,6 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                             editTexts[editTexts.indexOf(
                                 it
                             ) + 1].requestFocus()
-//                        if (validateEditText(editTexts)) loginIntent()
                         if (!isChange) {
                             isChange = true
                             val convertedText = convertToPersianNumbers(s.toString())
@@ -289,24 +288,6 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
         } else {
             loginBtn?.isEnabled = true
             progressLoading.visibility = View.GONE
-        }
-    }
-
-    private fun otpCodeListener() {
-        viewModel.codeStatus.observe(this) { result ->
-            when (result) {
-                is NetworkResult.Loading -> {}
-                is NetworkResult.Success -> {
-                    Log.i("TAG", "otpCodeListener: ${result.response}")
-                    populateVerificationCode(result.response.data.code)
-                    Log.i("TAG", "otpCodeListener token: $token")
-                    viewModel.confirmCode(token, result.response.data.code)
-                }
-
-                is NetworkResult.Error -> {
-                    Log.i("TAG", "otpCodeListener: ${result.message}")
-                }
-            }
         }
     }
 
