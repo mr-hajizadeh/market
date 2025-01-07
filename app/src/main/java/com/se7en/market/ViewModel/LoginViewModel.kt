@@ -80,9 +80,11 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                     override fun onResponse(call: Call<Confirm>, response: Response<Confirm>) {
                         if (response.isSuccessful && response.body()?.status == "success")
                             _confirmStatus.value = NetworkResult.Success(response.body()!!)
-                        else
+                        else if (response.body()?.status == "fail")
                             _confirmStatus.value =
-                                NetworkResult.Error(response.body()?.errors?.get(0)!!.toString())
+                                response.body()?.errors?.let {
+                                    NetworkResult.Error(it[0])
+                                }
                     }
 
                     override fun onFailure(call: Call<Confirm>, t: Throwable) {

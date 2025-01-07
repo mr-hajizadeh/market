@@ -12,6 +12,7 @@ import com.se7en.market.Response.Cart.CreateOrAddToCart
 import com.se7en.market.Response.Cart.DeleteCart
 import com.se7en.market.Response.Cart.GetAllCarts
 import com.se7en.market.Response.Cart.GetCartDetails
+import com.se7en.market.Response.Cart.PaymentResponse
 import com.se7en.market.Response.Home.GlobalCategoryItem
 import com.se7en.market.Response.Home.HomeResponse
 import com.se7en.market.Response.Neshan.DistanceMatrixResponse
@@ -207,5 +208,13 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("cartId") cartId: Int
     ): Call<GetCartDetails>
+
+    @Headers("Accept: application/json")
+    @POST("/api/v1/customer/payment/{cartId}")
+    fun payment(
+        @Header("Authorization") token: String,
+        @Path("cartId") cartId: Int,
+        @Body mapData: Map<String, String>
+    ): Call<PaymentResponse>
 
 }

@@ -45,4 +45,6 @@ class CartViewModel(application: Application) : AndroidViewModel(application) {
     fun unsetDiscountCode(cartId: Int) =
         repository.unsetDiscountCode("Bearer $token", cartId)
 
+    fun payment(cartId: Int) =
+        repository.payment("Bearer $token", cartId)
 }

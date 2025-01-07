@@ -8,6 +8,7 @@ import com.se7en.market.Response.Cart.CreateOrAddToCart
 import com.se7en.market.Response.Cart.DeleteCart
 import com.se7en.market.Response.Cart.GetAllCarts
 import com.se7en.market.Response.Cart.GetCartDetails
+import com.se7en.market.Response.Cart.PaymentResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -90,6 +91,8 @@ class CartRepository {
                     call: Call<GetCartDetails>,
                     response: Response<GetCartDetails>,
                 ) {
+                    if (response.code() == 404)
+                        _cartDetailStatus.value = NetworkResult.Error("fail")
                     if (response.isSuccessful && response.body()?.status == "success")
                         _cartDetailStatus.value = NetworkResult.Success(response.body()!!)
                 }
@@ -220,6 +223,32 @@ class CartRepository {
 
         return discountCode
 
+    }
+
+    fun payment(token: String, cartId: Int): MutableLiveData<NetworkResult<PaymentResponse>> {
+        val paymentStatus = MutableLiveData<NetworkResult<PaymentResponse>>()
+        paymentStatus.value = NetworkResult.Loading
+        RetrofitService.apiService().payment(
+            token,
+            cartId,
+            mapOf("receiver_name" to "حاجی", "receiver_phone" to "09379871359")
+        )
+            .enqueue(object : Callback<PaymentResponse> {
+                override fun onResponse(
+                    call: Call<PaymentResponse>,
+                    response: Response<PaymentResponse>
+                ) {
+                    if (response.isSuccessful)
+                        paymentStatus.value = NetworkResult.Success(response.body()!!)
+                    else
+                        paymentStatus.value = NetworkResult.Error("Error")
+                }
+
+                override fun onFailure(call: Call<PaymentResponse>, t: Throwable) {
+                    paymentStatus.value = NetworkResult.Error("Error ${t.message}")
+                }
+            })
+        return paymentStatus
     }
 
 }

@@ -7,8 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.JavascriptInterface
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
@@ -30,6 +35,7 @@ import com.se7en.market.databinding.FragmentPayBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
 
+
 class PayFragment : Fragment() {
 
     private var _binding: FragmentPayBinding? = null
@@ -42,7 +48,9 @@ class PayFragment : Fragment() {
     private lateinit var walletPay: MaterialCardView
     private lateinit var sitePay: MaterialCardView
     private lateinit var submitDiscountBtn: Button
+    private lateinit var paymentBtn: Button
     private lateinit var discountCodeEdt: EditText
+    private lateinit var webView: WebView
 
     private var cards: List<MaterialCardView> = emptyList()
     private var discountCodeStatus = MutableLiveData<Boolean>().apply { value = false }
@@ -72,7 +80,9 @@ class PayFragment : Fragment() {
         walletPay = binding.walletPaymentCard
         sitePay = binding.sitePaymentCard
         submitDiscountBtn = binding.submitDiscountBtn
+        paymentBtn = binding.paymentBtn
         discountCodeEdt = binding.discountCodeEdt
+        webView = binding.webView
         cards = listOf(onlinePay, walletPay, sitePay)
 
         val placeAddress = binding.placeAddressTxt
@@ -91,6 +101,10 @@ class PayFragment : Fragment() {
                     requireActivity().getString(R.string.title_submit_discount_code)
                 discountCodeEdt.text.clear()
             }
+        }
+
+        paymentBtn.setOnClickListener {
+            payment(cartId)
         }
 
     }
@@ -237,6 +251,11 @@ class PayFragment : Fragment() {
                     binding.linearLayout.hideSkeleton()
                     binding.bottomBarLayout.hideSkeleton()
                     Log.i(TAG, "getCartDetail: Error ${result.message}")
+                    if (result.message == "fail") {
+                        cartViewModel.getAllCarts()
+                        requireActivity().finish()
+                    }
+
                 }
             }
         }
@@ -292,9 +311,83 @@ class PayFragment : Fragment() {
         }
     }
 
+    private fun payment(cartId: Int) {
+        cartViewModel.payment(cartId).observe(requireActivity()) { result ->
+            when (result) {
+                is NetworkResult.Loading -> paymentLoading(true)
+
+                is NetworkResult.Success -> {
+                    paymentLoading(false)
+                    showWebView(result.response.data.payment_url.action)
+                }
+
+                is NetworkResult.Error -> {
+                    paymentLoading(false)
+                }
+            }
+        }
+    }
+
     private fun discountLoading(isLoading: Boolean = false) {
         binding.progress.visibility = if (isLoading) View.VISIBLE else View.GONE
         submitDiscountBtn.isEnabled = !isLoading
+    }
+
+    private fun paymentLoading(isLoading: Boolean = false) {
+        binding.loadingProgress.visibility = if (isLoading) View.VISIBLE else View.GONE
+        paymentBtn.isEnabled = !isLoading
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun showWebView(redirectUrl: String) {
+        webView.visibility = View.VISIBLE
+        binding.appbar.visibility = View.GONE
+        binding.nestedScrollView.visibility = View.GONE
+        binding.bottomBarLayout.visibility = View.GONE
+
+        webView.settings.javaScriptEnabled = true
+        webView.settings.javaScriptEnabled = true
+        webView.addJavascriptInterface(object {
+            @JavascriptInterface
+            fun exitWebView() {
+                requireActivity().runOnUiThread {
+                    webView.visibility = View.GONE
+                    binding.appbar.visibility = View.VISIBLE
+                    binding.nestedScrollView.visibility = View.VISIBLE
+                    binding.bottomBarLayout.visibility = View.VISIBLE
+                    getCartDetail()
+                }
+            }
+        }, "Android")
+
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                val url = request?.url.toString()
+                when {
+                    url.contains("payment/success") -> {
+                        Toast.makeText(
+                            requireActivity(),
+                            "پرداخت با موفقیت انجام شد",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    url.contains("payment/failure") -> {
+                        Toast.makeText(
+                            requireActivity(),
+                            "پرداخت انجام نشد",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                return super.shouldOverrideUrlLoading(view, request)
+            }
+        }
+        webView.loadUrl(redirectUrl)
+
     }
 
     companion object {
