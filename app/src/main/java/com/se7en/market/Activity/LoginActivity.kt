@@ -71,6 +71,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
 //        otpCodeListener()
         confirmCodeListener()
 //        val helper = Helper(this)
+//        Toast.makeText(this, helper.appSignatures.toString(), Toast.LENGTH_LONG).show()
 //        Log.i("TAG", "appSignatures: ${helper.appSignatures}")
     }
 

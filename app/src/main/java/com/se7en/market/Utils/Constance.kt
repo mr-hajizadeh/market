@@ -17,6 +17,7 @@ class Constance {
         const val KEY_PRODUCT_LIST = "product_list"
         const val KEY_SLIDER = "slider"
         const val KEY_ID = "id"
+        const val LABEL_DISCOUNT = "discount"
     }
 
 }

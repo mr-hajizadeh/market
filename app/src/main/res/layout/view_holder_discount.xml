@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Elevated"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/white_bg"
+    android:elevation="2dp"
+    android:layoutDirection="rtl"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/discountTitleTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:gravity="right"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        app:layout_constraintEnd_toStartOf="@+id/discountAmountTxt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_absoluteHeight="24dp"
+        tools:layout_conversion_absoluteWidth="61dp" />
+
+    <TextView
+        android:id="@+id/discountDescriptionTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        app:layout_constraintStart_toStartOf="@+id/discountTitleTxt"
+        app:layout_constraintTop_toBottomOf="@+id/discountTitleTxt"
+        tools:layout_conversion_absoluteHeight="21dp"
+        tools:layout_conversion_absoluteWidth="53dp" />
+
+    <TextView
+        android:id="@+id/discountAmountTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100,000"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/discountTitleTxt" />
+
+    <TextView
+        android:id="@+id/expireDateTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/gray_bg"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:text="قابل استفاده تا تاریخ 1403/10/30 "
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/discountDescriptionTxt"
+        app:layout_constraintTop_toBottomOf="@+id/discountDescriptionTxt"
+        tools:layout_conversion_absoluteHeight="32dp"
+        tools:layout_conversion_absoluteWidth="218dp" />
+
+    <TextView
+        android:id="@+id/allowedTimesTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/gray_bg"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:text="1 بار استفاده"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/expireDateTxt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/expireDateTxt"
+        app:layout_constraintTop_toTopOf="@+id/expireDateTxt"
+        tools:layout_conversion_absoluteHeight="32dp"
+        tools:layout_conversion_absoluteWidth="90dp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/discount_bg"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expireDateTxt"
+        tools:layout_conversion_absoluteHeight="64dp"
+        tools:layout_conversion_absoluteWidth="379dp">
+
+        <TextView
+            android:id="@+id/discountCodeTxt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:background="@drawable/white_bg"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="K7HCSF" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/copyBtn"
+            style="@style/Widget.Material3.Button.TextButton.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="0.5"
+            android:text="@string/title_copy"
+            app:icon="@drawable/ic_copy" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

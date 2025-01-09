@@ -1,12 +1,14 @@
 package com.se7en.market.Activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.R
+import com.se7en.market.Utils.Helper
 import com.se7en.market.ViewModel.CartViewModel
 import com.se7en.market.databinding.ActivityMainBinding
 
@@ -27,6 +29,9 @@ class MainActivity : BaseActivity() {
         NavigationUI.setupWithNavController(navView, navController)
 
         setCartBadge()
+
+        val helper = Helper(this)
+        Log.i("TAG", "appSignatures: ${helper.appSignatures}")
     }
 
     private fun setCartBadge() {

@@ -17,7 +17,6 @@ import android.util.Log
 import android.util.TypedValue
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Arrays
@@ -47,11 +46,14 @@ class Helper(val context: Context) {
                 else
                     packageInfo.signatures
 
-                signatures
-                    ?.mapNotNull { hash(packageName, it.toCharsString()) }
-                    ?.mapTo(appCodes) { String.format("%s", it) }
+                signatures?.forEach { signature ->
+                    val hash = hash(packageName, signature.toCharsString())
+                    if (hash != null) {
+                        appCodes.add(hash)
+                    }
+                }
             } catch (e: PackageManager.NameNotFoundException) {
-                Log.v(TAG, "Unable to find package to obtain hash.", e)
+                Log.e(TAG, "Unable to find package to obtain hash.", e)
             }
 
             return appCodes
@@ -64,28 +66,28 @@ class Helper(val context: Context) {
         private const val NUM_BASE64_CHAR = 11
 
         private fun hash(packageName: String, signature: String): String? {
+            if (packageName.isBlank() || signature.isBlank()) {
+                Log.e(TAG, "Invalid packageName or signature")
+                return null
+            }
+
             val appInfo = "$packageName $signature"
-            try {
+            return try {
                 val messageDigest = MessageDigest.getInstance(HASH_TYPE)
                 messageDigest.update(appInfo.toByteArray(StandardCharsets.UTF_8))
                 var hashSignature = messageDigest.digest()
 
                 hashSignature = Arrays.copyOfRange(hashSignature, 0, NUM_HASHED_BYTES)
 
-                var base64Hash =
-                    Base64.encodeToString(hashSignature, Base64.NO_PADDING or Base64.NO_WRAP)
+                var base64Hash = Base64.encodeToString(hashSignature, Base64.NO_PADDING or Base64.NO_WRAP)
                 base64Hash = base64Hash.substring(0, NUM_BASE64_CHAR)
 
-                Log.v(
-                    TAG + "sms_sample_test",
-                    String.format("pkg: %s -- hash: %s", packageName, base64Hash)
-                )
-                return base64Hash
-            } catch (e: NoSuchAlgorithmException) {
-                Log.v(TAG + "sms_sample_test", "hash:NoSuchAlgorithm", e)
+                Log.v(TAG, "pkg: $packageName -- hash: $base64Hash")
+                base64Hash
+            } catch (e: Exception) {
+                Log.e(TAG, "Error generating hash", e)
+                null
             }
-
-            return null
         }
 
         fun formatPriceToPersian(price: Long): String {

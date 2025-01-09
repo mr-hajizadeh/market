@@ -23,14 +23,21 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
 
             when (status.statusCode) {
                 CommonStatusCodes.SUCCESS -> {
-                    val otp: String = extras.get(SmsRetriever.EXTRA_SMS_MESSAGE) as String
-                    Log.d("OTP_Message", otp)
+                    val smsMessage: String = extras.get(SmsRetriever.EXTRA_SMS_MESSAGE) as String
+                    Log.d("OTP_Message", smsMessage)
+
                     try {
                         if (::otpReceiver.isInitialized) {
-                            val processedOtp = otp.replace("<#> ", "").split("\n".toRegex())
-                                .dropLastWhile { it.isEmpty() }.toTypedArray()[0]
-                            Log.i("TAG", "onReceive: $processedOtp")
-                            otpReceiver.onOTPReceived(processedOtp)
+                            val otpRegex = Regex("کد تایید شما: (\\d{5})")
+                            val matchResult = otpRegex.find(smsMessage)
+                            val processedOtp = matchResult?.groups?.get(1)?.value
+
+                            if (!processedOtp.isNullOrBlank()) {
+                                Log.i("TAG", "onReceive: OTP extracted: $processedOtp")
+                                otpReceiver.onOTPReceived(processedOtp)
+                            } else {
+                                Log.e("SmsBroadcastReceiver", "OTP not found in message")
+                            }
                         } else {
                             Log.e("SmsBroadcastReceiver", "otpReceiver is not initialized")
                         }
@@ -49,7 +56,6 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
             }
         }
     }
-
 
     interface OTPReceiveListener {
 

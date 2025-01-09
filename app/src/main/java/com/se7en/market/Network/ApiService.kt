@@ -11,6 +11,7 @@ import com.se7en.market.Response.Address.StoreAddress
 import com.se7en.market.Response.Cart.CreateOrAddToCart
 import com.se7en.market.Response.Cart.DeleteCart
 import com.se7en.market.Response.Cart.GetAllCarts
+import com.se7en.market.Response.Cart.GetAllDiscountCodes
 import com.se7en.market.Response.Cart.GetCartDetails
 import com.se7en.market.Response.Cart.PaymentResponse
 import com.se7en.market.Response.Home.GlobalCategoryItem
@@ -216,5 +217,12 @@ interface ApiService {
         @Path("cartId") cartId: Int,
         @Body mapData: Map<String, String>
     ): Call<PaymentResponse>
+
+    @Headers("Accept: application/json")
+    @GET("/api/v1/customer/discounts")
+    fun getAllDiscountCodes(
+        @Header("Authorization") token: String,
+    ): Call<GetAllDiscountCodes>
+
 
 }

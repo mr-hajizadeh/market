@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleObserver
 import com.se7en.market.Activity.AddressActivity
 import com.se7en.market.Activity.ChatActivity
+import com.se7en.market.Activity.DiscountActivity
 import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Activity.ProfileActivity
 import com.se7en.market.Activity.Ui.LogoutBottomSheet
@@ -67,6 +68,15 @@ class ProfileFragment : Fragment(), LifecycleObserver {
                 Intent(
                     noneNullContext,
                     AddressActivity::class.java
+                )
+            )
+        }
+
+        binding.discountBtn.setOnClickListener {
+            startActivity(
+                Intent(
+                    noneNullContext,
+                    DiscountActivity::class.java
                 )
             )
         }
