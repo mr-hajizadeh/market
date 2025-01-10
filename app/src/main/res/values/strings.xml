@@ -113,6 +113,7 @@
     <string name="hint_email">ایمیل خود را وارد کنید</string>
     <string name="hint_discount_code">لطفا کد تخفیف خود را وارد کنید</string>
     <string name="hint_message">پیام …</string>
+    <string name="title_amount">مبلغ</string>
 
 
     <string name="permission_denied_message">

@@ -15,11 +15,10 @@
         android:id="@+id/discountTitleTxt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:gravity="right"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-        app:layout_constraintEnd_toStartOf="@+id/discountAmountTxt"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_conversion_absoluteHeight="24dp"
@@ -41,10 +40,13 @@
         android:id="@+id/discountAmountTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="100,000"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/discountTitleTxt" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/discountDescriptionTxt"
+        app:layout_constraintTop_toBottomOf="@+id/discountDescriptionTxt" />
 
     <TextView
         android:id="@+id/expireDateTxt"
@@ -57,8 +59,8 @@
         android:text="قابل استفاده تا تاریخ 1403/10/30 "
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@+id/discountDescriptionTxt"
-        app:layout_constraintTop_toBottomOf="@+id/discountDescriptionTxt"
+        app:layout_constraintStart_toStartOf="@+id/discountAmountTxt"
+        app:layout_constraintTop_toBottomOf="@+id/discountAmountTxt"
         tools:layout_conversion_absoluteHeight="32dp"
         tools:layout_conversion_absoluteWidth="218dp" />
 

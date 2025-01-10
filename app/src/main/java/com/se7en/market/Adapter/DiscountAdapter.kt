@@ -56,7 +56,11 @@ class DiscountAdapter(private val discountList: MutableList<DiscountModel>) :
 
         holder.discountTitle.text = discount.title
         holder.discountAmount.text =
-            "${discount.formatAmountToPersianAmount()} ${context.getString(R.string.title_currency)}"
+            "${context.getString(R.string.title_amount)} : ${discount.formatAmountToPersianAmount()} ${
+                context.getString(
+                    R.string.title_currency
+                )
+            }"
         holder.discountDescription.visibility =
             if (discount.description == null) View.GONE else View.VISIBLE
         holder.discountDescription.text = discount.description
