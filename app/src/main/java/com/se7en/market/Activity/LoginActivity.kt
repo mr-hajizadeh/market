@@ -21,6 +21,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.material.snackbar.Snackbar
 import com.se7en.market.Model.LoginInfoModel
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.Utils.SmsBroadcastReceiver
@@ -295,12 +296,11 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
     private fun confirmCodeListener() {
         viewModel.confirmStatus.observe(this) { result ->
             when (result) {
-                is NetworkResult.Loading -> {
-                    loginLoading(true)
-                }
+                is NetworkResult.Loading -> loginLoading(true)
+
 
                 is NetworkResult.Success -> {
-                    loginLoading()
+                    loginLoading(false)
                     val token = result.response.data.token
                     viewModel.saveLoginInfo(LoginInfoModel(phoneWithoutZero(phone), token))
                     Log.i("TAG", "getLoginInfo: ${viewModel.getLoginInfo().value}")
@@ -313,7 +313,9 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                 }
 
                 is NetworkResult.Error -> {
-                    loginLoading()
+                    loginLoading(false)
+                    Snackbar.make(binding.main, result.message, Snackbar.LENGTH_SHORT)
+                        .show()
                     Log.i("TAG", "confirmCodeListener: ${result.message}")
                 }
             }

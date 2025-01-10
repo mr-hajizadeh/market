@@ -80,11 +80,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                     override fun onResponse(call: Call<Confirm>, response: Response<Confirm>) {
                         if (response.isSuccessful && response.body()?.status == "success")
                             _confirmStatus.value = NetworkResult.Success(response.body()!!)
-                        else if (response.body()?.status == "fail")
-                            _confirmStatus.value =
-                                response.body()?.errors?.let {
-                                    NetworkResult.Error(it[0])
-                                }
+                        else if (response.code() == 400 || response.body()?.status?.contains("fail") == true)
+                            _confirmStatus.value = NetworkResult.Error("کد وارد شده صحیح نمی باشد.")
                     }
 
                     override fun onFailure(call: Call<Confirm>, t: Throwable) {
