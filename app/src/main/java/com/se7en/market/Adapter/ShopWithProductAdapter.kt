@@ -2,17 +2,21 @@ package com.se7en.market.Adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.se7en.market.Activity.ListActivity
 import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Model.CartModel
 import com.se7en.market.Model.ListItemModel
 import com.se7en.market.Model.ShopModel
 import com.se7en.market.R
 import com.se7en.market.Utils.CartManager
+import com.se7en.market.Utils.Constance.Companion.KEY_PRODUCT_LIST
+import com.se7en.market.Utils.Constance.Companion.KEY_TITLE
 import com.se7en.market.databinding.ViewHolderShopWithProductBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
@@ -50,13 +54,22 @@ class ShopWithProductAdapter(
 
     override fun onBindViewHolder(holder: ShopViewHolder, position: Int) {
         holder.bind(items[position], context)
+        holder.shopBtn.setOnClickListener {
+            val intent = Intent(context, ListActivity::class.java)
+            val productList = ArrayList(items[position].items)
+            intent.putParcelableArrayListExtra(KEY_PRODUCT_LIST, productList)
+            intent.putExtra(KEY_TITLE, items[position].shop_name)
+            context.startActivity(intent)
+        }
+
     }
 
     class ShopViewHolder(private val binding: ViewHolderShopWithProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var adapter: ProductWithHeaderAdapter
-        var productView = binding.productView
+        private var productView = binding.productView
+        val shopBtn = binding.shopBtn
 
         @Suppress("UNCHECKED_CAST")
         @SuppressLint("SetTextI18n")

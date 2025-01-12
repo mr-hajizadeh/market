@@ -1,5 +1,6 @@
 package com.se7en.market.Activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +27,7 @@ import com.se7en.market.Utils.Constance.Companion.KEY_CATEGORY
 import com.se7en.market.Utils.Constance.Companion.KEY_PRODUCT_LIST
 import com.se7en.market.Utils.Constance.Companion.KEY_SHOP
 import com.se7en.market.Utils.Constance.Companion.KEY_SLIDER
+import com.se7en.market.Utils.Constance.Companion.KEY_TITLE
 import com.se7en.market.ViewModel.AddressViewModel
 import com.se7en.market.ViewModel.CartViewModel
 import com.se7en.market.ViewModel.SearchViewModel
@@ -47,6 +49,7 @@ class ListActivity : BaseActivity() {
     private val searchViewModel: SearchViewModel by viewModels<SearchViewModel>()
     private val addressViewModel: AddressViewModel by viewModels<AddressViewModel>()
 
+    @SuppressLint("SetTextI18n")
     @Suppress("DEPRECATION", "UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +63,7 @@ class ListActivity : BaseActivity() {
 
         val categoryData: CategoryModel? = intent.getParcelableExtra(KEY_CATEGORY)
         val mainListModel: MainListModel? = intent.getParcelableExtra(KEY_PRODUCT_LIST)
+        val productList = intent.getParcelableArrayListExtra<ProductModel>(KEY_PRODUCT_LIST)
         val shopModel: ArrayList<ShopModel>? = intent.getParcelableArrayListExtra(KEY_SHOP)
         val slider: SliderModel? = intent.getParcelableExtra(KEY_SLIDER)
 
@@ -77,6 +81,15 @@ class ListActivity : BaseActivity() {
                 )
                 window.statusBarColor = mainListModel.color
                 recyclerView.hideSkeleton()
+            }
+
+            productList != null -> {
+                titleTxt.text = "محصولات ${intent.getStringExtra(KEY_TITLE)}"
+                initProductRecyclerView(
+                    (productList as MutableList<ProductModel>),
+                    getColor(R.color.green)
+                )
+                window.statusBarColor = getColor(R.color.green)
             }
 
             shopModel != null -> {

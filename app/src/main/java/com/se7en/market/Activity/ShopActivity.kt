@@ -150,42 +150,33 @@ class ShopActivity : BaseActivity() {
             when (result) {
                 is NetworkResult.Loading -> {}
                 is NetworkResult.Success -> {
-                    mainList.add(
-                        MainListModel(
-                            title = getString(R.string.title_recommended),
-                            position = 1,
-                            color = getColor(R.color.orange),
-                            viewType = ViewTypeModel.HEADER_TYPE,
-                            items = result.response.data as MutableList<ListItemModel>
-                        )
-                    )
-                    mainList.add(
-                        MainListModel(
-                            title = getString(R.string.title_recommended),
-                            position = 2,
-                            color = getColor(R.color.green),
-                            viewType = ViewTypeModel.ONE_ROW_TYPE,
-                            items = result.response.data as MutableList<ListItemModel>
-                        )
-                    )
-                    mainList.add(
-                        MainListModel(
-                            title = getString(R.string.title_recommended),
-                            position = 3,
-                            color = getColor(R.color.green),
-                            viewType = ViewTypeModel.ONE_ROW_TYPE,
-                            items = result.response.data as MutableList<ListItemModel>
-                        )
-                    )
-                    mainList.add(
-                        MainListModel(
-                            title = getString(R.string.title_recommended),
-                            position = 4,
-                            color = getColor(R.color.orange),
-                            viewType = ViewTypeModel.HEADER_TYPE,
-                            items = result.response.data as MutableList<ListItemModel>
-                        )
-                    )
+
+                    result.response.data.filter { it.off_percent > 0 }.toMutableList()
+                        .takeIf { it.isNotEmpty() }?.let {
+                            mainList.add(
+                                MainListModel(
+                                    title = getString(R.string.title_offers),
+                                    position = 1,
+                                    color = getColor(R.color.orange),
+                                    viewType = ViewTypeModel.HEADER_TYPE,
+                                    items = it as MutableList<ListItemModel>
+                                )
+                            )
+                        }
+
+                    result.response.data.filter { it.off_percent <= 0 }.toMutableList()
+                        .takeIf { it.isNotEmpty() }?.let {
+                            mainList.add(
+                                MainListModel(
+                                    title = "سایر محصولات",
+                                    position = 2,
+                                    color = getColor(R.color.green),
+                                    viewType = ViewTypeModel.ONE_ROW_TYPE,
+                                    items = it as MutableList<ListItemModel>
+                                )
+                            )
+                        }
+
                     statusList.add(true)
                     dataStatus.value = statusList
                 }
@@ -196,7 +187,8 @@ class ShopActivity : BaseActivity() {
             }
         }
 
-        dataStatus.observe(this) { data ->
+        dataStatus.observe(this)
+        { data ->
             data?.takeIf { it.all { status -> status } }?.let {
                 Handler(Looper.getMainLooper()).postDelayed({
                     shopMainView.hideSkeleton()
