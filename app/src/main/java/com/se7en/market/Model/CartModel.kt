@@ -16,5 +16,6 @@ data class CartModel(
     var total_off: Long = 0,
     var seller: ShopModel = ShopModel(),
     var card_details: MutableList<CartDetailModel> = mutableListOf(),
+    var discount : DiscountModel? = null,
     var loading: Boolean = false,
 )

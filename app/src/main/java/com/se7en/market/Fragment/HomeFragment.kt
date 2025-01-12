@@ -255,6 +255,7 @@ class HomeFragment : Fragment() {
                 MainListModel(
                     title = getString(R.string.title_popular),
                     position = 3,
+                    color = nonNullContext.getColor(R.color.green),
                     viewType = ViewTypeModel.ONE_ROW_TYPE,
                     items = it as MutableList<ListItemModel>
                 )

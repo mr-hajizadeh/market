@@ -173,8 +173,15 @@ class PayFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun initCartDetails(cartModel: CartModel) {
 
-        if (cartModel.discount_price > 0)
+        cartModel.discount?.code?.let { code ->
             discountCodeStatus.postValue(true)
+            discountCodeEdt.setText(code)
+        } ?: run {
+            discountCodeStatus.postValue(false)
+            discountCodeEdt.setText("")
+        }
+
+
 
         binding.totalProductPriceTxt.text =
             Helper.formatPriceToPersian((cartModel.total_price - cartModel.total_off))

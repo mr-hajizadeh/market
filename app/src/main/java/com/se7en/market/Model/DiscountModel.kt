@@ -5,16 +5,16 @@ import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 class DiscountModel(
-    val id: Int,
-    val user_id: Int,
-    val title: String,
-    val amount: Int,
-    val code: String,
-    val used: Boolean,
-    val description: String? = null,
-    val expiration: String,
-    val created_at: String,
-    val updated_at: String
+    var id: Int = 0,
+    var user_id: Int = 0,
+    var title: String = "",
+    var amount: Int = 0,
+    var code: String? = null,
+    var used: Boolean = false,
+    var description: String? = null,
+    var expiration: String = "",
+    var created_at: String = "",
+    var updated_at: String = ""
 ) {
     fun formatAmountToPersianAmount(): String {
         val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
