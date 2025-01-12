@@ -6,6 +6,6 @@ data class AddressList(
     val status: String,
     val system_message: String,
     val `data`: MutableList<AddressModel>,
-    val messages: List<Any>,
-    val errors: List<Any>
+    val messages: List<String>,
+    val errors: List<String>
 )

@@ -12,12 +12,15 @@ data class AddressModel(
     var address: String = "",
     var apartment: Int = 0,
     var unit: Int = 0,
+    var is_default: Boolean = false,
+    var is_telegram_default: Boolean = false,
     var recipient_name: String = "",
     var recipient_phone: String = "",
     val created_at: String = "",
     val updated_at: String = "",
-    var active: Boolean = false
-) : Parcelable {
+    var active: Boolean = false,
+
+    ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readInt(),
@@ -27,6 +30,8 @@ data class AddressModel(
         parcel.readString().orEmpty(),
         parcel.readInt(),
         parcel.readInt(),
+        parcel.readByte() != 0.toByte(),
+        parcel.readByte() != 0.toByte(),
         parcel.readString().orEmpty(),
         parcel.readString().orEmpty(),
         parcel.readString().orEmpty(),
