@@ -123,7 +123,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
         timer.start()
 
         resendBtn.setOnClickListener {
-            viewModel.sendPhone(phone)
+            viewModel.sendPhone(convertToEnglishNumbers(phone))
             timer.start()
         }
 
@@ -265,7 +265,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
     private fun sendPhone() {
         submitBtn?.setOnClickListener {
             _phone = phoneEdt?.text.toString()
-            viewModel.sendPhone(phone)
+            viewModel.sendPhone(convertToEnglishNumbers(phone))
         }
     }
 
