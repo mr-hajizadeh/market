@@ -123,7 +123,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
         timer.start()
 
         resendBtn.setOnClickListener {
-            viewModel.sendPhone(phoneWithoutZero(phone))
+            viewModel.sendPhone(phone)
             timer.start()
         }
 
@@ -265,11 +265,9 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
     private fun sendPhone() {
         submitBtn?.setOnClickListener {
             _phone = phoneEdt?.text.toString()
-            viewModel.sendPhone(phoneWithoutZero(phone))
+            viewModel.sendPhone(phone)
         }
     }
-
-    private fun phoneWithoutZero(phone: String) = convertToEnglishNumbers(phone).removePrefix("0")
 
     private fun authLoading(isLoading: Boolean = false) {
         val progressLoading = binding.authProgressLoading
@@ -302,7 +300,7 @@ class LoginActivity : BaseActivity(), SmsBroadcastReceiver.OTPReceiveListener {
                 is NetworkResult.Success -> {
                     loginLoading(false)
                     val token = result.response.data.token
-                    viewModel.saveLoginInfo(LoginInfoModel(phoneWithoutZero(phone), token))
+                    viewModel.saveLoginInfo(LoginInfoModel(phone, token))
                     Log.i("TAG", "getLoginInfo: ${viewModel.getLoginInfo().value}")
                     val user = result.response.data.user
                     if (user.has_address) customIntent(SplashActivity::class.java)
