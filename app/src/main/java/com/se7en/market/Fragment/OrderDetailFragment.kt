@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.se7en.market.Activity.CartActivity.Companion.cartId
 import com.se7en.market.Activity.CartActivity.Companion.isOldSizeSet
 import com.se7en.market.Activity.CartActivity.Companion.newCartSize
 import com.se7en.market.Activity.CartActivity.Companion.oldCartSize
@@ -33,7 +34,7 @@ class OrderDetailFragment : Fragment() {
 
     private val cartViewModel: CartViewModel by viewModels<CartViewModel>()
 
-    private lateinit var totalPriceTxt: TextView
+    private lateinit var finalPriceTxt: TextView
     private lateinit var totalProductPriceTxt: TextView
     private lateinit var profitTxt: TextView
     private lateinit var adapter: CartAdapter
@@ -57,7 +58,7 @@ class OrderDetailFragment : Fragment() {
 
     private fun initViews() {
 
-        totalPriceTxt = binding.totalPriceTxt
+        finalPriceTxt = binding.finalPriceTxt
         totalProductPriceTxt = binding.totalProductPriceTxt
         profitTxt = binding.profitTxt
 
@@ -83,13 +84,14 @@ class OrderDetailFragment : Fragment() {
             { count: Int ->
                 totalItems.text = "${getString(R.string.title_total_items)} ($count کالا)"
                 newCartSize = count
-            }, { totalPrice: Long, profitPrice: Long ->
-                Log.i(TAG, "setupOrdersView: $totalPrice / $profitPrice")
-                if (totalPrice == 0L && profitPrice == 0L)
+            }, { cart: CartModel ->
+                if (cart.card_details.isEmpty())
                     requireActivity().finish()
-                totalProductPriceTxt.text = Helper.formatPriceToPersian(totalPrice)
-                profitTxt.text = Helper.formatPriceToPersian(profitPrice)
-                totalPriceTxt.text = Helper.formatPriceToPersian(totalPrice)
+
+                val finalPrice = cart.card_details.sumOf { it.final_price }
+                totalProductPriceTxt.text = Helper.formatPriceToPersian(finalPrice)
+                profitTxt.text = Helper.formatPriceToPersian(cart.total_off)
+                finalPriceTxt.text = Helper.formatPriceToPersian(cart.final_price)
             })
 
         ordersView.adapter = adapter
@@ -99,30 +101,34 @@ class OrderDetailFragment : Fragment() {
         cartViewModel.cartDetailStatus.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
-                    Log.i(TAG, "getCartDetail: Loading")
                     manageSkeletonLoading(true)
                 }
 
                 is NetworkResult.Success -> {
                     Log.i(TAG, "getCartDetail: Success ${result.response}")
+                    val cart: CartModel = result.response.data
                     val cartCount = result.response.data.card_details.sumOf { it.quantity }
                     if (!isOldSizeSet) {
                         oldCartSize = cartCount
                         isOldSizeSet = true
                     }
                     newCartSize = cartCount
-                    val cart: CartModel = result.response.data
+                    adapter.setCart(cart)
                     adapter.setCartList(cart.card_details)
                     manageSkeletonLoading(false)
                 }
 
                 is NetworkResult.Error -> {
                     Log.i(TAG, "getCartDetail: Error ${result.message}")
+                    if (result.message.contains("404")) {
+                        requireActivity().finish()
+                        cartViewModel.getAllCarts()
+                    }
                     manageSkeletonLoading(false)
                 }
             }
         }
-
+        cartViewModel.getCartDetails(cartId)
     }
 
     private fun manageSkeletonLoading(loading: Boolean = false) {

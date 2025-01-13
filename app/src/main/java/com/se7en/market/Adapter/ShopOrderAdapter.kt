@@ -75,11 +75,11 @@ class ShopOrderAdapter(
                 progressBar.max = /*item.minPrice.toInt()*/0
                 adapter =
                     CartAdapter(0, CartManager, { _: Int ->
-                    }, { price, profitPrice ->
-                        val remainingPrice = /*item.minPrice*/ 0 - (price - profitPrice)
-                        binding.remainingPriceTxt.text =
-                            "${Helper.formatPriceToPersian(remainingPrice)} ${context.getString(R.string.title_remaining)}"
-                        progressBar.progress = remainingPrice.toInt()
+                    }, { cart ->
+//                        val remainingPrice = /*item.minPrice*/ 0 - (price - profitPrice)
+//                        binding.remainingPriceTxt.text =
+//                            "${Helper.formatPriceToPersian(remainingPrice)} ${context.getString(R.string.title_remaining)}"
+//                        progressBar.progress = remainingPrice.toInt()
                     })
                 binding.minPriceTxt.text =
                     "${Helper.formatPriceToPersian(/*item.minPrice*/ 0)} ${context.getString(R.string.title_currency)}"

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.se7en.market.Activity.CartActivity
 import com.se7en.market.Model.CartDetailModel
+import com.se7en.market.Model.CartModel
 import com.se7en.market.R
 import com.se7en.market.Utils.Constance.Companion.IMAGE_URL_PATH
 import com.se7en.market.Utils.Helper
@@ -23,23 +24,28 @@ class CartAdapter(
 
     private lateinit var context: Context
     private var items: MutableList<CartDetailModel> = mutableListOf()
+    private var cart = CartModel()
     private var changeItemCount: ((count: Int) -> Unit)? = null
-    private var totalPrice: ((price: Long, profitPrice: Long) -> Unit)? = null
+    private var updatedCart: ((cartModel: CartModel) -> Unit)? = null
 
     constructor(
         cartViewType: Int,
         changeQuantityListener: ChangeQuantityListener,
         changeItemCount: (count: Int) -> Unit,
-        totalPrice: (price: Long, profitPrice: Long) -> Unit,
+        updatedCart: (cartModel: CartModel) -> Unit,
     ) : this(cartViewType, changeQuantityListener) {
         this.changeItemCount = changeItemCount
-        this.totalPrice = totalPrice
+        this.updatedCart = updatedCart
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun setCartList(items: MutableList<CartDetailModel>) {
         this.items = items
         notifyDataSetChanged()
+    }
+
+    fun setCart(cart: CartModel) {
+        this.cart = cart
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -63,7 +69,7 @@ class CartAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val cartDetail = items[position]
 
-        calculateTotal()
+        updatedCart?.invoke(cart)
         changeItemCount?.invoke(items.sumOf { it.quantity })
 
         when (holder) {
@@ -130,7 +136,7 @@ class CartAdapter(
             totalWithDiscount += finalPrice
         }
 
-        totalPrice?.invoke((totalWithoutDiscount - totalWithDiscount), totalWithDiscount)
+//        totalPrice?.invoke((totalWithoutDiscount - totalWithDiscount), totalWithDiscount)
     }
 
     class CartHolder(val binding: ViewHolderProductCartBinding) :
@@ -177,9 +183,8 @@ class CartAdapter(
                 productItem.amount,
                 context.getString(R.string.title_currency)
             )
-            val productPrice = cartDetail.item.offPrice() * cartDetail.quantity
             binding.finalPriceTxt.text =
-                "${Helper.formatPriceToPersian(productPrice.toLong())} ${context.getString(R.string.title_currency)}"
+                "${Helper.formatPriceToPersian(cartDetail.final_price)} ${context.getString(R.string.title_currency)}"
             percentView.visibility = if (productItem.off_percent > 0) View.VISIBLE else View.GONE
             percentView.text =
                 "%${CartActivity().convertToPersianNumbers(productItem.off_percent.toString())}"
@@ -203,21 +208,26 @@ class CartAdapter(
         }
     }
 
-    fun updateQuantity(position: Int, cartDetail: CartDetailModel) {
+    fun updateQuantity(position: Int, cartModel: CartModel) {
         if (position in 0 until items.size) {
-            items[position] = cartDetail
-            notifyItemChanged(position)
+            val updatedItem = cartModel.card_details.find { it.id == items[position].id }
+            if (updatedItem != null) {
+                items[position] = updatedItem
+                notifyItemChanged(position)
+            }
+            updatedCart?.invoke(cartModel)
         }
     }
 
+
     @SuppressLint("NotifyDataSetChanged")
-    fun retainList(newCartDetailList: MutableList<CartDetailModel>) {
-        if (newCartDetailList.size == 0)
-            totalPrice?.invoke(0, 0)
+    fun retainList(cartModel: CartModel) {
+        if (cartModel.card_details.size == 0)
+            updatedCart?.invoke(cartModel)
         val iterator = items.iterator()
         while (iterator.hasNext()) {
             val item = iterator.next()
-            if (newCartDetailList.none { it.item_id == item.item_id })
+            if (cartModel.card_details.none { it.item_id == item.item_id })
                 iterator.remove()
         }
         notifyDataSetChanged()

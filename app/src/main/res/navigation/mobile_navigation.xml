@@ -8,11 +8,7 @@
         android:id="@+id/navigation_home"
         android:name="com.se7en.market.Fragment.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_navigation_home_to_navigation_cart"
-            app:destination="@id/navigation_cart" />
-    </fragment>
+        tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/navigation_cart"
         android:name="com.se7en.market.Fragment.CartFragment"

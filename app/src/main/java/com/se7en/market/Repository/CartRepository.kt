@@ -92,7 +92,7 @@ class CartRepository {
                     response: Response<GetCartDetails>,
                 ) {
                     if (response.code() == 404)
-                        _cartDetailStatus.value = NetworkResult.Error("fail")
+                        _cartDetailStatus.value = NetworkResult.Error("404")
                     if (response.isSuccessful && response.body()?.status == "success")
                         _cartDetailStatus.value = NetworkResult.Success(response.body()!!)
                 }
@@ -231,7 +231,7 @@ class CartRepository {
         RetrofitService.apiService().payment(
             token,
             cartId,
-            mapOf("receiver_name" to "حاجی", "receiver_phone" to "09379871359")
+            mapOf("receiver_name" to "", "receiver_phone" to "")
         )
             .enqueue(object : Callback<PaymentResponse> {
                 override fun onResponse(

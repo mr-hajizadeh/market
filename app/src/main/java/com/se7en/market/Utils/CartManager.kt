@@ -114,7 +114,7 @@ object CartManager : ChangeQuantityListener {
 
                             is CartAdapter -> {
                                 adapter.loadingQuantity(position, cartDetail)
-                                adapter.updateQuantity(position, cartDetail)
+                                adapter.updateQuantity(position, result.response.data)
                             }
                         }
                     }
@@ -171,9 +171,9 @@ object CartManager : ChangeQuantityListener {
 
                             is CartAdapter -> {
                                 adapter.loadingQuantity(position, cartDetail)
-                                adapter.updateQuantity(position, cartDetail)
+                                adapter.updateQuantity(position, result.response.data)
                                 if (cartDetailsList.none { it.item_id == product.id })
-                                    adapter.retainList(cartDetailsList)
+                                    adapter.retainList(result.response.data)
                             }
                         }
                     }

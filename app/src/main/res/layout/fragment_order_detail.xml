@@ -198,7 +198,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/totalPriceTxt"
+            android:id="@+id/finalPriceTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -218,9 +218,9 @@
             android:layout_height="wrap_content"
             android:text="@string/title_currency"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-            app:layout_constraintBottom_toBottomOf="@+id/totalPriceTxt"
+            app:layout_constraintBottom_toBottomOf="@+id/finalPriceTxt"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/totalPriceTxt" />
+            app:layout_constraintTop_toTopOf="@+id/finalPriceTxt" />
 
         <TextView
             android:id="@+id/textView27"
@@ -228,7 +228,7 @@
             android:layout_height="wrap_content"
             android:text="@string/title_total_buy"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-            app:layout_constraintBottom_toTopOf="@+id/totalPriceTxt"
+            app:layout_constraintBottom_toTopOf="@+id/finalPriceTxt"
             app:layout_constraintEnd_toEndOf="@+id/currencyTxt"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
