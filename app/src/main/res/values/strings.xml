@@ -100,6 +100,7 @@
     <string name="title_popular">محبوب ترین ها</string>
     <string name="title_offers">بیشترین تخفیف</string>
     <string name="title_copy">کپی کردن</string>
+    <string name="title_increase_wallet">افزایش موجودی کیف پول</string>
 
     <string name="hint_search">دنبال چی میگردی ؟</string>
     <string name="hint_house_number">پلاک خود را وارد کنید</string>
@@ -136,6 +137,16 @@
     <string name="message_not_found_data">موردی یافت نشد!</string>
     <string name="allowed_times">1 بار استفاده</string>
     <string name="used">استفاده شده</string>
+    <string name="message_payment_success">
+    پرداخت شما با موفقیت انجام شد\n
+    برای پیگیری سفارش خود، لطفاً به بخش <b><font color="#4CAF50">سفارش‌ها</font></b> مراجعه کنید.
+    </string>
+    <string name="message_payment_fail">
+        پرداخت شما ناموفق بود.\n
+        لطفاً دوباره تلاش کنید یا در صورت نیاز به پشتیبانی، با <b><font color="#FF5722">مرکز پشتیبانی</font></b> تماس بگیرید.
+    </string>
+
+
 
     <string name="title_hint">عنوان</string>
     <string name="hint_address">استان خراسان رضوی، شهر مشهد، مقداد 28، پلاک 32</string>

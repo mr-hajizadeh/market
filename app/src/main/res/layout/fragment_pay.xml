@@ -465,6 +465,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:padding="8dp"
+                        android:visibility="gone"
                         app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="16dp">
 
@@ -769,7 +770,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/currencyTxt"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/paymentBtn" />
+            app:layout_constraintStart_toEndOf="@+id/paymentBtn"
+            tools:ignore="NotSibling" />
 
         <TextView
             android:id="@+id/currencyTxt"
@@ -795,6 +797,14 @@
 
     <WebView
         android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone" />
+
+    <include
+        android:id="@+id/resultLayout"
+        layout="@layout/transaction_result_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"

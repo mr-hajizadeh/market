@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.se7en.market.Activity.CartActivity.Companion.cartId
 import com.se7en.market.Activity.CartActivity.Companion.isOldSizeSet
 import com.se7en.market.Activity.CartActivity.Companion.newCartSize
@@ -38,6 +39,7 @@ class OrderDetailFragment : Fragment() {
     private lateinit var totalProductPriceTxt: TextView
     private lateinit var profitTxt: TextView
     private lateinit var adapter: CartAdapter
+    private lateinit var ordersView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +63,7 @@ class OrderDetailFragment : Fragment() {
         finalPriceTxt = binding.finalPriceTxt
         totalProductPriceTxt = binding.totalProductPriceTxt
         profitTxt = binding.profitTxt
+        ordersView = binding.ordersView
 
     }
 
@@ -76,7 +79,6 @@ class OrderDetailFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun setupOrdersView() {
-        val ordersView = binding.ordersView
         val totalItems = binding.totalItemsTxt
 
         CartManager.setValues(cartViewModel, viewLifecycleOwner)
@@ -135,12 +137,16 @@ class OrderDetailFragment : Fragment() {
         val containerView = binding.containerView
         val bottomBarLayout = binding.bottomBarLayout
         if (loading) {
+            ordersView.loadSkeleton(R.layout.view_holder_product_cart_with_buttons) {
+                itemCount(3)
+            }
             containerView.loadSkeleton()
             bottomBarLayout.loadSkeleton()
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
                 containerView.hideSkeleton()
                 bottomBarLayout.hideSkeleton()
+                ordersView.hideSkeleton()
             }, 1000)
         }
     }
