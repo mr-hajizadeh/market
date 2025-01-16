@@ -53,7 +53,6 @@ class PayFragment : Fragment() {
 
     private var cards: List<MaterialCardView> = emptyList()
     private var discountCodeStatus = MutableLiveData<Boolean>().apply { value = false }
-    private var isPayed = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -251,10 +250,6 @@ class PayFragment : Fragment() {
                         initCartDetails(cartModel)
                         binding.linearLayout.hideSkeleton()
                         binding.bottomBarLayout.hideSkeleton()
-                        if (isPayed) {
-                            binding.resultLayout.root.visibility = View.VISIBLE
-                            transactionResultLayout(false)
-                        }
                     }
                 }
 
@@ -264,8 +259,7 @@ class PayFragment : Fragment() {
                     Log.i(TAG, "getCartDetail: Error ${result.message}")
                     if (result.message.contains("404")) {
                         cartViewModel.getAllCarts()
-                        binding.resultLayout.root.visibility = View.VISIBLE
-                        transactionResultLayout(true)
+                        requireActivity().finish()
                     }
 
                 }
@@ -350,26 +344,6 @@ class PayFragment : Fragment() {
         paymentBtn.isEnabled = !isLoading
     }
 
-    private fun transactionResultLayout(isSuccess: Boolean) {
-        binding.appbar.visibility = View.GONE
-        binding.nestedScrollView.visibility = View.GONE
-        binding.bottomBarLayout.visibility = View.GONE
-        binding.resultLayout.dismissBtn.setOnClickListener {
-            if (isSuccess)
-                requireActivity().finish()
-            else
-                binding.resultLayout.root.visibility = View.GONE
-        }
-
-        binding.resultLayout.resultMessageTxt.text =
-            if (isSuccess) getString(R.string.message_payment_success) else getString(R.string.message_payment_fail)
-        binding.resultLayout.statusImg.setImageResource(
-            if (isSuccess) R.drawable.payment_success
-            else R.drawable.payment_failure
-        )
-
-    }
-
     @SuppressLint("SetJavaScriptEnabled")
     private fun showWebView(redirectUrl: String) {
         webView.visibility = View.VISIBLE
@@ -388,7 +362,6 @@ class PayFragment : Fragment() {
                     binding.nestedScrollView.visibility = View.VISIBLE
                     binding.bottomBarLayout.visibility = View.VISIBLE
                     getCartDetail()
-                    isPayed = true
                 }
             }
         }, "Android")
@@ -400,7 +373,7 @@ class PayFragment : Fragment() {
             ): Boolean {
                 val url = request?.url.toString()
                 when {
-                    url.contains("payment/success") -> {
+                    url.contains("Status=OK") -> {
                         Toast.makeText(
                             requireActivity(),
                             "پرداخت با موفقیت انجام شد",

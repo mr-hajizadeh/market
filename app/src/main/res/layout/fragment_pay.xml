@@ -802,12 +802,4 @@
         android:visibility="gone"
         tools:visibility="gone" />
 
-    <include
-        android:id="@+id/resultLayout"
-        layout="@layout/transaction_result_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        tools:visibility="gone" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
