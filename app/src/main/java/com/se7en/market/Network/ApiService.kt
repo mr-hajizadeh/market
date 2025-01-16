@@ -26,6 +26,7 @@ import com.se7en.market.Response.Seller.SellerCategories
 import com.se7en.market.Response.Seller.SellerItems
 import com.se7en.market.Response.User.Profile
 import com.se7en.market.Response.User.UpdateProfile
+import com.se7en.market.Response.Wallet.WalletPayemetResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -224,5 +225,11 @@ interface ApiService {
         @Header("Authorization") token: String,
     ): Call<GetAllDiscountCodes>
 
+    @Headers("Accept: application/json")
+    @POST("/api/v1/customer/wallet")
+    fun incrementWallet(
+        @Header("Authorization") token: String,
+        @Body mapData: Map<String, Long>
+    ): Call<WalletPayemetResponse>
 
 }

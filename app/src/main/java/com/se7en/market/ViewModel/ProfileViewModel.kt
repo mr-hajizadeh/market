@@ -2,17 +2,9 @@ package com.se7en.market.ViewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.se7en.market.Model.UserModel
-import com.se7en.market.Network.NetworkResult
 import com.se7en.market.Repository.PreferencesRepository
 import com.se7en.market.Repository.ProfileRepository
-import com.se7en.market.Response.User.Profile
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ProfileViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -29,5 +21,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun updateProfile(user: UserModel) {
         profileRepository.updateProfile(token, user)
     }
+
+    fun incrementWallet(mapData: Map<String, Long>) =
+        profileRepository.incrementWallet("Bearer $token", mapData)
 
 }

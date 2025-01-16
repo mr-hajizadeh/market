@@ -1,13 +1,20 @@
 package com.se7en.market.Fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.JavascriptInterface
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleObserver
@@ -17,7 +24,7 @@ import com.se7en.market.Activity.DiscountActivity
 import com.se7en.market.Activity.MainActivity
 import com.se7en.market.Activity.ProfileActivity
 import com.se7en.market.Activity.Ui.LogoutBottomSheet
-import com.se7en.market.Activity.WalletActivity
+import com.se7en.market.Activity.Ui.ModalWallet
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.R
 import com.se7en.market.Utils.Helper
@@ -34,7 +41,12 @@ class ProfileFragment : Fragment(), LifecycleObserver {
     private var _context: Context? = null
     private val noneNullContext get() = _context!!
 
+    private lateinit var webView: WebView
+    private lateinit var creditView: LinearLayout
+
     private val viewmodel: ProfileViewModel by viewModels<ProfileViewModel>()
+
+    private var shouldDisableBackPress: Boolean = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -49,7 +61,7 @@ class ProfileFragment : Fragment(), LifecycleObserver {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        initShimmer()
+        initViews()
         menuButtons()
         logout()
         setupProfile()
@@ -57,8 +69,32 @@ class ProfileFragment : Fragment(), LifecycleObserver {
         return root
     }
 
-    private fun initViews() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (shouldDisableBackPress) {
+                        Toast.makeText(
+                            requireContext(),
+                            "دکمه بازگشت غیرفعال است",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
+                }
+            })
+
+    }
+
+    private fun initViews() {
+        webView = binding.webView
+        webView.visibility = View.GONE
+        creditView = binding.creditView
     }
 
     private fun menuButtons() {
@@ -100,23 +136,20 @@ class ProfileFragment : Fragment(), LifecycleObserver {
         }
 
         binding.walletBtn.setOnClickListener {
-            startActivity(
-                Intent(
-                    noneNullContext,
-                    WalletActivity::class.java
-                )
-            )
+            val modal = ModalWallet { paymentUrl: String ->
+                Log.i("TAG", "menuButtons: $paymentUrl")
+                showWebView(paymentUrl)
+                val fragmentManager = requireActivity().supportFragmentManager
+                val existingFragment = fragmentManager.findFragmentByTag(ModalWallet.TAG)
+
+                if (existingFragment != null && existingFragment is ModalWallet)
+                    existingFragment.dismiss()
+
+                (requireActivity() as MainActivity).navView.visibility = View.GONE
+                shouldDisableBackPress = true
+            }
+            modal.show(requireActivity().supportFragmentManager, ModalWallet.TAG)
         }
-
-    }
-
-    private fun initShimmer() {
-
-        val creditView = binding.creditView
-        creditView.loadSkeleton()
-        Handler(Looper.getMainLooper()).postDelayed({
-            creditView.hideSkeleton()
-        }, 1000)
 
     }
 
@@ -130,11 +163,14 @@ class ProfileFragment : Fragment(), LifecycleObserver {
     }
 
     private fun setupProfile() {
-
         viewmodel.profileStatus.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is NetworkResult.Loading -> {}
+                is NetworkResult.Loading -> {
+                    creditView.loadSkeleton()
+                }
+
                 is NetworkResult.Success -> {
+                    creditView.hideSkeleton()
                     val user = result.response.data
                     val username =
                         if (user.first_name.isNullOrEmpty() or user.last_name.isNullOrEmpty())
@@ -152,6 +188,53 @@ class ProfileFragment : Fragment(), LifecycleObserver {
                 }
             }
         }
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun showWebView(redirectUrl: String) {
+        webView.visibility = View.VISIBLE
+        binding.mainScrollVIew.visibility = View.GONE
+        webView.settings.javaScriptEnabled = true
+        webView.addJavascriptInterface(object {
+            @JavascriptInterface
+            fun exitWebView() {
+                requireActivity().runOnUiThread {
+                    webView.visibility = View.GONE
+                    binding.mainScrollVIew.visibility = View.VISIBLE
+                    viewmodel.getProfile()
+                    (requireActivity() as MainActivity).navView.visibility = View.VISIBLE
+                    shouldDisableBackPress = false
+                }
+            }
+        }, "Android")
+
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                val url = request?.url.toString()
+                when {
+                    url.contains("Status=OK") -> {
+                        Toast.makeText(
+                            requireActivity(),
+                            "پرداخت با موفقیت انجام شد",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    url.contains("payment/failure") -> {
+                        Toast.makeText(
+                            requireActivity(),
+                            "پرداخت انجام نشد",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+                return super.shouldOverrideUrlLoading(view, request)
+            }
+        }
+        webView.loadUrl(redirectUrl)
 
     }
 
