@@ -11,12 +11,14 @@ import com.se7en.market.R
 import com.se7en.market.Utils.Helper
 import com.se7en.market.ViewModel.CartViewModel
 import com.se7en.market.databinding.ActivityMainBinding
+import koleton.api.hideSkeleton
+import koleton.api.loadSkeleton
 
 
 class MainActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var navView: BottomNavigationView
+    lateinit var binding: ActivityMainBinding
+    lateinit var navView: BottomNavigationView
     private val cartViewModel: CartViewModel by viewModels<CartViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +26,7 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        navView = findViewById(R.id.nav_view)
+        navView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         NavigationUI.setupWithNavController(navView, navController)
 
@@ -38,8 +40,14 @@ class MainActivity : BaseActivity() {
 
         cartViewModel.cartsStatus.observe(this) { result ->
             when (result) {
-                is NetworkResult.Loading -> {}
+                is NetworkResult.Loading -> {
+                    navView.loadSkeleton()
+                }
+
+
                 is NetworkResult.Success -> {
+                    navView.hideSkeleton()
+                    navView.setBackgroundColor(getColor(R.color.white))
                     val cartCount = result.response.data.count()
                     val badge = navView.getOrCreateBadge(R.id.navigation_cart)
                     if (cartCount > 0) {
