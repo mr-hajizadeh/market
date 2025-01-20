@@ -33,6 +33,7 @@ class OrderAdapter(private val items: MutableList<OrderModel>) :
         "بازگشت داده شده" to Pair("#4D9C27B0", "#9C27B0")   // بنفش
     )
 
+
     inner class OrderViewHolder(binding: ViewHolderOrderListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val orderDetailBtn = binding.orderDetailBtn
