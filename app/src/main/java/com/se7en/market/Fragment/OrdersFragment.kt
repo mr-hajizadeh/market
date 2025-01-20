@@ -50,10 +50,10 @@ class OrdersFragment : Fragment() {
                     recyclerView.hideSkeleton()
                     val orders = result.response.data
                     if (orders.size > 0) {
-//                        manageView(false)
+                        manageView(false)
                         recyclerView.adapter = OrderAdapter(orders)
-                    } else{}
-//                        manageView()
+                    } else
+                        manageView()
                 }
 
                 is NetworkResult.Error -> {
