@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +23,7 @@ class OrdersFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyLayout: LinearLayout
 
     private val viewModel: OrderViewModel by viewModels<OrderViewModel>()
 
@@ -30,13 +32,18 @@ class OrdersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentOrdersBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initViews()
         getAllOrders()
-        return binding.root
     }
 
     private fun initViews() {
         recyclerView = binding.orderView
+        emptyLayout = binding.emptyLayout
     }
 
     private fun getAllOrders() {
@@ -66,7 +73,6 @@ class OrdersFragment : Fragment() {
     }
 
     private fun manageView(emptyCart: Boolean = true) {
-        val emptyLayout = binding.emptyLayout
         if (emptyCart) {
             emptyLayout.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
@@ -74,11 +80,6 @@ class OrdersFragment : Fragment() {
             emptyLayout.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.getAllOrders()
     }
 
     override fun onDestroy() {

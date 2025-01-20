@@ -336,4 +336,9 @@ class OrderStatusActivity : AppCompatActivity() {
         private const val TAG = "OrderStatusActivity"
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        orderViewModel.getAllOrders()
+    }
+
 }
