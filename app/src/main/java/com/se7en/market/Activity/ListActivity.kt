@@ -131,8 +131,7 @@ class ListActivity : BaseActivity() {
     private fun getCategoryItemsListener() {
         shopViewModel.categoryItemStatus.observe(this) { result ->
             when (result) {
-                is NetworkResult.Loading -> recyclerView.loadSkeleton()
-
+                is NetworkResult.Loading -> loading()
                 is NetworkResult.Success -> {
                     recyclerView.hideSkeleton()
                     initProductRecyclerView(result.response.data)
@@ -192,7 +191,8 @@ class ListActivity : BaseActivity() {
     private fun globalSearch() {
         searchViewModel.searchStatus.observe(this) { result ->
             when (result) {
-                is NetworkResult.Loading -> recyclerView.loadSkeleton()
+                is NetworkResult.Loading -> loading()
+
                 is NetworkResult.Success -> {
                     val data = result.response.data
                     if (data.isNotEmpty()) {
@@ -226,7 +226,23 @@ class ListActivity : BaseActivity() {
             }
         }
     }
-
+    @Suppress("UNCHECKED_CAST")
+    private fun loading() {
+        val item = mutableListOf(
+            ProductModel(0),
+            ProductModel(1),
+            ProductModel(2),
+            ProductModel(3),
+        ) as MutableList<ListItemModel>
+        adapter = ProductWithHeaderAdapter(
+            item, "", 0, 0,
+            isHeaderEnable = false,
+            isMathParent = true,
+            changeQuantityListener = CartManager
+        )
+        recyclerView.adapter = adapter
+        recyclerView.loadSkeleton()
+    }
 
     companion object {
         private const val TAG = "ProductListActivity"

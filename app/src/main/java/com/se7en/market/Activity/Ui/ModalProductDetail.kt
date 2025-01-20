@@ -125,7 +125,10 @@ class ModalProductDetail(
             dotIndicators.attachTo(viewPager)
 
             productTitle.text = title
-            productDescription.text = description
+            val formattedDescription = description?.lines()
+                ?.joinToString("\n") { line -> "\t ● $line" }
+            productDescription.text = formattedDescription
+
             if (off_percent > 0) {
                 offPrice.visibility = View.VISIBLE
                 discountPercentage.visibility = View.VISIBLE
