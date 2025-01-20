@@ -53,7 +53,7 @@ class OrderStatusAdapter(private val statuses: List<String>, private var current
                 holder.statusText.setTextColor(context.getColor(R.color.black))
             }
 
-            position == currentStep -> {
+            position == currentStep && position != statuses.lastIndex -> {
                 holder.indicator.setBackgroundResource(R.drawable.indicator_current)
                 holder.statusText.setTextColor(context.getColor(R.color.orange))
             }
