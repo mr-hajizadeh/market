@@ -2,6 +2,7 @@ package com.se7en.market.ViewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.se7en.market.Model.PaymentModel
 import com.se7en.market.Model.ShopModel
 import com.se7en.market.Repository.CartRepository
 import com.se7en.market.Repository.PreferencesRepository
@@ -45,6 +46,6 @@ class CartViewModel(application: Application) : AndroidViewModel(application) {
     fun unsetDiscountCode(cartId: Int) =
         repository.unsetDiscountCode("Bearer $token", cartId)
 
-    fun payment(cartId: Int) =
-        repository.payment("Bearer $token", cartId)
+    fun payment(cartId: Int, payment:PaymentModel) =
+        repository.payment("Bearer $token", cartId, payment)
 }

@@ -87,9 +87,9 @@ class OrderDetailFragment : Fragment() {
                 totalItems.text = "${getString(R.string.title_total_items)} ($count کالا)"
                 newCartSize = count
             }, { cart: CartModel ->
+                adapter.setCart(cart)
                 if (cart.card_details.isEmpty())
                     requireActivity().finish()
-
                 val finalPrice = cart.card_details.sumOf { it.final_price }
                 totalProductPriceTxt.text = Helper.formatPriceToPersian(finalPrice)
                 profitTxt.text = Helper.formatPriceToPersian(cart.total_off)

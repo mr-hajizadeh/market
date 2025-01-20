@@ -129,13 +129,16 @@
 
                 <TextView
                     android:id="@+id/totalProductPriceTxt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:layout_marginEnd="4dp"
+                    android:gravity="left"
                     android:text="170,000"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="@+id/total_items_txt"
                     app:layout_constraintEnd_toStartOf="@+id/textView32"
+                    app:layout_constraintStart_toEndOf="@+id/total_items_txt"
                     app:layout_constraintTop_toTopOf="@+id/total_items_txt" />
 
                 <TextView
@@ -162,13 +165,16 @@
 
                 <TextView
                     android:id="@+id/profitTxt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:layout_marginEnd="4dp"
+                    android:gravity="left"
                     android:text="5,000"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toBottomOf="@+id/textView34"
                     app:layout_constraintEnd_toStartOf="@+id/textView35"
+                    app:layout_constraintStart_toEndOf="@+id/textView34"
                     app:layout_constraintTop_toTopOf="@+id/textView34" />
 
                 <TextView

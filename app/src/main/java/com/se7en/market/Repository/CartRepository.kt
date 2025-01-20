@@ -1,6 +1,7 @@
 package com.se7en.market.Repository
 
 import androidx.lifecycle.MutableLiveData
+import com.se7en.market.Model.PaymentModel
 import com.se7en.market.Model.ShopModel
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.Network.RetrofitService
@@ -225,13 +226,17 @@ class CartRepository {
 
     }
 
-    fun payment(token: String, cartId: Int): MutableLiveData<NetworkResult<PaymentResponse>> {
+    fun payment(
+        token: String,
+        cartId: Int,
+        payment:PaymentModel
+    ): MutableLiveData<NetworkResult<PaymentResponse>> {
         val paymentStatus = MutableLiveData<NetworkResult<PaymentResponse>>()
         paymentStatus.value = NetworkResult.Loading
         RetrofitService.apiService().payment(
             token,
             cartId,
-            mapOf("receiver_name" to "", "receiver_phone" to "")
+            payment
         )
             .enqueue(object : Callback<PaymentResponse> {
                 override fun onResponse(

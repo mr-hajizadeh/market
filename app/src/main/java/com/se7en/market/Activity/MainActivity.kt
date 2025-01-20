@@ -61,6 +61,7 @@ class MainActivity : BaseActivity() {
 
                 is NetworkResult.Error -> {
                     navView.hideSkeleton()
+                    cartViewModel.getAllCarts()
                 }
             }
         }

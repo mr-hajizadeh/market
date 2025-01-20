@@ -2,6 +2,7 @@ package com.se7en.market.Adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -170,6 +171,7 @@ class CartAdapter(
         val counterView = binding.countTxt
         val loadingProgress = binding.loadingProgress
         private val percentView = binding.percentTxt
+        private val productName = binding.productNameTxt
         private val productPrice = binding.productPriceTxt
         private val context: Context = binding.root.context
 
@@ -178,6 +180,7 @@ class CartAdapter(
             val productItem = cartDetail.item
             counterView.text =
                 CartActivity().convertToPersianNumbers(cartDetail.quantity.toString())
+            productName.text = productItem.title
             productPrice.visibility = if (productItem.off_percent > 0) View.VISIBLE else View.GONE
             productPrice.text = Helper.getStrikethroughPriceWithCurrency(
                 productItem.amount,
@@ -215,6 +218,7 @@ class CartAdapter(
                 items[position] = updatedItem
                 notifyItemChanged(position)
             }
+            Log.i("TAG", "updateQuantity: ${cartModel.final_price}")
             updatedCart?.invoke(cartModel)
         }
     }

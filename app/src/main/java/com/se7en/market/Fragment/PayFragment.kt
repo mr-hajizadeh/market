@@ -26,6 +26,7 @@ import com.se7en.market.Activity.CartActivity
 import com.se7en.market.Activity.CartActivity.Companion.cartId
 import com.se7en.market.Model.AddressModel
 import com.se7en.market.Model.CartModel
+import com.se7en.market.Model.PaymentModel
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.R
 import com.se7en.market.Utils.Helper
@@ -51,6 +52,7 @@ class PayFragment : Fragment() {
     private lateinit var discountCodeEdt: EditText
     private lateinit var webView: WebView
 
+    private var useWallet: Boolean = false
     private var cards: List<MaterialCardView> = emptyList()
     private var discountCodeStatus = MutableLiveData<Boolean>().apply { value = false }
 
@@ -140,13 +142,19 @@ class PayFragment : Fragment() {
         cards.forEach { card ->
             card.isChecked = false
             when (card.id) {
-                walletPay.id -> binding.walletImg.setBackgroundColor(
-                    context?.getColor(R.color.text_color) ?: Color.GRAY
-                )
+                walletPay.id -> {
+                    binding.walletImg.setBackgroundColor(
+                        context?.getColor(R.color.text_color) ?: Color.GRAY
+                    )
+                    useWallet = true
+                }
 
-                onlinePay.id -> binding.onlineImg.setBackgroundColor(
-                    context?.getColor(R.color.text_color) ?: Color.GRAY
-                )
+                onlinePay.id -> {
+                    binding.onlineImg.setBackgroundColor(
+                        context?.getColor(R.color.text_color) ?: Color.GRAY
+                    )
+                    useWallet = false
+                }
 
                 sitePay.id -> binding.siteImg.setBackgroundColor(
                     context?.getColor(R.color.text_color) ?: Color.GRAY
@@ -318,20 +326,21 @@ class PayFragment : Fragment() {
     }
 
     private fun payment(cartId: Int) {
-        cartViewModel.payment(cartId).observe(requireActivity()) { result ->
-            when (result) {
-                is NetworkResult.Loading -> paymentLoading(true)
+        cartViewModel.payment(cartId, PaymentModel("", "", if (useWallet) 1 else 0))
+            .observe(requireActivity()) { result ->
+                when (result) {
+                    is NetworkResult.Loading -> paymentLoading(true)
 
-                is NetworkResult.Success -> {
-                    paymentLoading(false)
-                    showWebView(result.response.data.payment_url.action)
-                }
+                    is NetworkResult.Success -> {
+                        paymentLoading(false)
+                        showWebView(result.response.data.payment_url.action)
+                    }
 
-                is NetworkResult.Error -> {
-                    paymentLoading(false)
+                    is NetworkResult.Error -> {
+                        paymentLoading(false)
+                    }
                 }
             }
-        }
     }
 
     private fun discountLoading(isLoading: Boolean = false) {

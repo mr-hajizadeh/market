@@ -1,6 +1,7 @@
 package com.se7en.market.Network
 
 import com.se7en.market.Model.AddressModel
+import com.se7en.market.Model.PaymentModel
 import com.se7en.market.Model.ReverseGeocoding
 import com.se7en.market.Model.SearchTags
 import com.se7en.market.Model.SliderModel
@@ -218,7 +219,7 @@ interface ApiService {
     fun payment(
         @Header("Authorization") token: String,
         @Path("cartId") cartId: Int,
-        @Body mapData: Map<String, String>
+        @Body payment: PaymentModel
     ): Call<PaymentResponse>
 
     @Headers("Accept: application/json")
