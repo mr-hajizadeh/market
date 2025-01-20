@@ -18,6 +18,7 @@ class Constance {
         const val KEY_SLIDER = "slider"
         const val KEY_ID = "id"
         const val KEY_TITLE = "title"
+        const val KEY_ORDER_ID = "order_id"
         const val LABEL_DISCOUNT = "discount"
     }
 

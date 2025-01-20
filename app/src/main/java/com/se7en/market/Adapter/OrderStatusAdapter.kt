@@ -1,5 +1,6 @@
 package com.se7en.market.Adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.se7en.market.R
 import com.se7en.market.databinding.ViewHolderOrderStatusBinding
 
-class OrderStatusAdapter(private val statuses: List<String>, private val currentStep: Int) :
+class OrderStatusAdapter(private val statuses: List<String>, private var currentStep: Int) :
     RecyclerView.Adapter<OrderStatusAdapter.StatusViewHolder>() {
 
     private lateinit var context: Context
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setStep(currentStep: Int) {
+        this.currentStep = currentStep
+        notifyDataSetChanged()
+    }
 
     inner class StatusViewHolder(binding: ViewHolderOrderStatusBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -41,10 +48,19 @@ class OrderStatusAdapter(private val statuses: List<String>, private val current
             holder.indicatorLayout.visibility = View.VISIBLE
 
         when {
-            position < currentStep -> holder.indicator.setBackgroundResource(R.drawable.indicator_active)
+            position < currentStep -> {
+                holder.indicator.setBackgroundResource(R.drawable.indicator_active)
+                holder.statusText.setTextColor(context.getColor(R.color.black))
+            }
+
             position == currentStep -> {
                 holder.indicator.setBackgroundResource(R.drawable.indicator_current)
                 holder.statusText.setTextColor(context.getColor(R.color.orange))
+            }
+
+            currentStep == statuses.lastIndex -> {
+                holder.indicator.setBackgroundResource(R.drawable.indicator_active)
+                holder.statusText.setTextColor(context.getColor(R.color.black))
             }
 
             else -> {

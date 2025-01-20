@@ -53,14 +53,14 @@
         android:id="@+id/imageView19"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/receiveTimeTxt"
+        app:layout_constraintBottom_toBottomOf="@+id/submitOrderDateTxt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/receiveTimeTxt"
+        app:layout_constraintTop_toTopOf="@+id/submitOrderDateTxt"
         app:srcCompat="@drawable/ic_clock"
         app:tint="@color/light_gray" />
 
     <TextView
-        android:id="@+id/receiveTimeTxt"
+        android:id="@+id/submitOrderDateTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -93,7 +93,7 @@
         android:text="@string/hint_address"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintStart_toEndOf="@+id/imageView20"
-        app:layout_constraintTop_toBottomOf="@+id/receiveTimeTxt" />
+        app:layout_constraintTop_toBottomOf="@+id/submitOrderDateTxt" />
 
     <ImageView
         android:id="@+id/imageView22"

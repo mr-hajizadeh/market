@@ -20,6 +20,8 @@ import com.se7en.market.Response.Neshan.DistanceMatrixResponse
 import com.se7en.market.Response.OTP.Code
 import com.se7en.market.Response.OTP.Confirm
 import com.se7en.market.Response.OTP.Token
+import com.se7en.market.Response.Order.GetAllOrders
+import com.se7en.market.Response.Order.GetOrderDetails
 import com.se7en.market.Response.Search.SearchResponse
 import com.se7en.market.Response.Seller.GetCategoryItems
 import com.se7en.market.Response.Seller.SellerCategories
@@ -231,5 +233,18 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body mapData: Map<String, Long>
     ): Call<WalletPayemetResponse>
+
+    @Headers("Accept: application/json")
+    @GET("/api/v1/customer/order")
+    fun getAllOrders(
+        @Header("Authorization") token: String
+    ): Call<GetAllOrders>
+
+    @Headers("Accept: application/json")
+    @GET("/api/v1/customer/order/{orderId}")
+    fun getOrderDetails(
+        @Header("Authorization") token: String,
+        @Path("orderId") orderId: Int
+    ): Call<GetOrderDetails>
 
 }

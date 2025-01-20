@@ -6,9 +6,12 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.carto.styles.AnimationStyleBuilder
 import com.carto.styles.AnimationType
 import com.carto.styles.LineStyle
@@ -17,6 +20,7 @@ import com.carto.styles.MarkerStyleBuilder
 import com.se7en.market.Adapter.OrderStatusAdapter
 import com.se7en.market.Network.NetworkResult
 import com.se7en.market.R
+import com.se7en.market.Utils.Constance.Companion.KEY_ORDER_ID
 import com.se7en.market.ViewModel.OrderViewModel
 import com.se7en.market.databinding.ActivityOrderStatusBinding
 import koleton.api.hideSkeleton
@@ -32,16 +36,35 @@ import org.neshan.servicessdk.direction.model.NeshanDirectionResult
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
+
 
 class OrderStatusActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOrderStatusBinding
     private lateinit var map: MapView
-    private var markers: MutableList<Marker> = mutableListOf()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: OrderStatusAdapter
+    private lateinit var detailLayout: LinearLayout
+    private lateinit var refreshLayout: SwipeRefreshLayout
+    private var orderId: Int = 0
     private var routeOverviewPolylinePoints: ArrayList<LatLng> = arrayListOf()
     private var decodedStepByStepPath: ArrayList<LatLng> = arrayListOf()
     private var onMapPolyline: Polyline? = null
     private var overview = false
+    private val statuses = listOf(
+        "در انتظار پرداخت",
+        "پرداخت شده",
+        "در حال پردازش",
+        "ارسال شده",
+        "تحویل داده شده",
+        "لغو شده",
+        "ناموفق",
+        "بازگشت داده شده",
+    )
 
     private val orderViewModel: OrderViewModel by viewModels<OrderViewModel>()
 
@@ -50,32 +73,32 @@ class OrderStatusActivity : AppCompatActivity() {
         binding = ActivityOrderStatusBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initViews()
         clickButtons()
-        initMap()
         getDistanceMatrix()
+        getOrderDetails()
+    }
 
-        val statuses = listOf(
-            "سفارش تأیید شد",
-            "کالاها در حال آماده‌سازی هستند",
-            "سفارش به پیک تحویل داده شد",
-            "سفارش در حال ارسال است",
-            "سفارش تحویل داده شد"
-        )
-        val recyclerView = binding.statusView
-        recyclerView.adapter = OrderStatusAdapter(statuses, 2)
-
+    private fun initViews() {
+        orderId = intent.getIntExtra(KEY_ORDER_ID, 0)
+        recyclerView = binding.statusView
+        adapter = OrderStatusAdapter(statuses, 0)
+        recyclerView.adapter = adapter
+        detailLayout = binding.detailLayout
+        refreshLayout = binding.refreshLayout
+        refreshLayout.setOnRefreshListener {
+            orderViewModel.getOrderDetails(orderId)
+        }
     }
 
     private fun clickButtons() {
         binding.backBtn.setOnClickListener { finish() }
     }
 
-    private fun initMap() {
+    private fun initMap(markers: MutableList<Marker>) {
         map = binding.map
         map.setStaticMap(true)
 
-        markers.add(createMarker(LatLng(36.30908687275, 59.643053102879)))
-        markers.add(createMarker(LatLng(36.297828915961, 59.640982747078)))
         orderViewModel.getDistanceMatrix(
             "${markers[0].latLng.latitude},${markers[0].latLng.longitude}",
             "${markers[1].latLng.latitude},${markers[1].latLng.longitude}"
@@ -84,8 +107,8 @@ class OrderStatusActivity : AppCompatActivity() {
         map.addMarker(
             createMarker(markers[1].latLng, R.drawable.shop_map, getColor(R.color.light_black))
         )
-        mapSetPosition(overview)
-        neshanRoutingApi()
+        mapSetPosition(overview, markers)
+        neshanRoutingApi(markers)
     }
 
     private fun createMarker(
@@ -144,7 +167,7 @@ class OrderStatusActivity : AppCompatActivity() {
         return Marker(loc, markSt)
     }
 
-    private fun neshanRoutingApi() {
+    private fun neshanRoutingApi(markers: MutableList<Marker>) {
         NeshanDirection.Builder(
             "service.b8ad9848b3614526bcd2dfb35fae9b14",
             markers[0].latLng,
@@ -173,7 +196,7 @@ class OrderStatusActivity : AppCompatActivity() {
                         map.addPolyline(onMapPolyline)
                         // focusing camera on first point of drawn line
                         overview = true
-                        mapSetPosition(overview)
+                        mapSetPosition(overview, markers)
                     } else {
                         Toast.makeText(
                             this@OrderStatusActivity,
@@ -188,19 +211,54 @@ class OrderStatusActivity : AppCompatActivity() {
             })
     }
 
-    private fun mapSetPosition(overview: Boolean) {
+    private fun mapSetPosition(overview: Boolean, markers: MutableList<Marker>) {
         val centerFirstMarkerX: Double = markers[0].latLng.latitude
         val centerFirstMarkerY: Double = markers[0].latLng.longitude
-        if (overview) {
+
+        if (overview && markers.size > 1) {
             val centerFocalPositionX: Double =
                 (centerFirstMarkerX + markers[1].latLng.latitude) / 2
             val centerFocalPositionY: Double =
                 (centerFirstMarkerY + markers[1].latLng.longitude) / 2
+
+            val distance = calculateDistance(
+                markers[0].latLng.latitude,
+                markers[0].latLng.longitude,
+                markers[1].latLng.latitude,
+                markers[1].latLng.longitude
+            )
+
+            val zoom = calculateZoomLevel(distance)
+
             map.moveCamera(LatLng(centerFocalPositionX, centerFocalPositionY), 0.5f)
-            map.setZoom(14.5f, 0.5f)
+            map.setZoom(zoom, 0.5f)
         } else {
             map.moveCamera(LatLng(centerFirstMarkerX, centerFirstMarkerY), 0.5f)
             map.setZoom(18f, 0.5f)
+        }
+    }
+
+    private fun calculateDistance(
+        lat1: Double, lon1: Double,
+        lat2: Double, lon2: Double
+    ): Double {
+        val earthRadius = 6371.0
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+                sin(dLon / 2) * sin(dLon / 2)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        return earthRadius * c
+    }
+
+    private fun calculateZoomLevel(distance: Double): Float {
+        return when {
+            distance < 1 -> 17f
+            distance < 5 -> 14.2f
+            distance < 20 -> 12f
+            distance < 50 -> 10f
+            else -> 8f
         }
     }
 
@@ -232,6 +290,46 @@ class OrderStatusActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun getOrderDetails() {
+
+        val markers: MutableList<Marker> = mutableListOf()
+        orderViewModel.orderDetailsStatus.observe(this) { result ->
+            when (result) {
+                is NetworkResult.Loading -> {
+                    detailLayout.loadSkeleton()
+                    recyclerView.loadSkeleton()
+                }
+
+                is NetworkResult.Success -> {
+                    val order = result.response.data
+                    detailLayout.hideSkeleton()
+                    recyclerView.hideSkeleton()
+                    refreshLayout.isRefreshing = false
+                    markers.add(
+                        createMarker(
+                            LatLng(order.destination_latitude, order.destination_longitude)
+                        )
+                    )
+                    markers.add(createMarker(LatLng(order.seller.latitude, order.seller.longitude)))
+                    initMap(markers)
+                    val statusIndex = statuses.indexOf(order.status_title)
+                    if (statusIndex != -1) adapter.setStep(statusIndex)
+                    else adapter.setStep(0)
+                    binding.distanceAddressTxt.text = order.destination_address
+                    binding.distanceAddressTxt.isSelected = true
+                }
+
+                is NetworkResult.Error -> {
+                    refreshLayout.isRefreshing = false
+                    detailLayout.hideSkeleton()
+                    recyclerView.hideSkeleton()
+                }
+            }
+        }
+
+        orderViewModel.getOrderDetails(orderId)
     }
 
     companion object {

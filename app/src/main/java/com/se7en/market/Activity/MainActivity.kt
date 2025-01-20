@@ -59,7 +59,9 @@ class MainActivity : BaseActivity() {
                         badge.isVisible = false
                 }
 
-                is NetworkResult.Error -> {}
+                is NetworkResult.Error -> {
+                    navView.hideSkeleton()
+                }
             }
         }
 
