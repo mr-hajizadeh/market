@@ -20,6 +20,7 @@ class MainActivity : BaseActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var navView: BottomNavigationView
     private val cartViewModel: CartViewModel by viewModels<CartViewModel>()
+    private var loading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +42,16 @@ class MainActivity : BaseActivity() {
         cartViewModel.cartsStatus.observe(this) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
-                    navView.loadSkeleton()
+                    if (!loading)
+                        navView.loadSkeleton()
                 }
 
 
                 is NetworkResult.Success -> {
-                    navView.hideSkeleton()
+                    if (!loading) {
+                        navView.hideSkeleton()
+                        loading = true
+                    }
                     navView.setBackgroundColor(getColor(R.color.white))
                     val cartCount = result.response.data.count()
                     val badge = navView.getOrCreateBadge(R.id.navigation_cart)
@@ -60,7 +65,8 @@ class MainActivity : BaseActivity() {
                 }
 
                 is NetworkResult.Error -> {
-                    navView.hideSkeleton()
+                    if (!loading)
+                        navView.hideSkeleton()
                     cartViewModel.getAllCarts()
                 }
             }

@@ -1,7 +1,6 @@
 package com.se7en.market.Network
 
 import android.util.Log
-import com.google.gson.GsonBuilder
 import com.se7en.market.Utils.Constance.Companion.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -26,8 +25,9 @@ class RetrofitService {
 
             val client =
                 OkHttpClient.Builder()
-                    .connectTimeout(10, TimeUnit.SECONDS)
-                    .readTimeout(10, TimeUnit.SECONDS)
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
                     .addInterceptor(loggingInterceptor)
                     .build()
 
