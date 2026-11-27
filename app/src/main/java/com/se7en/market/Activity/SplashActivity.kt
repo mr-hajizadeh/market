@@ -76,16 +76,14 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkValues() {
-
         viewmodel.getLoginInfo().observe(this) { loginInfo ->
-            if (loginInfo.phone.isEmpty() && loginInfo.token.isEmpty())
+            if (loginInfo.phone.isEmpty() || loginInfo.token.isEmpty())
                 Handler(Looper.getMainLooper()).postDelayed(
                     { customIntent(LoginActivity::class.java) }, 3000
                 )
             else
                 viewmodel.getProfile()
         }
-
     }
 
     private fun responseListener() {

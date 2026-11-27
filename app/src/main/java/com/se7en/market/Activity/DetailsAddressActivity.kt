@@ -104,7 +104,7 @@ class DetailsAddressActivity : BaseActivity() {
 
     private fun loadStaticMap(lat: Double, lon: Double) {
         Glide.with(this)
-            .load("https://api.neshan.org/v4/static?key=service.b8ad9848b3614526bcd2dfb35fae9b14&type=dreamy&zoom=19&width=512&height=256&center=$lat,$lon&markerToken=351047.QDbFpjwn")
+            .load("https://api.neshan.org/v4/static?key=YOUR_NESHAN_API_KEY&type=dreamy&zoom=19&width=512&height=256&center=$lat,$lon&markerToken=YOUR_MARKER_TOKEN")
             .into(binding.staticMapImg)
     }
 

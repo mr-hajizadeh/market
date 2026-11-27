@@ -1,7 +1,6 @@
 package com.se7en.market.Fragment
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -55,9 +54,6 @@ class HomeFragment : Fragment() {
     private val sliderAdapter = SliderAdapter()
     private var activeAddressTxt: TextView? = null
 
-    private var _context: Context? = null
-    private val nonNullContext get() = _context!!
-
     private val sliderHandler = Handler(Looper.getMainLooper())
     private val sliderRunnable = Runnable {
         if (sliderAdapter.itemCount > 0) {
@@ -65,11 +61,6 @@ class HomeFragment : Fragment() {
                 if (viewPager.currentItem == sliderAdapter.itemCount - 1) 0 else viewPager.currentItem + 1
             viewPager.currentItem = nextItem
         }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        _context = context
     }
 
     override fun onCreateView(
@@ -88,11 +79,10 @@ class HomeFragment : Fragment() {
         dataListener()
         activeAddress()
         buttonsOnCLick()
-
     }
 
     private fun dataListener() {
-        viewModel.homeStatus.observe(requireActivity()) { result ->
+        viewModel.homeStatus.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
                     Log.i("TAG", "onViewCreated: loading")
@@ -110,7 +100,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun sliderListener() {
-        viewModel.sliderStatus.observe(requireActivity()) { result ->
+        viewModel.sliderStatus.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
                     binding.homeContainer.loadSkeleton()
@@ -120,8 +110,8 @@ class HomeFragment : Fragment() {
                 is NetworkResult.Success -> {
                     initSlider(result.response)
                     Handler(Looper.getMainLooper()).postDelayed({
-                        binding.homeContainer.hideSkeleton()
-                        binding.appBarLayout.hideSkeleton()
+                        _binding?.homeContainer?.hideSkeleton()
+                        _binding?.appBarLayout?.hideSkeleton()
                     }, 1000)
                 }
 
@@ -159,17 +149,18 @@ class HomeFragment : Fragment() {
             showAddressListBottomSheet()
         }
         binding.searchViewBtn.setOnClickListener {
-            nonNullContext.startActivity(Intent(nonNullContext, SearchActivity::class.java))
+            val context = requireContext()
+            context.startActivity(Intent(context, SearchActivity::class.java))
         }
     }
 
     private fun showAddressListBottomSheet(closeable: Boolean = true) {
         AddressListBottomSheet.newInstance(closeable)
-            .show(requireActivity().supportFragmentManager, AddressListBottomSheet.TAG)
+            .show(parentFragmentManager, AddressListBottomSheet.TAG)
     }
 
     private fun activeAddress() {
-        viewModel.loadActiveAddress().observe(requireActivity()) { address ->
+        viewModel.loadActiveAddress().observe(viewLifecycleOwner) { address ->
             if (address != null) {
                 Log.i("TAG", "activeAddress: ${address.latitude} lon ${address.longitude}")
                 CartManager.activeAddress = address
@@ -178,10 +169,8 @@ class HomeFragment : Fragment() {
                 viewModel.getAllData(address.latitude, address.longitude)
                 viewModel.getSliderList()
             } else {
-                requireActivity().startActivity(
-                    Intent(requireActivity(), MapActivity::class.java)
-                )
-                requireActivity().finish()
+                startActivity(Intent(requireContext(), MapActivity::class.java))
+                activity?.finish()
             }
         }
     }
@@ -206,7 +195,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun getAllCarts() {
-        cartViewModel.cartsStatus.observe(requireActivity()) { result ->
+        cartViewModel.cartsStatus.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
                     Log.i("TAG", "setupCartView: Loading")
@@ -224,6 +213,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun getMainList(data: HomeResponse.Data): MutableList<MainListModel> {
+        val context = requireContext()
         val mainList = listOfNotNull(
             data.shops.takeIf { it.isNotEmpty() }?.let {
                 cartViewModel.updateShopList(it)
@@ -245,7 +235,7 @@ class HomeFragment : Fragment() {
                 MainListModel(
                     title = getString(R.string.title_offers),
                     position = 1,
-                    color = nonNullContext.getColor(R.color.orange),
+                    color = context.getColor(R.color.orange),
                     icon = R.drawable.ic_percent,
                     viewType = ViewTypeModel.HEADER_TYPE,
                     items = it as MutableList<ListItemModel>
@@ -255,7 +245,7 @@ class HomeFragment : Fragment() {
                 MainListModel(
                     title = getString(R.string.title_popular),
                     position = 3,
-                    color = nonNullContext.getColor(R.color.green),
+                    color = context.getColor(R.color.green),
                     viewType = ViewTypeModel.ONE_ROW_TYPE,
                     items = it as MutableList<ListItemModel>
                 )
@@ -274,8 +264,9 @@ class HomeFragment : Fragment() {
         sliderHandler.postDelayed(sliderRunnable, 5000)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        sliderHandler.removeCallbacksAndMessages(null)
         _binding = null
     }
 

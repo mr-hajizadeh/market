@@ -2,7 +2,6 @@ package com.se7en.market.Fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -34,19 +33,10 @@ class AddressListFragment : Fragment(), AddressAdapter.onClickAddressListener {
     private var _binding: FragmentAddressListBinding? = null
     private val binding get() = _binding!!
 
-    private var _context: Context? = null
-    private val noneNullContext get() = _context!!
-
     private val viewModel by viewModels<AddressViewModel>()
     private var addressView: RecyclerView? = null
 
     private lateinit var adapter: AddressAdapter
-
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        _context = context
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +72,7 @@ class AddressListFragment : Fragment(), AddressAdapter.onClickAddressListener {
     }
 
     private fun setupAddressView() {
-        viewModel.listStatus.observe(requireActivity()) { result ->
+        viewModel.listStatus.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is NetworkResult.Loading -> loadSkeleton()
 
@@ -112,9 +102,9 @@ class AddressListFragment : Fragment(), AddressAdapter.onClickAddressListener {
 
     @SuppressLint("InflateParams")
     private fun showDialog() {
-
+        val context = requireContext()
         val builderBinding = DialogLayoutBinding.inflate(layoutInflater)
-        val builder = MaterialAlertDialogBuilder(noneNullContext)
+        val builder = MaterialAlertDialogBuilder(context)
             .create().apply {
                 setView(builderBinding.root)
                 setCancelable(false)
@@ -123,7 +113,7 @@ class AddressListFragment : Fragment(), AddressAdapter.onClickAddressListener {
         builderBinding.apply {
             positiveBtn.setOnClickListener {
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", noneNullContext.packageName, null)
+                    data = Uri.fromParts("package", context.packageName, null)
                 }
                 startActivity(intent)
                 builder.dismiss()
@@ -135,16 +125,16 @@ class AddressListFragment : Fragment(), AddressAdapter.onClickAddressListener {
     }
 
     private fun isPermissionGranted(): Boolean =
-        noneNullContext.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        requireContext().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
 
     private fun showMap() {
         val modal = ModalBottomSheetMap()
-        modal.show(requireActivity().supportFragmentManager, ModalBottomSheetMap.TAG)
+        modal.show(parentFragmentManager, ModalBottomSheetMap.TAG)
     }
 
     private fun deletedAddressListener(item: AddressModel) {
-        viewModel.deleteStatus.observe(requireActivity()) { result ->
+        viewModel.deleteStatus.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
                     loadSkeleton()
@@ -156,8 +146,8 @@ class AddressListFragment : Fragment(), AddressAdapter.onClickAddressListener {
                     adapter.removeItem(item)
                     adapter.getAddressList().let {
                         if (it.size == 0) {
-                            startActivity(Intent(requireActivity(), MapActivity::class.java))
-                            requireActivity().finish()
+                            startActivity(Intent(requireContext(), MapActivity::class.java))
+                            activity?.finish()
                         }
                     }
                 }
@@ -182,7 +172,7 @@ class AddressListFragment : Fragment(), AddressAdapter.onClickAddressListener {
         }
 
     override fun activeAddress(item: AddressModel) {
-        adapter?.setActiveAddress(item)
+        adapter.setActiveAddress(item)
         viewModel.saveActiveAddress(item)
     }
 
@@ -190,10 +180,15 @@ class AddressListFragment : Fragment(), AddressAdapter.onClickAddressListener {
         viewModel.deleteAddress(item.id)
         deletedAddressListener(item)
         if (item.active) {
-            adapter?.getAddressList()?.let {
+            adapter.getAddressList().let {
                 viewModel.saveActiveAddress(it.first().apply { active = true })
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

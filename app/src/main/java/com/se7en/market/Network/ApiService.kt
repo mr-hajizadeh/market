@@ -44,14 +44,14 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @Headers("Api-Key: service.b8ad9848b3614526bcd2dfb35fae9b14")
+    @Headers("Api-Key: YOUR_NESHAN_API_KEY")
     @GET("/v5/reverse")
     fun reverseGeocoding(
         @Query("lat") lat: Double,
         @Query("lng") lon: Double,
     ): Call<ReverseGeocoding>
 
-    @Headers("Api-Key: service.b8ad9848b3614526bcd2dfb35fae9b14")
+    @Headers("Api-Key: YOUR_NESHAN_API_KEY")
     @GET("v1/distance-matrix")
     fun getDistanceMatrix(
         @Query("type") type: String,

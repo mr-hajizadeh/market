@@ -169,7 +169,7 @@ class OrderStatusActivity : AppCompatActivity() {
 
     private fun neshanRoutingApi(markers: MutableList<Marker>) {
         NeshanDirection.Builder(
-            "service.b8ad9848b3614526bcd2dfb35fae9b14",
+            "YOUR_NESHAN_API_KEY",
             markers[0].latLng,
             markers[1].latLng
         )

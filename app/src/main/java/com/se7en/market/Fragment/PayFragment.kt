@@ -327,7 +327,7 @@ class PayFragment : Fragment() {
 
     private fun payment(cartId: Int) {
         cartViewModel.payment(cartId, PaymentModel("", "", if (useWallet) 1 else 0))
-            .observe(requireActivity()) { result ->
+            .observe(viewLifecycleOwner) { result ->
                 when (result) {
                     is NetworkResult.Loading -> paymentLoading(true)
 
@@ -409,8 +409,8 @@ class PayFragment : Fragment() {
         private const val TAG = "PayFragment"
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

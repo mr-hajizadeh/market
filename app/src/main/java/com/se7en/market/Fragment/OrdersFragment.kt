@@ -47,7 +47,7 @@ class OrdersFragment : Fragment() {
     }
 
     private fun getAllOrders() {
-        viewModel.ordersStatus.observe(requireActivity()) { result ->
+        viewModel.ordersStatus.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is NetworkResult.Loading -> {
                     recyclerView.loadSkeleton(R.layout.view_holder_order_list)
@@ -82,8 +82,8 @@ class OrdersFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 

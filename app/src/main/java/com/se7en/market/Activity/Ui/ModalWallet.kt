@@ -138,7 +138,7 @@ class ModalWallet(private val paymentUrl: (url: String) -> Unit) :
 
             } else
                 viewModel.incrementWallet(mapOf("amount" to amount))
-                    .observe(requireActivity()) { result ->
+                    .observe(viewLifecycleOwner) { result ->
                         when (result) {
                             is NetworkResult.Loading -> paymentLoading(true)
 
