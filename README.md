@@ -11,25 +11,25 @@
 
 ## 📸 Screenshots
 
-|                       Login & OTP                       |                Home Screen                |                  Product Details                   |              Cart Management               |
-|:-------------------------------------------------------:|:-----------------------------------------:|:--------------------------------------------------:|:------------------------------------------:|
-| <img src="images/bot_login&register.jpg" width="220" /> | <img src="images/home.jpg" width="220" /> | <img src="images/detailProduct.jpg" width="220" /> | <img src="images/cart1.jpg" width="220" /> |
+| Home Screen | Product Details | Cart Management | Cart Overview |
+| :---: | :---: | :---: | :---: |
+| <img src="images/home.jpg" width="220" /> | <img src="images/detailProduct.jpg" width="220" /> | <img src="images/cart1.jpg" width="220" /> | <img src="images/cart2.jpg" width="220" /> |
 
-|                  Address & Map                  |                  Order Tracking                   |                   Wallet                    |              Profile & Settings              |
-|:-----------------------------------------------:|:-------------------------------------------------:|:-------------------------------------------:|:--------------------------------------------:|
+| Address & Map | Order Tracking | Wallet | Profile & Settings |
+| :---: | :---: | :---: | :---: |
 | <img src="images/addAddress.jpg" width="220" /> | <img src="images/orderTracker.jpg" width="220" /> | <img src="images/wallet.jpg" width="220" /> | <img src="images/profile.jpg" width="220" /> |
 
 <details>
   <summary><b>📱 View Additional App Screens</b></summary>
   <br>
 
-  |                   Address List                   |                   Change Address                   |                Discount Codes                 |                 Payment Flow                 |
-  |:------------------------------------------------:|:--------------------------------------------------:|:---------------------------------------------:|:--------------------------------------------:|
-  | <img src="images/addressList.jpg" width="200" /> | <img src="images/changeAddress.jpg" width="200" /> | <img src="images/discount.jpg" width="200" /> | <img src="images/payment.jpg" width="200" /> |
+  | Address List | Map Location Picker | Change Address | Discount Codes |
+  | :---: | :---: | :---: | :---: |
+  | <img src="images/addressList.jpg" width="200" /> | <img src="images/addAddress2.jpg" width="200" /> | <img src="images/changeAddress.jpg" width="200" /> | <img src="images/discount.jpg" width="200" /> |
 
-  |                 Order List                  |                   Edit Profile                   |                Main Interface                 |                    Map Detail                    |
-  |:-------------------------------------------:|:------------------------------------------------:|:---------------------------------------------:|:------------------------------------------------:|
-  | <img src="images/orders.jpg" width="200" /> | <img src="images/editProfile.jpg" width="200" /> | <img src="images/bot_main.jpg" width="200" /> | <img src="images/addAddress2.jpg" width="200" /> |
+  | Payment Flow | Order History | Edit Profile |
+  | :---: | :---: | :---: |
+  | <img src="images/payment.jpg" width="200" /> | <img src="images/orders.jpg" width="200" /> | <img src="images/editProfile.jpg" width="200" /> |
 </details>
 
 ---
